@@ -1,0 +1,40 @@
+{
+  "name": "mysite.com",
+  "version": "0.0.0",
+  "description": "Django REST Framework example",
+  "main": "./mysite/static/js/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ukjin1192/django-rest-framework-example.git"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/ukjin1192/django-rest-framework-example/issues"
+  },
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "jquery.cookie": "~1.4.1",
+    "lodash": "~3.10.1",
+    "bootstrap": "~3.3.6",
+    "bootstrap-webpack": "0.0.5"
+  },
+  "devDependencies": {
+    "css-loader": "~0.23.1",
+    "es6-promise": "~3.0.2",
+    "exports-loader": "~0.6.2",
+    "extract-text-webpack-plugin": "~0.9.1",
+    "file-loader": "~0.8.5",
+    "imports-loader": "~0.6.5",
+    "less": "~2.5.3",
+    "less-loader": "~2.2.2",
+    "node-sass": "~3.4.2",
+    "sass-loader": "~3.1.2",
+    "style-loader": "~0.13.0",
+    "url-loader": "~0.5.7",
+    "webpack": "^1.12.4"
+  }
+}
