@@ -1,19 +1,19 @@
 {
-  "name": "mysite.com",
+  "name": "Political survey",
   "version": "0.0.0",
-  "description": "Django REST Framework example",
-  "main": "./mysite/static/js/index.js",
+  "description": "Survey to recognize where my political tendency positioned",
+  "main": "./survey/static/js/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ukjin1192/django-rest-framework-example.git"
+    "url": "https://github.com/ukjin1192/political-survey.git"
   },
   "author": "",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/ukjin1192/django-rest-framework-example/issues"
+    "url": "https://github.com/ukjin1192/political-survey/issues"
   },
   "dependencies": {
     "jquery": "~2.1.4",
