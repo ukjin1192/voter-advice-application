@@ -1,73 +1,36 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import url
-from main.views import api_root, UserViewSet, ArticleViewSet, CommentViewSet
+from main.views import UserList, UserDetail, QuestionList, AnswerList, AnswerDetail, ResultList, ResultDetail 
 
-
-user_list = UserViewSet.as_view({
-    'get': 'list',
-    'post': 'create'
-})
-user_detail = UserViewSet.as_view({
-    'get': 'retrieve',
-    'put': 'update',
-    'patch': 'partial_update',
-    'delete': 'destroy'
-})
-article_list = ArticleViewSet.as_view({
-    'get': 'list',
-    'post': 'create'
-})
-article_detail = ArticleViewSet.as_view({
-    'get': 'retrieve',
-    'put': 'update',
-    'patch': 'partial_update',
-    'delete': 'destroy'
-})
-comment_list = CommentViewSet.as_view({
-    'get': 'list',
-    'post': 'create'
-})
-comment_detail = CommentViewSet.as_view({
-    'get': 'retrieve',
-    'put': 'update',
-    'patch': 'partial_update',
-    'delete': 'destroy'
-})
 
 urlpatterns = [
     url(
-        r'^$', 
-        api_root
-    ),
-    url(
         r'^users/$',
-        user_list,
-        name='user-list'
+        UserList.as_view()
     ),
     url(
         r'^users/(?P<pk>[0-9]+)/$',
-        user_detail,
-        name='user-detail'
+        UserDetail.as_view()
     ),
     url(
-        r'^articles/$',
-        article_list,
-        name='article-list'
+        r'^questions/$',
+        QuestionList.as_view()
     ),
     url(
-        r'^articles/(?P<pk>[0-9]+)/$',
-        article_detail,
-        name='article-detail'
+        r'^answers/$',
+        AnswerList.as_view()
     ),
     url(
-        r'^comments/$',
-        comment_list,
-        name='comment-list'
+        r'answers/(?P<pk>[0-9]+)/$',
+        AnswerDetail.as_view()
     ),
     url(
-        r'^comments/(?P<pk>[0-9]+)/$',
-        comment_detail,
-        name='comment-detail'
+        r'^results/$',
+        ResultList.as_view()
+    ),
+    url(
+        r'^results/(?P<pk>[0-9]+)/$',
+        ResultDetail.as_view()
     ),
 ]

@@ -2,41 +2,21 @@
 # -*- coding:utf-8 -*-
 
 from captcha.models import CaptchaStore
-from django.contrib.auth.hashers import make_password
-from main.models import User, Article, Comment
-from main.permissions import UserPermission, IsAuthorOrReadOnly
-from main.serializers import UserSerializer, ArticleSerializer, CommentSerializer
-from rest_framework import parsers, permissions, renderers, status, viewsets
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import AllowAny, IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.reverse import reverse
-from rest_framework.views import APIView
+from django.http import HttpResponse
+from django.utils import simplejson
+from django.views.generic import View
+from main.models import User, Survey, Question, Choice, Answer, Result 
 
 
-@api_view(['GET'])
-@permission_classes((AllowAny, ))
-def api_root(request, format=None):
-    return Response({
-        'users': reverse('user-list', request=request, format=format),
-        'articles': reverse('article-list', request=request, format=format),
-        'comments': reverse('comment-list', request=request, format=format)
-    })
-
-
-class UserViewSet(viewsets.ModelViewSet):
+class UserList(View):
     """
-    Provides `list`, `create`, `retrieve`, `update` and `destroy` actions for user object
+    Provides `create` action for user object
     """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    permission_classes = (UserPermission,)
 
-    def create(self, request, *args, **kwargs):
-        # Check captcha validation 
-        if 'captcha-value' not in self.request.data or 'captcha-key' not in self.request.data:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        
+    def post(self, request):
+        """
+        Create user if captcha is valid
+        """
         captcha_key = self.request.data['captcha-key']
         captcha_value = self.request.data['captcha-value']
         
@@ -44,116 +24,102 @@ class UserViewSet(viewsets.ModelViewSet):
             captcha = CaptchaStore.objects.get(challenge=captcha_value, hashkey=captcha_key)
             captcha.delete()
         except:
-            return Response(
-                    {'state': False, 'code': 1, 'message': 'Captcha input is not correct.'},
-                    status=status.HTTP_200_OK)
-        
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-    def perform_create(self, serializer):
-        password = make_password(self.request.data['password'])
-        serializer.save(password=password, is_active=True)
-
-    # Note that update USERNAME_FIELD(=email) or password will refresh authentication token
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        
-        if 'email' in self.request.data or 'password' in self.request.data or 'is_active' in self.request.data:
-            if 'original-password' not in self.request.data:
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-            if instance.check_password(self.request.data['original-password']) == False:
-                return Response(
-                        {'state': False, 'code': 1, 'message': 'Password is not correct.'},
-                        status=status.HTTP_200_OK)
-        
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        
-        return Response(serializer.data)
-
-    def perform_update(self, serializer):
-        if 'password' in self.request.data:
-            password = make_password(self.request.data['password'])
-            serializer.save(password=password)
-        else:
-            serializer.save()
+            data = {'foo': 'bar'}
+            return HttpResponse(
+                simplejson.dumps(data),
+                status=400,
+                content_type='application/json')
+            
+        return HttpResponse()
 
 
-class ArticleViewSet(viewsets.ModelViewSet):
+class UserDetail(View):
     """
-    Provides `list`, `create`, `retrieve`, `update` and `destroy` actions for article object
+    Provides `retrieve` and `partial update` actions for user object
     """
-    queryset = Article.objects.select_related('author').prefetch_related('comments').filter(state='shown')
-    serializer_class = ArticleSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly)
 
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+    def get(self, request, pk):
+        """
+        Retrieve user and check user participated survey
+        """
+        return HttpResponse()
+
+    def patch(self, request, pk):
+        """
+        Partially update user
+        """
+        return HttpResponse()
 
 
-class CommentViewSet(viewsets.ModelViewSet):
+class QuestionList(View):
     """
-    Provides `list`, `create`, `retrieve`, `update` and `destroy` actions for comment object
+    Provides `list` action for question object
     """
-    queryset = Comment.objects.select_related('author').select_related('article').filter(state='shown')
-    serializer_class = CommentSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly)
 
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user, article_id=int(self.request.data['article_id']))
+    def get(self, request):
+        """
+        List all questions with choices
+        """
+        questions = Question.objects.prefetch_related('choices').all()
+        return HttpResponse()
 
 
-"""
-Original source code to override methods
+class AnswerList(View):
+    """
+    Provides `list` and `create` actions for answer object
+    """
 
-def list(self, request, *args, **kwargs):
-    queryset = self.filter_queryset(self.get_queryset())
+    def get(self, request):
+        """
+        Retrieve whole answers of user
+        """
+        return HttpResponse()
 
-    page = self.paginate_queryset(queryset)
-    if page is not None:
-        serializer = self.get_serializer(page, many=True)
-        return self.get_paginated_response(serializer.data)
+    def post(self, request):
+        """
+        Create answer if same answer is not exist
+        """
+        return HttpResponse()
 
-    serializer = self.get_serializer(queryset, many=True)
-    return Response(serializer.data)
 
-def create(self, request, *args, **kwargs):
-    serializer = self.get_serializer(data=request.data)
-    serializer.is_valid(raise_exception=True)
-    self.perform_create(serializer)
-    headers = self.get_success_headers(serializer.data)
-    return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+class AnswerDetail(View):
+    """
+    Provides `partial update` action for answer object
+    """
 
-def perform_create(self, serializer):
-    serializer.save()
+    def patch(self, request, pk):
+        """
+        Partially update answer
+        """
+        return HttpResponse()
 
-def retrieve(self, request, *args, **kwargs):
-    instance = self.get_object()
-    serializer = self.get_serializer(instance)
-    return Response(serializer.data)
 
-def update(self, request, *args, **kwargs):
-    partial = kwargs.pop('partial', False)
-    instance = self.get_object()
-    serializer = self.get_serializer(instance, data=request.data, partial=partial)
-    serializer.is_valid(raise_exception=True)
-    self.perform_update(serializer)
-    return Response(serializer.data)
+class ResultList(View):
+    """
+    Provides `create` action for result object
+    """
 
-def perform_update(self, serializer):
-    serializer.save()
+    def post(self, request):
+        """
+        Create result if result is not exist or updated datetime is past than the comparison target
+        Otherwise get ID of existing result
+        """
+        return HttpResponse()
 
-def destroy(self, request, *args, **kwargs):
-    instance = self.get_object()
-    self.perform_destroy(instance)
-    return Response(status=status.HTTP_204_NO_CONTENT)
 
-def perform_destroy(self, instance):
-    instance.delete()
-"""
+class ResultDetail(View):
+    """
+    Provides `retrieve` and `partial update` for result object
+    """
+
+    def get(self, request, pk):
+        """
+        Retrieve result
+        """
+        return HttpResponse()
+
+    def patch(self, request, pk):
+        """
+        Partially update result
+        """
+        return HttpResponse()

@@ -3,7 +3,6 @@
 
 import djcelery
 import os
-import rest_framework
 import sys
 from ConfigParser import ConfigParser
 from datetime import timedelta
@@ -120,37 +119,13 @@ INSTALLED_APPS += (
     'djcelery',
     'django_extensions',
     'redisboard',
-    'rest_framework',
 )
 
 # User class settings
 AUTH_USER_MODEL = 'main.User'   # Extend default user class
+TEMPORARY_PASSWORD = config.get('django', 'temporary_password')
 LOGIN_URL = '/'
 LOGOUT_URL = '/logout/'
-
-# REST framework settings
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5,
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-    )
-}
-
-def jwt_response_payload_handler(token, user=None, request=None):
-    return {
-        'token': token,
-        'user_id': user.id,
-        'email': user.email,
-        'username': user.username
-    }
-
-# Django REST framework JWT settings
-JWT_AUTH = {
-    'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
-    'JWT_EXPIRATION_DELTA': timedelta(days=100),
-}
 
 # Celery settings for async tasks
 djcelery.setup_loader()
@@ -160,9 +135,6 @@ BROKER_URL = 'amqp://guest:guest@localhost:5672/'       # Use RabbitMQ as broker
 CELERY_IMPORTS = ('utils.cron',)
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 
-# Custom variables
-USER_EMAIL_MAX_LENGTH = 255
-USER_USERNAME_MAX_LENGTH = 30
-ARTICLE_TITLE_MAX_LENGTH = 20
-ARTICLE_CONTEXT_MAX_LENGTH = 300
-COMMENT_CONTEXT_MAX_LENGTH = 100
+# Facebook application ID and secret code
+FACEBOOK_APP_ID = config.get('facebook', 'app_id')
+FACEBOOK_SECRET_CODE = config.get('facebook', 'secret_code')

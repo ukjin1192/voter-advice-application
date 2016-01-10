@@ -52,11 +52,6 @@ def run_server():
         local("./manage.py runserver 0.0.0.0:8000")
 
 
-def run_test():
-    with lcd(ROOT_DIR):
-        local("./manage.py test main")
-
-
 def run_celery():
     with lcd(ROOT_DIR):
         local("./manage.py celeryd_detach --logfile=logs/celery_daemon.log --pidfile=logs/celery_daemon.pid")

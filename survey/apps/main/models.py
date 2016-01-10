@@ -1,45 +1,36 @@
 #!usr/bin/python
 # -*- coding: utf-8 -*-
 
+from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
+from jsonfield import JSONField
+from uuid import uuid4
 
 
 class MyUserManager(BaseUserManager):
 
-    def create_user(self, email, username, password):
+    def create_user(self, username=uuid4, password=settings.TEMPORARY_PASSWORD):
         """
-        Creates and saves a User with the given email and password
+        Creates and saves a user
         """
-        if not email:
-            raise ValueError('User must have an email address')
-        
-        if not username:
-            raise ValueError('User must have an username')
-        
-        if not password:
-            raise ValueError('User must have a password')
-        
         user = self.model(
-            email=self.normalize_email(email),
-            username=username
+            username = username
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, username, password):
+    def create_superuser(self, username, password):
         """
         Creates and saves a superuser
         """
         user = self.create_user(
-            email=self.normalize_email(email),
-            username=username,
-            password=password
+            username = username,
+            password = password
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -51,16 +42,37 @@ class User(AbstractBaseUser):
     User profile which extends AbstractBaseUser class
     AbstractBaseUser contains basic fields like password and last_login
     """
-    email = models.EmailField(
-        verbose_name = _('Email'),
-        max_length = getattr(settings, 'USER_EMAIL_MAX_LENGTH', None),
-        unique = True
-    )
-    username = models.CharField(
+    username = models.UUIDField(
         verbose_name = _('Username'),
-        max_length = getattr(settings, 'USER_USERNAME_MAX_LENGTH', None),
         unique = True,
         null = False
+    )
+    sex_choices = (
+        ('male', 'Male'),
+        ('female', 'Female')
+    )
+    sex = models.CharField(
+        verbose_name = _('Sex'),
+        choices = sex_choices,
+        max_length = 255,
+        blank = True,
+        null = True
+    )
+    year_of_birth = models.PositiveSmallIntegerField(
+        verbose_name = _('Year of birth'),
+        validators = [MaxValueValidator(2010), MinValueValidator(1910)],
+        null = True
+    )
+    party_choices = ( 
+        ('party_a', 'Party A'),
+        ('party_b', 'Party B')
+    )
+    supporting_party = models.CharField(
+        verbose_name = _('Supporting party'),
+        choices = party_choices,
+        max_length = 255,
+        blank = True,
+        null = True
     )
     is_active = models.BooleanField(
         verbose_name = _('Active'),
@@ -78,8 +90,8 @@ class User(AbstractBaseUser):
 
     objects = MyUserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'password']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELDS = ['password', ]
 
     class Meta:
         verbose_name = _('User')
@@ -105,51 +117,19 @@ class User(AbstractBaseUser):
     def is_staff(self):
         return self.is_admin
 
-    """
-    def save(self, *args, **kwargs):
-        super(User, self).save(*args, **kwargs)
-    """
 
-
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def do_something_when_user_created(sender, instance=None, created=False, **kwargs):
+class Survey(models.Model):
     """
-    Do something when user created
+    Survey information
     """
-    if created:
-        user_obj = instance
-        pass
-
-
-class Article(models.Model):
-    """
-    Article information
-    """
-    author = models.ForeignKey(
+    participants = models.ManyToManyField(
         'User',
-        related_name = 'articles'
+        related_name='participated_survey',
+        blank = True
     )
     title = models.CharField(
         verbose_name = _('Title'),
-        max_length = getattr(settings, 'ARTICLE_TITLE_MAX_LENGTH', None)
-    )
-    context = models.TextField(
-        verbose_name = _('Context'),
-        max_length = getattr(settings, 'ARTICLE_CONTEXT_MAX_LENGTH', None)
-    )
-    hits = models.PositiveIntegerField(
-        verbose_name = _('Hits'),
-        default = 0
-    )
-    state_choices = (
-        ('shown', 'Shown'),
-        ('deleted', 'Deleted'),
-    )
-    state = models.CharField(
-        verbose_name = _('State'),
-        max_length = 10,
-        choices = state_choices,
-        default = 'shown'
+        max_length = 255
     )
     created_at = models.DateTimeField(
         verbose_name = _('Created datetime'),
@@ -162,39 +142,40 @@ class Article(models.Model):
     )
 
     class Meta:
-        verbose_name = _('Article')
-        verbose_name_plural = _('Articles')
+        verbose_name = _('Survey')
+        verbose_name_plural = _('Surveys')
         ordering = ['-id']
 
     def __unicode__(self):
         return unicode(self.title) or u''
 
 
-class Comment(models.Model):
+class Question(models.Model):
     """
-    Comment under specific article
+    Question under specific survey
     """
-    article = models.ForeignKey(
-        'Article',
-        related_name = 'comments'
+    survey = models.ForeignKey(
+        'Survey',
+        related_name = 'questions'
     )
-    author = models.ForeignKey(
-        'User',
-        related_name = 'comments'
+    explanation = models.CharField(
+        verbose_name = _('Explanation'),
+        max_length = 255
     )
-    context = models.TextField(
-        verbose_name = _('Context'),
-        max_length = getattr(settings, 'COMMENT_CONTEXT_MAX_LENGTH', None)
+    category_choices = (
+        ('category_a', 'Category A'),
+        ('category_b', 'Category B')
     )
-    state_choices = (
-        ('shown', 'Shown'),
-        ('deleted', 'Deleted'),
+    category = models.CharField(
+        verbose_name = _('Category'),
+        choices = category_choices,
+        max_length = 255,
     )
-    state = models.CharField(
-        verbose_name = _('State'),
-        max_length = 10,
-        choices = state_choices,
-        default = 'shown'
+    learn_more = models.CharField(
+        verbose_name = _('Learn more'),
+        max_length = 255,
+        blank = True,
+        null = True
     )
     created_at = models.DateTimeField(
         verbose_name = _('Created datetime'),
@@ -207,8 +188,131 @@ class Comment(models.Model):
     )
 
     class Meta:
-        verbose_name = _('Comment')
-        verbose_name_plural = _('Comments')
+        verbose_name = _('Question')
+        verbose_name_plural = _('Questions')
+        ordering = ['-id']
+
+    def __unicode__(self):
+        return unicode(self.id) or u''
+
+
+class Choice(models.Model):
+    """
+    Choice under specific question
+    """
+    question = models.ForeignKey(
+        'Question',
+        related_name = 'choices'
+    )
+    context = models.CharField(
+        verbose_name = _('Context'),
+        max_length = 255
+    )
+    factor = models.SmallIntegerField(
+        verbose_name = _('Factor'),
+        validators = [MaxValueValidator(2), MinValueValidator(-2)],
+        null = True
+    )
+    created_at = models.DateTimeField(
+        verbose_name = _('Created datetime'),
+        auto_now_add = True,
+        editable = False
+    )
+    updated_at = models.DateTimeField(
+        verbose_name = _('Updated datetime'),
+        auto_now = True
+    )
+
+    class Meta:
+        verbose_name = _('Choice')
+        verbose_name_plural = _('Choices')
+        ordering = ['-id']
+
+    def __unicode__(self):
+        return unicode(self.id) or u''
+
+
+class Answer(models.Model):
+    """
+    Answer under specific choice
+    """
+    user = models.ForeignKey(
+        'User',
+        related_name = 'user_chosen_answers'
+    )
+    choice = models.ForeignKey(
+        'Choice',
+        related_name = 'answers'
+    )
+    duration = models.DurationField(
+        verbose_name = _('Duration'),
+        validators = [MinValueValidator(timedelta(seconds=3)), ]
+    )
+    weight = models.PositiveSmallIntegerField(
+        verbose_name = _('Weight'),
+        validators = [MaxValueValidator(2), MinValueValidator(1)],
+        default = 1
+    )
+    created_at = models.DateTimeField(
+        verbose_name = _('Created datetime'),
+        auto_now_add = True,
+        editable = False
+    )
+    updated_at = models.DateTimeField(
+        verbose_name = _('Updated datetime'),
+        auto_now = True
+    )
+
+    class Meta:
+        verbose_name = _('Choice')
+        verbose_name_plural = _('Choices')
+        ordering = ['-id']
+
+    def __unicode__(self):
+        return unicode(self.id) or u''
+
+
+class Result(models.Model):
+    """
+    Result of user's survey
+    """
+    user = models.ForeignKey(
+        'User',
+        related_name = 'results'
+    )
+    survey = models.ForeignKey(
+        'Survey',
+        related_name = 'whole_results_of_survey'
+    )
+    category_choices = (
+        ('category_a', 'Category A'),
+        ('category_b', 'Category B')
+    )
+    category = models.CharField(
+        verbose_name = _('Category'),
+        choices = category_choices,
+        max_length = 255,
+    )
+    record = JSONField(
+        verbose_name = _('Record in JSON format'),
+    ) 
+    is_public = models.BooleanField(
+        verbose_name = _('Public'),
+        default = False
+    )
+    created_at = models.DateTimeField(
+        verbose_name = _('Created datetime'),
+        auto_now_add = True,
+        editable = False
+    )
+    updated_at = models.DateTimeField(
+        verbose_name = _('Updated datetime'),
+        auto_now = True
+    )
+
+    class Meta:
+        verbose_name = _('Result')
+        verbose_name_plural = _('Results')
         ordering = ['-id']
 
     def __unicode__(self):
