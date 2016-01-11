@@ -12,7 +12,7 @@ Survey to recognize where my political tendency positioned
 
 - Nginx : Web server
 - uWSGI : Connect web server and application server
-- Django : Application server based on REST API
+- Django REST framework : Application server
 - MySQL : Relational DB
 - Redis : In-memory DB
 - Celery : Async task manager
@@ -34,7 +34,7 @@ Survey to recognize where my political tendency positioned
 - django-redis : Connect redis with django framework
 - django-silk : Query inspection and debugging tool
 - django-suit : Custom admin interface
-- django-jwt-auth : JSON Web Token authentication for django framework
+- django-rest-framework-jwt : JSON Web Token authentication for django REST framework
 
 #### Deployment : Amazon Web Services
 

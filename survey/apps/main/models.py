@@ -7,13 +7,12 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from jsonfield import JSONField
 from uuid import uuid4
 
 
 class MyUserManager(BaseUserManager):
 
-    def create_user(self, username=uuid4, password=settings.TEMPORARY_PASSWORD):
+    def create_user(self, username=uuid4, password=getattr(settings, 'TEMPORARY_PASSWORD')):
         """
         Creates and saves a user
         """
@@ -47,13 +46,9 @@ class User(AbstractBaseUser):
         unique = True,
         null = False
     )
-    sex_choices = (
-        ('male', 'Male'),
-        ('female', 'Female')
-    )
     sex = models.CharField(
         verbose_name = _('Sex'),
-        choices = sex_choices,
+        choices = getattr(settings, 'SEX_CHOICES'),
         max_length = 255,
         blank = True,
         null = True
@@ -63,13 +58,22 @@ class User(AbstractBaseUser):
         validators = [MaxValueValidator(2010), MinValueValidator(1910)],
         null = True
     )
-    party_choices = ( 
-        ('party_a', 'Party A'),
-        ('party_b', 'Party B')
-    )
     supporting_party = models.CharField(
         verbose_name = _('Supporting party'),
-        choices = party_choices,
+        choices = getattr(settings, 'PARTY_CHOICES'),
+        max_length = 255,
+        blank = True,
+        null = True
+    )
+    category = models.CharField(
+        verbose_name = _('Category'),
+        choices = getattr(settings, 'USER_CATEGORY_CHOICES'),
+        max_length = 255,
+        blank = True,
+        null = True
+    )
+    caption = models.CharField(
+        verbose_name = _('Caption'),
         max_length = 255,
         blank = True,
         null = True
@@ -162,13 +166,9 @@ class Question(models.Model):
         verbose_name = _('Explanation'),
         max_length = 255
     )
-    category_choices = (
-        ('category_a', 'Category A'),
-        ('category_b', 'Category B')
-    )
     category = models.CharField(
         verbose_name = _('Category'),
-        choices = category_choices,
+        choices = getattr(settings, 'QUESTION_CATEGORY_CHOICES'),
         max_length = 255,
     )
     learn_more = models.CharField(
@@ -284,17 +284,13 @@ class Result(models.Model):
         'Survey',
         related_name = 'whole_results_of_survey'
     )
-    category_choices = (
-        ('category_a', 'Category A'),
-        ('category_b', 'Category B')
-    )
     category = models.CharField(
         verbose_name = _('Category'),
-        choices = category_choices,
+        choices = getattr(settings, 'RESULT_CATEGORY_CHOICES'),
         max_length = 255,
     )
-    record = JSONField(
-        verbose_name = _('Record in JSON format'),
+    record = models.TextField(
+        verbose_name = _('Record'),
     ) 
     is_public = models.BooleanField(
         verbose_name = _('Public'),

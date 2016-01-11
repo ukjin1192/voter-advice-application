@@ -5,10 +5,29 @@ import base64
 import hashlib
 import hmac
 import json
+from datetime import datetime
 from django.conf import settings
+from main.models import User, Survey, Question, Choice, Answer, Result 
 
 # Variable from settings.py
 FACEBOOK_SECRET_CODE = getattr(settings, 'FACEBOOK_SECRET_CODE')
+
+
+def get_survey_data_of_user(user_obj):
+    """
+    Get factor list, weight list and last updated datetime of user's survey data from all answers
+    """
+    if isinstance(user_obj, User) == False:
+        raise ValueError('Invalid variable')
+
+    return {'factor_list': [], 'weight_list': [], 'updated_at': datetime.utcnow()}
+
+
+def get_record_of_result(factor_list, weight_list, *target_data):
+    """
+    Get record of result, which compares target data with user’s data
+    """
+    return [('party_a', 65), ('party_b', 32)]
 
 
 def base64_url_decode(raw_url):

@@ -2,124 +2,289 @@
 # -*- coding:utf-8 -*-
 
 from captcha.models import CaptchaStore
-from django.http import HttpResponse
-from django.utils import simplejson
-from django.views.generic import View
+from datetime import timedelta
+from django.conf import settings
+from django.contrib.auth.hashers import make_password
 from main.models import User, Survey, Question, Choice, Answer, Result 
+from main.permissions import UserPermission, QuestionPermission, AnswerPermission, ResultPermission 
+from main.serializers import UserSerializer, QuestionSerializer, AnswerSerializer, ResultSerializer
+from rest_framework import status, viewsets
+from rest_framework.response import Response
+from utils import utilities
 
 
-class UserList(View):
+class UserViewSet(viewsets.ModelViewSet):
     """
-    Provides `create` action for user object
+    Provides `create`, `retrieve` and `partial update` actions for user object
     """
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = (UserPermission, )
 
-    def post(self, request):
+    def create(self, request, *args, **kwargs):
         """
         Create user if captcha is valid
         """
-        captcha_key = self.request.data['captcha-key']
-        captcha_value = self.request.data['captcha-value']
+        if not all(x in request.data for x in ['captcha_key', 'captcha_value']):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        captcha_key = request.data['captcha_key']
+        captcha_value = request.data['captcha_value']
         
         try:
             captcha = CaptchaStore.objects.get(challenge=captcha_value, hashkey=captcha_key)
             captcha.delete()
         except:
-            data = {'foo': 'bar'}
-            return HttpResponse(
-                simplejson.dumps(data),
-                status=400,
-                content_type='application/json')
-            
-        return HttpResponse()
+            return Response(
+                    {'state': False, 'code': 1, 'message': 'Captcha input is not correct.'},
+                    status=status.HTTP_200_OK)
+        
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-
-class UserDetail(View):
-    """
-    Provides `retrieve` and `partial update` actions for user object
-    """
-
-    def get(self, request, pk):
+    def retrieve(self, request, *args, **kwargs):
         """
         Retrieve user and check user participated survey
         """
-        return HttpResponse()
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        data = serializer.data
+        data['user_participated'] = Survey.objects.latest('id').filter(participants=request.user).exists()
+        return Response(data)
 
-    def patch(self, request, pk):
+    def update(self, request, *args, **kwargs):
         """
         Partially update user
         """
-        return HttpResponse()
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        
+        if partial == False:
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        
+        if not set(request.data).issubset(set(['sex', 'year_of_birth', 'supporting_party'])):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
 
-class QuestionList(View):
+class QuestionViewSet(viewsets.ModelViewSet):
     """
     Provides `list` action for question object
     """
+    queryset = Question.objects.prefetch_related('choices').all()
+    serializer_class = QuestionSerializer
+    permission_classes = (QuestionPermission, )
 
-    def get(self, request):
+    def list(self, request, *args, **kwargs):
         """
         List all questions with choices
         """
-        questions = Question.objects.prefetch_related('choices').all()
-        return HttpResponse()
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
-class AnswerList(View):
+class AnswerViewSet(viewsets.ModelViewSet):
     """
-    Provides `list` and `create` actions for answer object
+    Provides `list`, `create` and `partial update` actions for answer object
     """
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerializer
+    permission_classes = (AnswerPermission, )
 
-    def get(self, request):
+    def list(self, request, *args, **kwargs):
         """
-        Retrieve whole answers of user
+        List all answers of user
         """
-        return HttpResponse()
+        queryset = Answer.objects.filter(user=request.user)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
-    def post(self, request):
+    def create(self, request, *args, **kwargs):
         """
         Create answer if same answer is not exist
         """
-        return HttpResponse()
+        if not all(x in request.data for x in ['choice_id', 'duration', 'weight']):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        data = request.data
+        data['user_id'] = request.user.id
+        data['choice_id'] = int(request.data['choice_id'])
+        data['duration'] = timedelta(seconds=int(request.data['duration']))
+        data['weight'] = int(request.data['weight'])
+        
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-
-class AnswerDetail(View):
-    """
-    Provides `partial update` action for answer object
-    """
-
-    def patch(self, request, pk):
+    def update(self, request, *args, **kwargs):
         """
         Partially update answer
         """
-        return HttpResponse()
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        
+        if partial == False:
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        
+        if not all(x in request.data for x in ['choice_id', 'duration', 'weight']):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        data = request.data
+        data['choice_id'] = int(request.data['choice_id'])
+        data['duration'] = timedelta(seconds=int(request.data['duration']))
+        data['weight'] = int(request.data['weight'])
+        
+        serializer = self.get_serializer(instance, data=data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
 
-class ResultList(View):
+class ResultViewSet(viewsets.ModelViewSet):
     """
-    Provides `create` action for result object
+    Provides `create`, `retrieve` and `partial update` actions for result object
     """
+    queryset = Result.objects.all()
+    serializer_class = ResultSerializer
+    permission_classes = (ResultPermission, )
 
-    def post(self, request):
+    def create(self, request, *args, **kwargs):
         """
         Create result if result is not exist or updated datetime is past than the comparison target
         Otherwise get ID of existing result
         """
-        return HttpResponse()
+        if not all(x in request.data for x in ['category']) or \
+                request.data['category'] not in getattr(settings, 'RESULT_CATEGORY_CHOICES'):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            result = Result.objects.filter(user=request.user).latest('id')
+        except:
+            pass
+        
+        target_data = []
+        updated_at_list = []
+        if category == 'party':
+            try:
+                for party_name in getattr(settings, 'PARTY_CHOICES'):
+                    party = User.objects.get(category='party', caption=party_name)
+                    answers = utilities.get_survey_data_of_user(party)
+                    factor_list = answers['factor_list']
+                    weight_list = answers['weight_list']
+                    updated_at = answers['updated_at']
+                    party_dict = {
+                            'party_name': party_name, 
+                            'factor_list': factor_list, 
+                            'weight_list': weight_list}
+                    target_data.append(party_dict)
+                    updated_at_list.append(updated_at)
+            except:
+                return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        # Only get ID of existing result
+        if result is not None and result.updated_at > max(updated_at_list):
+            return Response(
+                    {'state': True, 'result_id': result.id, 'message': 'Result already exist.'},
+                    status=status.HTTP_200_OK)
+        
+        answers = utilities.get_survey_data_of_user(request.user)
+        factor_list = answers['factor_list']
+        weight_list = answers['weight_list']
+        record = utilities.get_record_of_result(factor_list, weight_list, *target_data)
+        
+        data = request.data
+        data['user_id'] = request.user.id
+        data['survey'] = Survey.objects.latest('id').id
+        data['record'] = record
+        
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-
-class ResultDetail(View):
-    """
-    Provides `retrieve` and `partial update` for result object
-    """
-
-    def get(self, request, pk):
+    def retrieve(self, request, *args, **kwargs):
         """
         Retrieve result
         """
-        return HttpResponse()
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
 
-    def patch(self, request, pk):
+    def update(self, request, *args, **kwargs):
         """
         Partially update result
         """
-        return HttpResponse()
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        
+        if partial == False:
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        
+        if not all(x in request.data for x in ['is_public']):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
+
+
+"""
+Original source code to override methods
+
+def list(self, request, *args, **kwargs):
+    queryset = self.filter_queryset(self.get_queryset())
+
+    page = self.paginate_queryset(queryset)
+    if page is not None:
+        serializer = self.get_serializer(page, many=True)
+        return self.get_paginated_response(serializer.data)
+
+    serializer = self.get_serializer(queryset, many=True)
+    return Response(serializer.data)
+
+def create(self, request, *args, **kwargs):
+    serializer = self.get_serializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    self.perform_create(serializer)
+    headers = self.get_success_headers(serializer.data)
+    return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+def perform_create(self, serializer):
+    serializer.save()
+
+def retrieve(self, request, *args, **kwargs):
+    instance = self.get_object()
+    serializer = self.get_serializer(instance)
+    return Response(serializer.data)
+
+def update(self, request, *args, **kwargs):
+    partial = kwargs.pop('partial', False)
+    instance = self.get_object()
+    serializer = self.get_serializer(instance, data=request.data, partial=partial)
+    serializer.is_valid(raise_exception=True)
+    self.perform_update(serializer)
+    return Response(serializer.data)
+
+def perform_update(self, serializer):
+    serializer.save()
+
+def destroy(self, request, *args, **kwargs):
+    instance = self.get_object()
+    self.perform_destroy(instance)
+    return Response(status=status.HTTP_204_NO_CONTENT)
+
+def perform_destroy(self, instance):
+    instance.delete()
+"""

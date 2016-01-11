@@ -1,5 +1,5 @@
 {
-  "name": "Political survey",
+  "name": "political-survey",
   "version": "0.0.0",
   "description": "Survey to recognize where my political tendency positioned",
   "main": "./survey/static/js/index.js",

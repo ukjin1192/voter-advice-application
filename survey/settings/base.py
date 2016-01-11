@@ -30,10 +30,10 @@ ADMINS = (
 LANGUAGE_CODE = 'ko'
 ugettext = lambda s: s
 LANGUAGES = (
-    ('ko', ugettext('Korean')),
-    ('en', ugettext('English')),
-    ('jp', ugettext('Japanese')),
-    ('cn', ugettext('Chinese')),
+    ('ko', 'Korean'),
+    ('en', 'English'),
+    ('jp', 'Japanese'),
+    ('cn', 'Chinese'),
 )
 LOCALE_PATHS = (
     ROOT_DIR + '/locale/',
@@ -119,6 +119,7 @@ INSTALLED_APPS += (
     'djcelery',
     'django_extensions',
     'redisboard',
+    'rest_framework',
 )
 
 # User class settings
@@ -127,6 +128,28 @@ TEMPORARY_PASSWORD = config.get('django', 'temporary_password')
 LOGIN_URL = '/'
 LOGOUT_URL = '/logout/'
 
+# REST framework settings
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5,
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    )
+}
+
+def jwt_response_payload_handler(token, user=None, request=None):
+    return {
+        'token': token,
+        'user_id': user.id
+    }
+
+# Django REST framework JWT settings
+JWT_AUTH = {
+    'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
+    'JWT_EXPIRATION_DELTA': timedelta(days=100),
+}
+
 # Celery settings for async tasks
 djcelery.setup_loader()
 BROKER_URL = 'amqp://guest:guest@localhost:5672/'       # Use RabbitMQ as broker
@@ -134,6 +157,27 @@ BROKER_URL = 'amqp://guest:guest@localhost:5672/'       # Use RabbitMQ as broker
 # Celery beat settings for cron tasks
 CELERY_IMPORTS = ('utils.cron',)
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+
+# Choices in `models.py`
+SEX_CHOICES = (
+    ('male', 'Male'),
+    ('female', 'Female')
+)
+PARTY_CHOICES = (
+    ('party_a', 'Party A'),
+    ('party_b', 'Party B')
+)
+USER_CATEGORY_CHOICES = (
+    ('party', 'Party'),
+)
+QUESTION_CATEGORY_CHOICES = (
+    ('category_a', 'Category A'),
+    ('category_b', 'Category B')
+)
+RESULT_CATEGORY_CHOICES = (
+    ('category_a', 'Category A'),
+    ('category_b', 'Category B')
+)
 
 # Facebook application ID and secret code
 FACEBOOK_APP_ID = config.get('facebook', 'app_id')
