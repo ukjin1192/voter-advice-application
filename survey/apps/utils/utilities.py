@@ -16,7 +16,7 @@ FACEBOOK_SECRET_CODE = getattr(settings, 'FACEBOOK_SECRET_CODE')
 
 def get_survey_data_of_user(user_obj):
     """
-    Get factor list, weight list and last updated datetime of user's survey data from all answers
+    Get weighted factor list and last updated datetime of user's survey data from all answers
     """
     if isinstance(user_obj, User) == False:
         raise ValueError('Invalid variable')
@@ -25,39 +25,47 @@ def get_survey_data_of_user(user_obj):
         raise ValueError('User does not completed survey')
 
     answers = Answer.objects.select_related('choice').filter(user=user_obj).order_by('choice__id')
-    factor_list = []
-    weight_list = [] 
+    weighted_factor_list = []
     updated_at = answers.latest('updated_at').updated_at
 
     for answer in answers:
-        factor_list.append(answer.choice.factor)
-        weight_list.append(answer.weight)
+        weighted_factor = answer.choice.factor * answer.weight
+        weighted_factor_list.append(weighted_factor)
 
-    return {'factor_list': factor_list, 'weight_list': weight_list, 'updated_at': updated_at}
+    return {'weighted_factor_list': weighted_factor_list, 'updated_at': updated_at}
 
 
-def get_record_of_result(factor_list, weight_list, *target_data):
+def get_one_dimensional_result(user_data, *target_data):
     """
-    Get record of result, which compares target data with user’s data
+    Get one dimensional result which compares target data with user’s data
     For example,
+    [Data]
+        User's survey data
+            factor_list = [0, -2, 2]
+            weight_list = [1, 2, 1]
+            weighted_factor_list = [0, -4, 2]
+        User A(1st comparison target)'s survey data
+            factor_list = [1, 1, 1]
+            weight_list = [1, 2, 1]
+            weighted_factor_list = [1, 2, 1]
+        User B(2nd comparision target)'s survey data
+            factor_list = [2, 2, 2]
+            weight_list = [2, 1, 2]
+            weighted_factor_list = [4, 2, 4]
     [Input]
-        factor_list = [0, -2, 2]
-        weight_list = [1, 2, 1]
-        target_data = [{'name': 'User A', 'factor_list': [1, 1, 1], 'weight_list': [1, 2, 1]},
-                       {'name': 'User B', 'factor_list': [2, 2, 2], 'weight_list': [2, 1, 2]}]
+        user_data = [0, -4, 2]
+        target_data = [{'name': 'User A', 'weighted_factor_list': [1, 2, 1]},
+                       {'name': 'User B', 'weighted_factor_list': [4, 2, 4]}]
     [Output]
-        similarity = [('User A', 0.66), ('User B', 0.5)]
+        [('User A', 0.66), ('User B', 0.5)]
     """
-    weighted_factor_list = numpy.multiply(factor_list, weight_list)
-    question_count = len(factor_list)
+    question_count = len(user_data)
     similarity = []
 
-    for data in target_data:
-        target_name = data['name']
-        target_factor_list = data['factor_list']
-        target_weight_list = data['weight_list']
-        target_weighted_factor_list = numpy.multiply(target_factor_list, target_weight_list)
-        disagreement = sum(numpy.absolute(numpy.subtract(weighted_factor_list, target_weighted_factor_list)))
+    for single_target_data in target_data:
+        target_name = single_target_data['name']
+        target_weighted_factor_list = single_target_data['weighted_factor_list']
+        disagreement = sum(numpy.absolute(numpy.subtract(user_data, target_weighted_factor_list)))
         max_disagreement = float(question_count * getattr(settings, 'FACTOR_MAX_DISTANCE'))
         agreement_score = 1 - (disagreement / max_disagreement)
         similarity.append((target_name, agreement_score))

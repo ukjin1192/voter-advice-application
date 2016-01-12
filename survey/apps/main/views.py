@@ -214,21 +214,16 @@ class ResultViewSet(viewsets.ModelViewSet):
         target_data = []
         updated_at_list = []
         if request.data['category'] == 'party':
-            try:
-                for party_name in getattr(settings, 'PARTY_CHOICES'):
-                    party = User.objects.get(category='party', caption=party_name[0])
-                    answers = utilities.get_survey_data_of_user(party)
-                    factor_list = answers['factor_list']
-                    weight_list = answers['weight_list']
-                    updated_at = answers['updated_at']
-                    party_dict = {
-                            'name': party_name[0], 
-                            'factor_list': factor_list, 
-                            'weight_list': weight_list}
-                    target_data.append(party_dict)
-                    updated_at_list.append(updated_at)
-            except:
-                return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            #try:
+            for party_name in getattr(settings, 'PARTY_CHOICES'):
+                party = User.objects.get(category='party', caption=party_name[0])
+                answer = utilities.get_survey_data_of_user(party)
+                party_dict = {'name': party_name[0], 
+                        'weighted_factor_list': answer['weighted_factor_list']}
+                target_data.append(party_dict)
+                updated_at_list.append(answer['updated_at'])
+            #except:
+            #    return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
         # Only get ID of existing result
         if result is not None and result.updated_at > max(updated_at_list):
@@ -236,10 +231,8 @@ class ResultViewSet(viewsets.ModelViewSet):
                     {'state': True, 'result_id': result.id, 'message': 'Result already exist.'},
                     status=status.HTTP_200_OK)
         
-        answers = utilities.get_survey_data_of_user(request.user)
-        factor_list = answers['factor_list']
-        weight_list = answers['weight_list']
-        record = utilities.get_record_of_result(factor_list, weight_list, *target_data)
+        answer = utilities.get_survey_data_of_user(request.user)
+        record = utilities.get_one_dimensional_result(answer['weighted_factor_list'], *target_data)
         
         data = request.data
         data['record'] = record
