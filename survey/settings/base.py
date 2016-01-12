@@ -179,6 +179,9 @@ RESULT_CATEGORY_CHOICES = (
     ('category_b', 'Category B')
 )
 
+# Custom variables
+FACTOR_MAX_DISTANCE = 8     # Distance between maximum factor value and minimum factor value
+
 # Facebook application ID and secret code
 FACEBOOK_APP_ID = config.get('facebook', 'app_id')
 FACEBOOK_SECRET_CODE = config.get('facebook', 'secret_code')

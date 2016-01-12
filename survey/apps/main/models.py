@@ -263,6 +263,8 @@ class Answer(models.Model):
         auto_now = True
     )
 
+    unique_together = ('user', 'choice')
+
     class Meta:
         verbose_name = _('Choice')
         verbose_name_plural = _('Choices')

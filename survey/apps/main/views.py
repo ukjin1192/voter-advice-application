@@ -52,7 +52,7 @@ class UserViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         data = serializer.data
-        data['user_participated'] = Survey.objects.latest('id').filter(participants=request.user).exists()
+        data['user_participated'] = Survey.objects.filter(participants=request.user).exists()
         return Response(data)
 
     def update(self, request, *args, **kwargs):
