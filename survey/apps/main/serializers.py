@@ -9,7 +9,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('url', 'id', 'sex', 'year_of_birth', 'supporty_party')
+        fields = ('id', 'sex', 'year_of_birth', 'supporting_party')
 
 
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
@@ -17,33 +17,37 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('url', 'id', 'survey', 'explanation', 'category', 'learn_more')
+        fields = ('id', 'explanation', 'category', 'learn_more', 'choices')
 
     def get_choices(self, obj):
         """
         Get all choices in specific question
         """
-        choices = Choices.objects.filter(question=obj)
+        choices = Choice.objects.filter(question=obj)
         serializer = ChoiceSerializer(choices, many=True, context={'request': self.context['request']})
         return serializer.data
 
 
 class ChoiceSerializer(serializers.HyperlinkedModelSerializer):
+    question = serializers.ReadOnlyField(source='question.id')
 
     class Meta:
         model = Choice
-        fields = ('url', 'id', 'question', 'context', 'factor')
+        fields = ('id', 'question', 'context', 'factor')
 
 
 class AnswerSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.ReadOnlyField(source='user.id')
+    choice = serializers.ReadOnlyField(source='choice.id')
 
     class Meta:
         model = Answer
-        fields = ('url', 'id', 'user', 'choice', 'duration', 'weight', 'updated_at')
+        fields = ('id', 'user', 'choice', 'duration', 'weight', 'updated_at')
 
 
 class ResultSerializer(serializers.HyperlinkedModelSerializer):
+    user = serializers.ReadOnlyField(source='user.id')
 
     class Meta:
         model = Result
-        fields = ('url', 'id', 'user', 'category', 'record', 'updated_at')
+        fields = ('id', 'user', 'category', 'record', 'is_public', 'updated_at')

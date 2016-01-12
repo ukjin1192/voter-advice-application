@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 @task()
-def clear_expired_captcha(*args, **kwargs):
+def clear_expired_captcha():
     """
     Clear expired captcha
     """

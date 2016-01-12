@@ -12,7 +12,7 @@ from uuid import uuid4
 
 class MyUserManager(BaseUserManager):
 
-    def create_user(self, username=uuid4, password=getattr(settings, 'TEMPORARY_PASSWORD')):
+    def create_user(self, username, password):
         """
         Creates and saves a user
         """
@@ -41,10 +41,20 @@ class User(AbstractBaseUser):
     User profile which extends AbstractBaseUser class
     AbstractBaseUser contains basic fields like password and last_login
     """
-    username = models.UUIDField(
+    # UUIDField is not JSON serializable
+    username = models.CharField(
         verbose_name = _('Username'),
+        default = str(uuid4()),
+        max_length = 255,
         unique = True,
         null = False
+    )
+    # DRF JWT package requires email field in User class
+    email = models.CharField(
+        verbose_name = _('Email'),
+        max_length = 255,
+        blank = True,
+        null = True
     )
     sex = models.CharField(
         verbose_name = _('Sex'),
@@ -56,6 +66,7 @@ class User(AbstractBaseUser):
     year_of_birth = models.PositiveSmallIntegerField(
         verbose_name = _('Year of birth'),
         validators = [MaxValueValidator(2010), MinValueValidator(1910)],
+        blank = True,
         null = True
     )
     supporting_party = models.CharField(
@@ -95,7 +106,7 @@ class User(AbstractBaseUser):
     objects = MyUserManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['password', ]
+    REQUIRED_FIELDS = []
 
     class Meta:
         verbose_name = _('User')
@@ -103,7 +114,7 @@ class User(AbstractBaseUser):
         ordering = ['-id']   
 
     def __unicode__(self):
-        return unicode(self.email) or u''
+        return unicode(self.id) or u''
 
     def get_full_name(self):
         return self.username
@@ -211,6 +222,7 @@ class Choice(models.Model):
     factor = models.SmallIntegerField(
         verbose_name = _('Factor'),
         validators = [MaxValueValidator(2), MinValueValidator(-2)],
+        blank = True,
         null = True
     )
     created_at = models.DateTimeField(
@@ -263,11 +275,9 @@ class Answer(models.Model):
         auto_now = True
     )
 
-    unique_together = ('user', 'choice')
-
     class Meta:
-        verbose_name = _('Choice')
-        verbose_name_plural = _('Choices')
+        verbose_name = _('Answer')
+        verbose_name_plural = _('Answers')
         ordering = ['-id']
 
     def __unicode__(self):

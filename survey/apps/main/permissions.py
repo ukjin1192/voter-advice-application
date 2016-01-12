@@ -16,6 +16,8 @@ class UserPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         if view.action == 'create':
             return True
+        elif view.action in ['retrieve', 'partial_update']:
+            return True
         else:
             return False
 
@@ -38,6 +40,8 @@ class QuestionPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         if view.action == 'list':
             return True
+        else:
+            return False
 
     def has_object_permission(self, request, view, obj):
         return False
@@ -55,6 +59,8 @@ class AnswerPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         if view.action in ['list', 'create']:
             return request.user.is_authenticated()
+        elif view.action == 'partial_update':
+            return True
         else:
             return False
 
@@ -77,12 +83,14 @@ class ResultPermission(permissions.BasePermission):
     def has_permission(self, request, view):
         if view.action == 'create':
             return request.user.is_authenticated()
+        elif view.action in ['retrieve', 'partial_update']:
+            return True
         else:
             return False
 
     def has_object_permission(self, request, view, obj):
         if view.action == 'retrieve':
-            return request.user.is_authenticated() and (obj.user == request.user or obj.is_public)
+            return (request.user.is_authenticated() and obj.user == request.user) or obj.is_public
         elif view.action == 'partial_update':
             return request.user.is_authenticated() and obj.user == request.user
         else:

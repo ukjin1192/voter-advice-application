@@ -21,10 +21,10 @@ def get_survey_data_of_user(user_obj):
     if isinstance(user_obj, User) == False:
         raise ValueError('Invalid variable')
 
-    if not Survey.objects.filter(participants=request.user).exists():
+    if not Survey.objects.filter(participants=user_obj).exists():
         raise ValueError('User does not completed survey')
 
-    answers = Answer.objects.select_related('choice').filter(user=user_obj).order_by('choice')
+    answers = Answer.objects.select_related('choice').filter(user=user_obj).order_by('choice__id')
     factor_list = []
     weight_list = [] 
     updated_at = answers.latest('updated_at').updated_at

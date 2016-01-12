@@ -10,6 +10,7 @@ from main.permissions import UserPermission, QuestionPermission, AnswerPermissio
 from main.serializers import UserSerializer, QuestionSerializer, AnswerSerializer, ResultSerializer
 from rest_framework import status, viewsets
 from rest_framework.response import Response
+from rest_framework_jwt.settings import api_settings
 from utils import utilities
 
 
@@ -43,7 +44,21 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        
+        # Manually issue token
+        jwt_payload_handler = api_settings.JWT_PAYLOAD_HANDLER
+        jwt_encode_handler = api_settings.JWT_ENCODE_HANDLER
+        
+        serializer_data = serializer.data
+        user = User.objects.get(id=serializer_data['id'])
+        payload = jwt_payload_handler(user)
+        token = jwt_encode_handler(payload)
+        serializer_data['token'] = token
+        return Response(serializer_data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        password = make_password(getattr(settings, 'TEMPORARY_PASSWORD'))
+        serializer.save(password=password)
 
     def retrieve(self, request, *args, **kwargs):
         """
@@ -114,17 +129,32 @@ class AnswerViewSet(viewsets.ModelViewSet):
         if not all(x in request.data for x in ['choice_id', 'duration', 'weight']):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
-        data = request.data
-        data['user_id'] = request.user.id
-        data['choice_id'] = int(request.data['choice_id'])
-        data['duration'] = timedelta(seconds=int(request.data['duration']))
-        data['weight'] = int(request.data['weight'])
+        try:
+            choice = Choice.objects.get(id=int(request.data['choice_id']))
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         
-        serializer = self.get_serializer(data=data)
+        # Check whether user already pick choice in this question
+        if Answer.objects.filter(user=request.user, choice__question_id=choice.question.id).exists():
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
+        
+        # When user completed survey
+        if Answer.objects.filter(user=request.user).count() == Question.objects.all().count():
+            survey = Survey.objects.latest('id')
+            survey.participants.add(request.user)
+        
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user, 
+                choice_id=int(self.request.data['choice_id']),
+                duration=timedelta(seconds=int(self.request.data['duration'])),
+                weight=int(self.request.data['weight']))
 
     def update(self, request, *args, **kwargs):
         """
@@ -139,15 +169,24 @@ class AnswerViewSet(viewsets.ModelViewSet):
         if not all(x in request.data for x in ['choice_id', 'duration', 'weight']):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
-        data = request.data
-        data['choice_id'] = int(request.data['choice_id'])
-        data['duration'] = timedelta(seconds=int(request.data['duration']))
-        data['weight'] = int(request.data['weight'])
+        try:
+            choice = Choice.objects.get(id=int(request.data['choice_id']))
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         
-        serializer = self.get_serializer(instance, data=data, partial=partial)
+        # Prevent user to choose multiple choices in one question
+        if instance.choice.question.id != choice.question.id:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        serializer.save(choice_id=int(self.request.data['choice_id']),
+                duration=timedelta(seconds=int(self.request.data['duration'])),
+                weight=int(self.request.data['weight']))
 
 
 class ResultViewSet(viewsets.ModelViewSet):
@@ -163,27 +202,27 @@ class ResultViewSet(viewsets.ModelViewSet):
         Create result if result is not exist or updated datetime is past than the comparison target
         Otherwise get ID of existing result
         """
-        if not all(x in request.data for x in ['category']) or \
-                request.data['category'] not in getattr(settings, 'RESULT_CATEGORY_CHOICES'):
+        if not (all(x in request.data for x in ['category']) or \
+                request.data['category'] not in getattr(settings, 'RESULT_CATEGORY_CHOICES')):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
         try:
             result = Result.objects.filter(user=request.user).latest('id')
         except:
-            pass
+            result = None
         
         target_data = []
         updated_at_list = []
-        if category == 'party':
+        if request.data['category'] == 'party':
             try:
                 for party_name in getattr(settings, 'PARTY_CHOICES'):
-                    party = User.objects.get(category='party', caption=party_name)
+                    party = User.objects.get(category='party', caption=party_name[0])
                     answers = utilities.get_survey_data_of_user(party)
                     factor_list = answers['factor_list']
                     weight_list = answers['weight_list']
                     updated_at = answers['updated_at']
                     party_dict = {
-                            'party_name': party_name, 
+                            'name': party_name[0], 
                             'factor_list': factor_list, 
                             'weight_list': weight_list}
                     target_data.append(party_dict)
@@ -203,8 +242,6 @@ class ResultViewSet(viewsets.ModelViewSet):
         record = utilities.get_record_of_result(factor_list, weight_list, *target_data)
         
         data = request.data
-        data['user_id'] = request.user.id
-        data['survey'] = Survey.objects.latest('id').id
         data['record'] = record
         
         serializer = self.get_serializer(data=data)
@@ -212,6 +249,10 @@ class ResultViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user,
+                survey=Survey.objects.latest('id'))
 
     def retrieve(self, request, *args, **kwargs):
         """

@@ -5,7 +5,7 @@ import djcelery
 import os
 import sys
 from ConfigParser import ConfigParser
-from datetime import timedelta
+from datetime import datetime, timedelta
 from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -138,16 +138,16 @@ REST_FRAMEWORK = {
     )
 }
 
+# Django REST framework JWT settings
 def jwt_response_payload_handler(token, user=None, request=None):
     return {
         'token': token,
         'user_id': user.id
     }
 
-# Django REST framework JWT settings
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER': jwt_response_payload_handler,
-    'JWT_EXPIRATION_DELTA': timedelta(days=100),
+    'JWT_EXPIRATION_DELTA': timedelta(days=100)
 }
 
 # Celery settings for async tasks
@@ -175,8 +175,7 @@ QUESTION_CATEGORY_CHOICES = (
     ('category_b', 'Category B')
 )
 RESULT_CATEGORY_CHOICES = (
-    ('category_a', 'Category A'),
-    ('category_b', 'Category B')
+    ('party', 'Party'),
 )
 
 # Custom variables
