@@ -1,4 +1,4 @@
-# Django REST framework example
+# Political survey
 
 
 ## Project goal
@@ -10,37 +10,36 @@ Survey to recognize where my political tendency positioned
 
 #### Back-end
 
-- Nginx : Web server
-- uWSGI : Connect web server and application server
-- Django REST framework : Application server
-- MySQL : Relational DB
-- Redis : In-memory DB
-- Celery : Async task manager
-- Fabric : Deploy tool
+- <a href="http://nginx.org/" target="_blank">Nginx</a> : Web server
+- <a href="https://uwsgi-docs.readthedocs.org/en/latest/" target="_blank">uWSGI</a> : Connect web server and application server
+- <a href="http://www.django-rest-framework.org/" target="_blank">Django REST framework</a> : Application server
+- <a href="https://www.mysql.com/" target="_blank">MySQL</a> :Relational DB
+- <a href="http://www.redis.io/" target="_blank">Redis</a> : In-memory DB
+- <a href="http://www.celeryproject.org/" target="_blank">Celery</a> : Async task manager
+- <a href="http://www.fabfile.org/" target="_blank">Fabric</a> : Deploy tool
 
 #### Front-end
 
-- NPM : Package management
-- Webpack : Manage static files and bundle modules
-- SCSS : Stylesheet
+- <a href="https://www.npmjs.com/" target="_blank">NPM</a> : Package management
+- <a href="https://webpack.github.io/" target="_blank">Webpack</a> : Manage static files and bundle modules
+- <a href="http://sass-lang.com/" target="_blank">SCSS</a> : Stylesheet
 - <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> : Framework made by twitter
 - <a href="https://github.com/alvarotrigo/fullPage.js" target="_blank">fullPage.js</a> : Fullscreen scrolling plug-in
 - <a href="https://plot.ly/" target="_blank">plot.ly</a> : Visualize data
 
 #### Django framework libraries
 
-- django-simple-captcha : Human validation
-- django-celery : Connect celery with django framework
-- django-redis : Connect redis with django framework
-- django-silk : Query inspection and debugging tool
-- django-suit : Custom admin interface
-- django-rest-framework-jwt : JSON Web Token authentication for django REST framework
+- <a href="https://github.com/mbi/django-simple-captcha" target="_blank">django-simple-captcha</a> : Human validation
+- <a href="https://github.com/celery/django-celery" target="_blank">django-celery</a> : Connect celery with django framework
+- <a href="https://github.com/niwinz/django-redis" target="_blank">django-redis</a> : Connect redis with django framework
+- <a href="https://github.com/django-silk/silk" target="_blank">django-silk</a> : Query inspection and debugging tool
+- <a href="https://github.com/darklow/django-suit" target="_blank">django-suit</a> : Custom admin interface
+- <a href="https://github.com/GetBlimp/django-rest-framework-jwt" target="_blank">django-rest-framework-jwt</a> : JSON Web Token authentication for django REST framework
 
-#### Deployment : Amazon Web Services
+#### Deployment : <a href="https://aws.amazon.com/" target="_blank">Amazon Web Services</a>
 
 - EC2 (OS: ubuntu 14.04 LTS)
-- ELB (Load balancing)
-- Adapt SSL certificate at ELB
+- ELB (Load balancing, Adapt SSL certificate)
 - Route 53 (DNS)
 - RDS (MySQL)
 - ElastiCache (Redis)
