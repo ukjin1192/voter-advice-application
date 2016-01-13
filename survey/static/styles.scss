@@ -1,5 +1,279 @@
-$red: #FF0000;
+/* ===============
+ * Color variables
+ * =============== */
 
-#login-info {
-	color: $red;
+$blue-color: #004879;
+$light-blue-color: lighten($blue-color, 3%);
+$lighter-blue-color: lighten($blue-color, 10%);
+$dark-blue-color: darken($blue-color, 3%);
+$darker-blue-color: darken($blue-color, 10%);
+
+$grey-color: #AEAEAE;
+$light-grey-color: lighten($grey-color, 10%);
+$lighter-grey-color: lighten($grey-color, 22%);
+$dark-grey-color: darken($grey-color, 10%);
+$darker-grey-color: darken($grey-color, 45%);
+
+/* ======================
+ * Transparency variables
+ * ====================== */
+
+$full-transparent: rgba(0, 0, 0, 0);
+$almost-transparent: rgba(0, 0, 0, 0.3);
+$half-transparent: rgba(0, 0, 0, 0.5);
+
+/* ======================
+ * Device width variables
+ * ====================== */
+
+$screen-xxs-max: 320px;
+$screen-xs-min: 321px;
+$screen-xs-max: 767px;
+$screen-sm-min: 768px;
+$screen-sm-max: 991px;
+$screen-md-min: 992px;
+$screen-md-max: 1199px;
+$screen-lg-min: 1200px;
+$screen-lg-max: 1585px;
+$screen-xlg-min: 1586px;
+
+/* =====================
+ * Default tag attribute 
+ * ===================== */
+
+@import url(https://cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css);
+
+* {
+	margin: 0;
+	padding: 0;
+	font-family: 'Nanum Barun Gothic';
+
+	// Prevent from blinking when clicked
+	-webkit-tap-highbase-color-light: $full-transparent;
+}
+
+html, body { 
+	width: 100%;
+	height: 100%;
+}
+
+body {
+	background-color: $lighter-grey-color;
+
+	// Disable double-tap-to-zoom in IE 10, 11 for fast-click
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+}
+
+textarea {
+	resize: none;
+}
+
+a, a:focus, a:hover, a:active, a:visited {
+	text-decoration: none !important;
+	cursor: pointer;
+	color: inherit;
+	outline: 0;
+}
+
+pre {
+	font-family: 'Nanum Barun Gothic';
+	background-color: $lighter-grey-color;
+	padding: 15px;
+	border: 0;
+}
+
+/* ===============
+ * Basic attribute
+ * =============== */
+
+.position-relative {
+	position: relative;
+}
+
+.full-width {
+	width: 100%;
+}
+
+.cursor-pointer {
+	cursor: pointer;
+}
+
+.space {
+	height: 20px;
+}
+
+/* ==============
+ * Common element
+ * ============== */
+
+#loading-icon {
+	position: fixed;
+	width: 60px;
+	height: 60px;
+	top: 50%;
+	left: 50%;
+	margin-top: -30px;
+	margin-left: -30px;
+	z-index: 9999;
+
+	@media screen and (min-width: $screen-md-min) {
+		width: 120px;
+		height: 120px;
+		top: 50%;
+		left: 50%;
+		margin-top: -60px;
+		margin-left: -60px;
+	}
+}
+
+/* ==============
+ * Navigation bar
+ * ============== */
+
+/* =======
+ * Sidebar
+ * ======= */
+
+/* ===============================
+ * Loading icon - 3rd party 
+ * Generated at http://loading.io/
+ * =============================== */
+
+@-webkit-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-ms-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes uil-ring-anim {
+  0% {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.uil-ring-css  {
+  border-radius: 80px;
+  box-shadow: 0 6px 0 0 $lighter-blue-color;
+  -ms-animation: uil-ring-anim 1s linear infinite;
+  -moz-animation: uil-ring-anim 1s linear infinite;
+  -webkit-animation: uil-ring-anim 1s linear infinite;
+  -o-animation: uil-ring-anim 1s linear infinite;
+  animation: uil-ring-anim 1s linear infinite;
 }
