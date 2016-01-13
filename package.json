@@ -20,7 +20,8 @@
     "jquery.cookie": "~1.4.1",
     "lodash": "~3.10.1",
     "bootstrap": "~3.3.6",
-    "bootstrap-webpack": "0.0.5"
+    "bootstrap-webpack": "0.0.5",
+    "fullpage.js": "~2.7.6"
   },
   "devDependencies": {
     "css-loader": "~0.23.1",
@@ -35,7 +36,6 @@
     "sass-loader": "~3.1.2",
     "style-loader": "~0.13.0",
     "url-loader": "~0.5.7",
-    "webpack": "^1.12.4",
-    "fullpage.js": "~2.7.6"
+    "webpack": "^1.12.4"
   }
 }
