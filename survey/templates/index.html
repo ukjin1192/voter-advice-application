@@ -1,7 +1,65 @@
 {% extends "base.html" %}
 
 {% block container %}
-<div>
-	Contents here
+<div class="hidden" id="fullpage">
+	<div class="section hidden" id="main-page">
+		<h3>길동이와 나의 정치 궁합은?</h3>
+		<h1><strong>123,456</strong></h1>
+		<h4>명이 자신의 위치를 확인하고 갔습니다</h4>
+		
+		<div class="space"></div>
+		
+		<form class="form-group" id="create-user-form">
+			<input type="hidden" id="captcha-key" value="" />
+			<div class="input-group">
+				<span class="input-group-addon" id="captcha-image-container">
+					<img src="" id="captcha-image" />
+				</span>
+				<span class="input-group-addon cursor-pointer" id="refresh-captcha">
+					<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+				</span>
+				<input type="text" class="form-control" id="captcha-value" placeholder="왼쪽 문자를 입력해주세요" required />
+			</div>
+			<div class="space"></div>
+			<button type="submit" class="btn btn-primary btn-lg btn-block">
+				나도 확인할래요
+			</button>
+		</form>
+	</div>
+
+	<div class="section hidden">
+		<h3>내가 속한 단체는?</h3>
+		단체 속에 나를 알아볼 수 있어요
+		<form class="form-group" id="add-tag-form">
+			<div class="input-group">
+				<input type="text" class="form-control" id="tag-input" placeholder="단체명" required />
+				<div class="input-group-btn">
+					<button type="submit" class="btn btn-default">
+						<span class="glyphicon glyphicon-plus-sign"></span>
+					</button>
+				</div>
+			</div>
+		</form>
+		
+		<div class="space"></div>
+		<div class="space"></div>
+		
+		<h3>비교해보고 싶은 유명인은?</h3>
+		유명인과 나를 비교해볼 수 있어요
+		<form class="form-group" id="add-celebrity-form">
+			<div class="input-group">
+				<input type="text" class="form-control" id="celebrity-input" placeholder="이름" required />
+				<div class="input-group-btn">
+					<button type="submit" class="btn btn-default">
+						<span class="glyphicon glyphicon-plus-sign"></span>
+					</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="section"></div>
+	<div class="section"></div>
+	<div class="section"></div>
 </div>
 {% endblock %}
