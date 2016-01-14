@@ -182,8 +182,8 @@ class Question(models.Model):
         choices = getattr(settings, 'QUESTION_CATEGORY_CHOICES'),
         max_length = 255,
     )
-    learn_more = models.CharField(
-        verbose_name = _('Learn more'),
+    image_url = models.CharField(
+        verbose_name = _('Image URL'),
         max_length = 255,
         blank = True,
         null = True
@@ -201,7 +201,7 @@ class Question(models.Model):
     class Meta:
         verbose_name = _('Question')
         verbose_name_plural = _('Questions')
-        ordering = ['-id']
+        ordering = ['id']
 
     def __unicode__(self):
         return unicode(self.id) or u''
@@ -221,9 +221,7 @@ class Choice(models.Model):
     )
     factor = models.SmallIntegerField(
         verbose_name = _('Factor'),
-        validators = [MaxValueValidator(2), MinValueValidator(-2)],
-        blank = True,
-        null = True
+        validators = [MaxValueValidator(2), MinValueValidator(-2)]
     )
     created_at = models.DateTimeField(
         verbose_name = _('Created datetime'),

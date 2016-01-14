@@ -17,7 +17,7 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'explanation', 'category', 'learn_more', 'choices')
+        fields = ('id', 'explanation', 'category', 'image_url', 'choices')
 
     def get_choices(self, obj):
         """

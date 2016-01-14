@@ -20,7 +20,7 @@ class SurveyAdmin(admin.ModelAdmin):
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'explanation', 'category', 'learn_more')
+    list_display = ('id', 'explanation', 'category')
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'
     ordering = ('-id', )
