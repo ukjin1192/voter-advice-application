@@ -228,7 +228,7 @@ class ResultViewSet(viewsets.ModelViewSet):
         # Only get ID of existing result
         if result is not None and result.updated_at > max(updated_at_list):
             return Response(
-                    {'state': True, 'result_id': result.id, 'message': 'Result already exist.'},
+                    {'state': True, 'id': result.id, 'message': 'Result already exist.'},
                     status=status.HTTP_200_OK)
         
         answer = utilities.get_survey_data_of_user(request.user)

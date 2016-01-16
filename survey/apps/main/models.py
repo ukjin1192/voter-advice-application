@@ -236,7 +236,7 @@ class Choice(models.Model):
     class Meta:
         verbose_name = _('Choice')
         verbose_name_plural = _('Choices')
-        ordering = ['-id']
+        ordering = ['id']
 
     def __unicode__(self):
         return unicode(self.id) or u''
