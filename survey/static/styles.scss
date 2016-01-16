@@ -103,6 +103,10 @@ pre {
 	height: 20px;
 }
 
+.grey-color {
+	color: $grey-color;
+}
+
 /* ==============
  * Common element
  * ============== */
@@ -127,13 +131,122 @@ pre {
 	}
 }
 
+.short-width-group {
+	margin-left: auto; 
+	margin-right: auto; 
+	max-width: 330px;
+}
+
+/* =======================
+ * Browser support warning
+ * ======================= */
+
+#browser-support-warning {
+	margin-bottom: 0;
+	text-align: center;
+}
+
 /* ==============
  * Navigation bar
  * ============== */
 
+#navbar {
+	padding: 10px 0;
+	text-align: center; 
+	background-color: white; 
+	z-index: 100;
+
+	#toggle-sidebar {
+		top: 8px;
+		// Make clickable area bigger
+		margin: -10px;
+		padding: 10px;
+		font-size: 27px;
+		color: $blue-color;
+		cursor: pointer;
+	}
+
+	#navbar-service-name {
+		// Make clickable area bigger
+		margin: -10px -30px;
+		padding: 10px 30px;
+		font-weight: 700;
+		font-size: 2.0em;
+		text-align: center;
+		color: $blue-color;
+		cursor: pointer;
+		
+		#beta-logo {
+			position: absolute;
+			top: -7px;
+			margin-left: -10px;
+			font-size: 0.3em;
+			transform: rotate(30deg);
+			-webkit-transform: rotate(30deg);
+			-moz-transform: rotate(30deg);
+			-ms-transform: rotate(30deg);
+			-o-transform: rotate(30deg);
+		}
+	}
+
+	#page-scroll-link {
+		margin-top: 4px;
+		color: $blue-color;
+	}
+}
+
 /* =======
  * Sidebar
  * ======= */
+
+/* ============
+ * Progress bar
+ * ============ */
+
+#progress-bar {
+	margin: 10px 0;
+}
+
+/* ====================
+ * Main page with survey
+ * ===================== */
+
+#page-scroll-container {
+
+	.section {
+		text-align: center;
+			
+		#captcha-image-container {
+			padding: 0;
+		}
+		
+		#captcha-value {
+			height: 44px;
+		}
+		
+		.question {
+			
+			.question-image {
+				max-width: 100%;
+				border-radius: 5px 5px 0 0;
+			}
+			
+			.question-explanation {
+				margin-bottom: 20px;
+				padding: 15px;
+				text-align: left;
+				border-radius: 0 0 5px 5px;
+				background-color: white;
+			}
+			
+			.question-choices {
+				display: inline-block;
+				margin-bottom: 10px;
+				text-align: left;
+			}
+		}
+	}
+}
 
 /* ===============================
  * Loading icon - 3rd party 

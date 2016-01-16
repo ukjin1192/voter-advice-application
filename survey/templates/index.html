@@ -1,65 +1,147 @@
 {% extends "base.html" %}
 
 {% block container %}
-<div class="hidden" id="fullpage">
-	<div class="section hidden" id="main-page">
+<div class="progress" id="progress-bar">
+	<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: 100%"></div>
+</div>
+
+<div class="hidden" id="page-scroll-container">
+
+	<div class="section">
 		<h3>길동이와 나의 정치 궁합은?</h3>
 		<h1><strong>123,456</strong></h1>
 		<h4>명이 자신의 위치를 확인하고 갔습니다</h4>
 		
 		<div class="space"></div>
 		
-		<form class="form-group" id="create-user-form">
+		<form class="form-group short-width-group" id="create-user-form">
 			<input type="hidden" id="captcha-key" value="" />
 			<div class="input-group">
 				<span class="input-group-addon" id="captcha-image-container">
 					<img src="" id="captcha-image" />
 				</span>
 				<span class="input-group-addon cursor-pointer" id="refresh-captcha">
-					<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+					<span class="glyphicon glyphicon-refresh"></span>
 				</span>
 				<input type="text" class="form-control" id="captcha-value" placeholder="왼쪽 문자를 입력해주세요" required />
 			</div>
+			
 			<div class="space"></div>
+			
+			<div class="alert alert-danger hidden" id="create-user-form-alert-message" role="alert"></div>
+			
 			<button type="submit" class="btn btn-primary btn-lg btn-block">
 				나도 확인할래요
 			</button>
 		</form>
 	</div>
 
-	<div class="section hidden">
+	<div class="section">
 		<h3>내가 속한 단체는?</h3>
-		단체 속에 나를 알아볼 수 있어요
+		<h5>단체 속에 나를 알아볼 수 있어요</h5>
+		
 		<form class="form-group" id="add-tag-form">
-			<div class="input-group">
+			<div class="input-group short-width-group">
 				<input type="text" class="form-control" id="tag-input" placeholder="단체명" required />
 				<div class="input-group-btn">
 					<button type="submit" class="btn btn-default">
-						<span class="glyphicon glyphicon-plus-sign"></span>
+						<span class="glyphicon glyphicon-plus"></span>
 					</button>
 				</div>
 			</div>
 		</form>
+		
+		<div id="tag-list">
+			<span class="label label-primary cursor-pointer">단체 A</span>
+			<span class="label label-primary cursor-pointer">단체 B</span>
+			<h6 class="grey-color">클릭해서 삭제할 수 있어요</h6>
+		</div>
 		
 		<div class="space"></div>
 		<div class="space"></div>
 		
 		<h3>비교해보고 싶은 유명인은?</h3>
-		유명인과 나를 비교해볼 수 있어요
+		<h5>유명인과 나를 비교해볼 수 있어요</h5>
+		
 		<form class="form-group" id="add-celebrity-form">
-			<div class="input-group">
+			<div class="input-group short-width-group">
 				<input type="text" class="form-control" id="celebrity-input" placeholder="이름" required />
 				<div class="input-group-btn">
 					<button type="submit" class="btn btn-default">
-						<span class="glyphicon glyphicon-plus-sign"></span>
+						<span class="glyphicon glyphicon-plus"></span>
 					</button>
 				</div>
 			</div>
 		</form>
+		
+		<div id="celebrity-list">
+			<span class="label label-primary cursor-pointer">유명인 A</span>
+			<span class="label label-primary cursor-pointer">유명인 B</span>
+			<h6 class="grey-color">클릭해서 삭제할 수 있어요</h6>
+		</div>
 	</div>
 
-	<div class="section"></div>
-	<div class="section"></div>
-	<div class="section"></div>
+	<div class="section">
+		<h3>성별이 어떻게 되세요?</h3>
+		<div>
+			<label class="radio-inline">
+				<input type="radio" name="sex" value="male" />
+				남자
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="sex" value="female" />
+				여자
+			</label>
+		</div>
+		
+		<div class="space"></div>
+		
+		<h3>언제 태어나셨나요?</h3>
+		<div class="short-width-group">
+			<input type="number" class="form-control" id="year-of-birth" min="1910" max="2010" placeholder="출생년도" />
+		</div>
+		
+		<div class="space"></div>
+		
+		<h3>지지정당이 있으세요?</h3>
+		<div class="short-width-group">
+			<select class="form-control" id="supporting-party">
+				<option></option>
+				<option value="">새누리당</option>
+				<option value="">더불어 민주당</option>
+				<option value="">안철수 신당</option>
+				<option value="">정의당</option>
+				<option value="">녹색당</option>
+			</select>
+		</div>
+		
+		<div class="space"></div>
+		
+		<h3>어느 지역에 있나요?</h3>
+		<div class="short-width-group">
+			<input type="text" class="form-control" id="district" placeholder="지역구" />
+		</div>
+		
+		<div class="space"></div>
+		
+		<div class="short-width-group">
+			<a class="btn btn-primary btn-lg btn-block" href="/result/" id="submit-survey-btn" role="button">
+				결과 확인하기
+			</a>
+		</div>
+	</div>
+</div>
+
+<div class="section hidden" id="section-virtual-dom">
+	<div class="question">
+		<input type="hidden" class="question-id" value="" />
+		<img class="question-image" src="" />
+		<div class="question-explanation"></div>
+		<div class="question-choices"></div>
+		<div class="question-weight hidden">
+			공감되는 문제인가요?
+			<input type="checkbox" class="checkbox-switch" />
+		</div>
+	</div>
 </div>
 {% endblock %}

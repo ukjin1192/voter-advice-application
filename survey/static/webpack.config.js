@@ -1,6 +1,7 @@
 'use strict';
 
 var webpack = require('webpack');
+var path = require('path');
 require('es6-promise').polyfill();
 
 var productionMode = JSON.parse(process.env.production_mode || '0');
@@ -13,7 +14,8 @@ module.exports = {
       'jquery.cookie', 
       'lodash',
       'bootstrap-webpack',
-      'fullpage.js'
+      'fullpage.js',
+      'bootstrap-switch'
     ]
   },
   output: {

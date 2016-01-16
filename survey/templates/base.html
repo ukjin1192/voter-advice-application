@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ping</title>
+  <title>Ping Korea</title>
 
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -54,6 +54,7 @@
   {% endcomment %}
 
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.7.6/jquery.fullPage.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.2/css/bootstrap3/bootstrap-switch.css" />
 
   {# Support HTML5 tag and media query for IE below version 9 #}
   <!--[if lte IE 8]>
@@ -96,16 +97,18 @@
       도구 - 기본 설정 - 보안 - JavaScript 활성화
     </div>
   </noscript>
-
-  <nav class="container-fit" id="navbar">
+  
+  <header class="container-fit">
     {# Show if browser is not supported #}
     <div class="alert alert-warning hidden" id="browser-support-warning" role="alert"></div>
-    
+  </header>
+
+  <nav class="container-fit" id="navbar">
     <div class="container">
       <div class="row">
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
           <div class="pull-left" title="메뉴">
-            <span class="glyphicon glyphicon-menu-hamburger" id="toggle-sidebar" aria-hidden="true"></span>
+            <span class="glyphicon glyphicon-menu-hamburger" id="toggle-sidebar"></span>
           </div>
         </div>
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
@@ -116,12 +119,12 @@
         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
           <div class="pull-right" title="페이지 이동">
             <select class="form-control" id="page-scroll-link">
-              <option>메인</option>
-              <option>단체, 유명인</option>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>부가 정보</option>
+              <option value="main">메인</option>
+              <option value="tag">단체, 유명인</option>
+              <option value="question-1">1</option>
+              <option value="question-2">2</option>
+              <option value="question-3">3</option>
+              <option value="additional-info">부가 정보</option>
             </select>
           </div>
         </div>
@@ -137,10 +140,11 @@
     </div>
   </section>
 
-  <script type="text/javascript" src="{% static 'dist/vendor.bundle.js' %}"></script>
-  <script type="text/javascript" src="{% static 'dist/bundle.js' %}"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/2.7.6/jquery.fullPage.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-switch/3.3.2/js/bootstrap-switch.js"></script>
+  <script type="text/javascript" src="{% static 'dist/vendor.bundle.js' %}"></script>
+  <script type="text/javascript" src="{% static 'dist/bundle.js' %}"></script>
 
   {# Support Placehoder for IE below version 10 #}
   <!--[if lte IE 9]>
