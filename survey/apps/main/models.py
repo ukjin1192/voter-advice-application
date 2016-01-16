@@ -7,7 +7,6 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from uuid import uuid4
 
 
 class MyUserManager(BaseUserManager):
@@ -44,10 +43,9 @@ class User(AbstractBaseUser):
     # UUIDField is not JSON serializable
     username = models.CharField(
         verbose_name = _('Username'),
-        default = str(uuid4()),
         max_length = 255,
         unique = True,
-        null = False
+        null = True
     )
     # DRF JWT package requires email field in User class
     email = models.CharField(

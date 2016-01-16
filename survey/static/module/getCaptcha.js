@@ -3,6 +3,8 @@
 var $ = require('jquery');
 
 module.exports = function getCaptcha() {
+  $('#create-user-form-alert-message').html('').addClass('hidden');
+
   $.ajax({
     url: '/captcha/refresh/',
     type: 'GET'

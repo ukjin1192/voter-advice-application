@@ -12,6 +12,7 @@ from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
 from utils import utilities
+from uuid import uuid4
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -58,7 +59,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         password = make_password(getattr(settings, 'TEMPORARY_PASSWORD'))
-        serializer.save(password=password)
+        serializer.save(username=uuid4(), password=password)
 
     def retrieve(self, request, *args, **kwargs):
         """
