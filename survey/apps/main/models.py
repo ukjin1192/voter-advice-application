@@ -65,7 +65,8 @@ class User(AbstractBaseUser):
     )
     year_of_birth = models.PositiveSmallIntegerField(
         verbose_name = _('Year of birth'),
-        validators = [MaxValueValidator(2010), MinValueValidator(1910)],
+        validators = [MaxValueValidator(getattr(settings, 'MAX_YEAR_OF_BIRTH')), 
+            MinValueValidator(getattr(settings, 'MIN_YEAR_OF_BIRTH'))],
         blank = True,
         null = True
     )
@@ -221,7 +222,8 @@ class Choice(models.Model):
     )
     factor = models.SmallIntegerField(
         verbose_name = _('Factor'),
-        validators = [MaxValueValidator(2), MinValueValidator(-2)]
+        validators = [MaxValueValidator(getattr(settings, 'MAX_FACTOR_VALUE')), 
+            MinValueValidator(getattr(settings, 'MIN_FACTOR_VALUE'))]
     )
     created_at = models.DateTimeField(
         verbose_name = _('Created datetime'),
@@ -256,12 +258,13 @@ class Answer(models.Model):
     )
     duration = models.DurationField(
         verbose_name = _('Duration'),
-        validators = [MinValueValidator(timedelta(seconds=3)), ]
+        validators = [MinValueValidator(timedelta(seconds=getattr(settings, 'MIN_DURATION_IN_SECONDS'))), ]
     )
     weight = models.PositiveSmallIntegerField(
         verbose_name = _('Weight'),
-        validators = [MaxValueValidator(2), MinValueValidator(1)],
-        default = 1
+        validators = [MaxValueValidator(getattr(settings, 'MAX_WEIGHT_VALUE')), 
+            MinValueValidator(getattr(settings, 'MIN_WEIGHT_VALUE'))],
+        default = getattr(settings, 'MIN_WEIGHT_VALUE')
     )
     created_at = models.DateTimeField(
         verbose_name = _('Created datetime'),

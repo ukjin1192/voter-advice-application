@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load custom_filter %}
+
 {% block container %}
 <div class="progress" id="progress-bar">
 	<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: 100%"></div>
@@ -107,11 +109,9 @@
 		<div class="short-width-group">
 			<select class="form-control" id="supporting-party">
 				<option></option>
-				<option value="">새누리당</option>
-				<option value="">더불어 민주당</option>
-				<option value="">안철수 신당</option>
-				<option value="">정의당</option>
-				<option value="">녹색당</option>
+				{% for party in 'PARTY_CHOICES'|get_settings_variable  %}
+				<option value="{{ party.0 }}">{{ party.1 }}</option>
+				{% endfor %}
 			</select>
 		</div>
 		

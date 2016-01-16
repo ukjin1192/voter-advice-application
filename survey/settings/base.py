@@ -158,7 +158,14 @@ BROKER_URL = 'amqp://guest:guest@localhost:5672/'       # Use RabbitMQ as broker
 CELERY_IMPORTS = ('utils.cron',)
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
 
-# Choices in `models.py`
+# Variables in `models.py`
+MIN_YEAR_OF_BIRTH = 1910
+MAX_YEAR_OF_BIRTH = 2010
+MIN_FACTOR_VALUE = -2
+MAX_FACTOR_VALUE = 2
+MIN_WEIGHT_VALUE = 1
+MAX_WEIGHT_VALUE = 2
+MIN_DURATION_IN_SECONDS = 3
 SEX_CHOICES = (
     ('male', 'Male'),
     ('female', 'Female')
