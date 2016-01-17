@@ -64,8 +64,12 @@ $(document).ready(function() {
       url: '/api/questions/',
       type: 'GET'
     }).done(function(data) {
-      data.forEach(function(question) {
+      var totalQuestions = data.length;
+      var totalSections = totalQuestions + 3;
+      
+      data.forEach(function(question, index) {
         var sectionDOM = $('#section-virtual-dom').clone().removeClass('hidden').removeAttr('id');
+        sectionDOM.find('.progress-bar').css('width', (index + 1) / (totalQuestions + 1) * 100 + '%');
         sectionDOM.find('.question-id').val(question.id);
         sectionDOM.find('.question-image').attr('src', question.image_url);
         sectionDOM.find('.question-explanation').html(question.explanation);
@@ -80,8 +84,6 @@ $(document).ready(function() {
         $('#page-scroll-container .section').last().before(sectionDOM);
       });
       
-      var totalSections = $('#page-scroll-container .section').length;
-      var totalQuestions = totalSections - 3;
       var anchorsList = ['main', 'tag'];
       for (var i = 1; i < totalQuestions + 1; i++) {
         anchorsList.push('Q' + i);
@@ -90,6 +92,7 @@ $(document).ready(function() {
       
       $('#page-scroll-container').removeClass('hidden').fullpage({
         anchors: anchorsList,
+        paddingBottom: $('#navbar').outerHeight() + $('#browser-support-warning').outerHeight(),
         onLeave: function(index, nextIndex, direction){
           var leavingSection = $(this);
           
