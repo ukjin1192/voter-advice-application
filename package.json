@@ -21,8 +21,7 @@
     "lodash": "~3.10.1",
     "bootstrap": "~3.3.6",
     "bootstrap-webpack": "0.0.5",
-    "fullpage.js": "~2.7.6",
-    "bootstrap-switch": "~3.3.2"
+    "fullpage.js": "~2.7.6"
   },
   "devDependencies": {
     "css-loader": "~0.23.1",

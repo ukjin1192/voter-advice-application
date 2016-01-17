@@ -14,8 +14,7 @@ module.exports = {
       'jquery.cookie', 
       'lodash',
       'bootstrap-webpack',
-      'fullpage.js',
-      'bootstrap-switch'
+      'fullpage.js'
     ]
   },
   output: {

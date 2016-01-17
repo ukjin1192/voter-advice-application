@@ -11,6 +11,15 @@ var getCaptcha = require('./module/getCaptcha');
 
 $(document).on('click', '#refresh-captcha', getCaptcha);
 
+$(document).on('click', '.question-weight', function() {
+  var button = $(this);
+  if (button.hasClass('active')) {
+    button.html('공감이 안되면 눌러주세요');
+  } else {
+    button.html('공감이 되면 눌러주세요');
+  }
+});
+
 // Validate captcha input and create user
 $(document).on('submit', '#create-user-form', function(event) {
   event.preventDefault();
@@ -114,10 +123,6 @@ $(document).ready(function() {
       
       $('#section-virtual-dom').remove();
       
-      // Activate bootstrap switch
-      $('.question-weight').bootstrapSwitch({
-        'offText': '공감되면 눌러주세요', 'onText': '공감되지 않으면 눌러주세요', 'handleWidth': '170px'});
-      
       // Get user profile and answers, then fill out this data into questions
       if (localStorage.getItem('token') != null && localStorage.getItem('user_id') != null) {
         $('#check-data-existence-message').removeClass('hidden');
@@ -149,10 +154,9 @@ $(document).ready(function() {
               questionBlock.find('.answer-id').val(answer.id);
               questionBlock.find('.original-choice-id').val(answer.choice);
               questionBlock.find('.original-weight').val(answer.weight);
-              if (answer.weight == 1) {
-                questionBlock.find('.question-weight').attr('checked', false);
-              } else {
-                questionBlock.find('.question-weight').attr('checked', true);
+              if (answer.weight == 2) {
+                questionBlock.find('.question-weight').button('toggle');
+                questionBlock.find('.question-weight').html('공감이 안되면 눌러주세요');
               }
             });
             
@@ -206,7 +210,7 @@ $(document).ready(function() {
             var choiceID = leavingSection.find('.question-choice[type="radio"]:checked').val();
             var originalChoiceID = leavingSection.find('.original-choice-id').val();
             var answerID = leavingSection.find('.answer-id').val();
-            var weight = leavingSection.find('.question-weight').is(':checked') + 1;
+            var weight = leavingSection.find('.question-weight').hasClass('active') + 1;
             var originalWeight = leavingSection.find('.original-weight').val();
             
             if (choiceID != undefined) {
@@ -228,8 +232,8 @@ $(document).ready(function() {
                   processData: false
                 }).done(function(data) {
                   leavingSection.find('.answer-id').val(data.id);
-                  leavingSection.find('.original-choice-id').val(data.choice);
-                  leavingSection.find('.original-weight').val(data.weight);
+                  leavingSection.find('.original-choice-id').val(choiceID);
+                  leavingSection.find('.original-weight').val(weight);
                 }).fail(function(data) {
                   console.log('Failed to create answer: ' + data);
                 }); 
@@ -251,9 +255,8 @@ $(document).ready(function() {
                   contentType: false,
                   processData: false
                 }).done(function(data) {
-                  leavingSection.find('.answer-id').val(data.id);
-                  leavingSection.find('.original-choice-id').val(data.choice);
-                  leavingSection.find('.original-weight').val(data.weight);
+                  leavingSection.find('.original-choice-id').val(choiceID);
+                  leavingSection.find('.original-weight').val(weight);
                 }).fail(function(data) {
                   console.log('Failed to update answer: ' + data);
                 }); 
