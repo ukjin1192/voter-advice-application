@@ -98,39 +98,27 @@
     </div>
   </noscript>
   
-  <header class="container-fit">
+  <header class="container-fit" id="header">
     {# Show if browser is not supported #}
     <div class="alert alert-warning hidden" id="browser-support-warning" role="alert"></div>
-  </header>
-
-  <nav class="container-fit" id="navbar">
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-          <div class="pull-left" title="메뉴">
-            <span class="glyphicon glyphicon-menu-hamburger" id="toggle-sidebar"></span>
+    
+    <nav id="navbar">
+      <div class="container">
+        <div class="row">
+          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <div class="pull-left" title="메뉴">
+              <span class="glyphicon glyphicon-menu-hamburger" id="toggle-sidebar"></span>
+            </div>
           </div>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
-          <a href="/" id="navbar-service-name" title="홈으로 이동">
-            핑<span class="label label-primary" id="beta-logo">Beta</span>
-          </a>
-        </div>
-        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-          <div class="pull-right" title="페이지 이동">
-            <select class="form-control" id="page-scroll-link">
-              <option value="main">메인</option>
-              <option value="tag">단체, 유명인</option>
-              <option value="question-1">1</option>
-              <option value="question-2">2</option>
-              <option value="question-3">3</option>
-              <option value="additional-info">부가 정보</option>
-            </select>
+          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
+            <a href="/" id="home-link" title="홈으로 이동">
+              핑<span class="label label-primary" id="beta-logo">Beta</span>
+            </a>
           </div>
         </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+  </header>
 
   <section id="sidebar"></section>
 

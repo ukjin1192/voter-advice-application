@@ -137,61 +137,58 @@ pre {
 	max-width: 330px;
 }
 
-/* =======================
- * Browser support warning
- * ======================= */
-
-#browser-support-warning {
-	margin-bottom: 0;
-	text-align: center;
-}
-
 /* ==============
  * Navigation bar
  * ============== */
 
-#navbar {
-	padding: 10px 0;
+#header {
+	position:fixed;
+	top: 0;
+	width: 100%;
 	text-align: center; 
 	background-color: white; 
 	z-index: 100;
-
-	#toggle-sidebar {
-		top: 8px;
-		// Make clickable area bigger
-		margin: -10px;
-		padding: 10px;
-		font-size: 27px;
-		color: $blue-color;
-		cursor: pointer;
+	
+	#browser-support-warning {
+		margin-bottom: 0;
 	}
 
-	#navbar-service-name {
-		// Make clickable area bigger
-		margin: -10px -30px;
-		padding: 10px 30px;
-		font-weight: 700;
-		font-size: 2.0em;
-		text-align: center;
-		color: $blue-color;
-		cursor: pointer;
+	#navbar {
+		width: 100%;
+		padding: 10px 0;
 		
-		#beta-logo {
-			position: absolute;
-			top: -7px;
-			margin-left: -10px;
-			font-size: 0.3em;
-			transform: rotate(30deg);
-			-webkit-transform: rotate(30deg);
-			-moz-transform: rotate(30deg);
-			-ms-transform: rotate(30deg);
-			-o-transform: rotate(30deg);
+		#toggle-sidebar {
+			top: 8px;
+			// Make clickable area bigger
+			margin: -10px;
+			padding: 10px;
+			font-size: 27px;
+			color: $blue-color;
+			cursor: pointer;
 		}
-	}
-
-	#page-scroll-link {
-		margin-top: 4px;
-		color: $blue-color;
+		
+		#home-link {
+			// Make clickable area bigger
+			margin: -10px -30px;
+			padding: 10px 30px;
+			font-weight: 700;
+			font-size: 2.0em;
+			text-align: center;
+			color: $blue-color;
+			cursor: pointer;
+			
+			#beta-logo {
+				position: absolute;
+				top: -7px;
+				margin-left: -10px;
+				font-size: 0.3em;
+				transform: rotate(30deg);
+				-webkit-transform: rotate(30deg);
+				-moz-transform: rotate(30deg);
+				-ms-transform: rotate(30deg);
+				-o-transform: rotate(30deg);
+			}
+		}
 	}
 }
 
@@ -228,7 +225,6 @@ pre {
 			
 			.question-weight-container {
 				margin-bottom: 10px;
-				text-align: left;
 			}
 			
 			.question-image {

@@ -103,7 +103,7 @@ $(document).ready(function() {
       
       $('#page-scroll-container').removeClass('hidden').fullpage({
         anchors: anchorsList,
-        paddingBottom: $('#navbar').outerHeight() + $('#browser-support-warning').outerHeight(),
+        paddingTop: $('#header').outerHeight(),
         onLeave: function(index, nextIndex, direction){
           var leavingSection = $(this);
           
