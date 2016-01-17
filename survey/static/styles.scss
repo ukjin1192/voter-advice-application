@@ -142,7 +142,7 @@ pre {
  * ============== */
 
 #header {
-	position:fixed;
+	position: fixed;
 	top: 0;
 	width: 100%;
 	text-align: center; 
@@ -154,7 +154,7 @@ pre {
 	}
 
 	#navbar {
-		width: 100%;
+		width: inherit;
 		padding: 10px 0;
 		
 		#toggle-sidebar {

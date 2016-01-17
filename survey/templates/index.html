@@ -28,10 +28,26 @@
 			
 			<div class="alert alert-danger hidden" id="create-user-form-alert-message" role="alert"></div>
 			
-			<button type="submit" class="btn btn-primary btn-lg btn-block">
-				나도 확인할래요
+			<button type="submit" class="btn btn-primary btn-lg btn-block" id="create-user-submit-btn">
+				나도 확인해보기
 			</button>
 		</form>
+		
+		<div class="alert alert-info hidden" id="check-data-existence-message" role="alert">
+			기존 데이터를 가져오는 중입니다
+		</div>
+		
+		<a href="#" type="button" class="btn btn-primary btn-lg btn-block hidden" id="continue-survey-btn">
+			이어하기
+		</a>
+		
+		<a href="#tag" type="button" class="btn btn-primary btn-lg btn-block hidden" id="edit-survey-btn">
+			수정하기
+		</a>
+		
+		<a href="/result/" type="button" class="btn btn-primary btn-lg btn-block hidden" id="move-to-result-list-btn">
+			결과 보기
+		</a>
 	</div>
 
 	<div class="section">
@@ -138,12 +154,16 @@
 			<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"></div>
 		</div>
 		<input type="hidden" class="question-id" value="" />
-		<img class="question-image" src="" />
+		<input type="hidden" class="question-order" value="" />
+		<img class="question-image" data-src="" />
 		<div class="question-explanation"></div>
 		<div class="question-weight-container">
 			<input type="checkbox" class="question-weight" />
 		</div>
 		<div class="question-choices"></div>
+		<input type="hidden" class="answer-id" value="" />
+		<input type="hidden" class="original-choice-id" value="" />
+		<input type="hidden" class="original-weight" value="" />
 	</div>
 </div>
 {% endblock %}
