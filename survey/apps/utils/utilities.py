@@ -57,7 +57,7 @@ def get_one_dimensional_result(user_data, *target_data):
         target_data = [{'name': 'User A', 'weighted_factor_list': [1, 2, 1]},
                        {'name': 'User B', 'weighted_factor_list': [4, 2, 4]}]
     [Output]
-        [('User A', 0.66), ('User B', 0.5)]
+        [{'key': 'User A', 'value': 0.66}, {'key': 'User B', 'value': 0.5}]
     """
     question_count = len(user_data)
     similarity = []
@@ -70,7 +70,7 @@ def get_one_dimensional_result(user_data, *target_data):
                 getattr(settings, 'MAX_WEIGHT_VALUE')
         max_disagreement = float(question_count * factor_max_distance)
         agreement_score = 1 - (disagreement / max_disagreement)
-        similarity.append((target_name, agreement_score))
+        similarity.append({'key': target_name, 'value': agreement_score})
 
     return similarity
 
