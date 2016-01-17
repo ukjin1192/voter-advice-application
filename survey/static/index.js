@@ -8,13 +8,8 @@ var setCSRFToken = require('./module/setCSRFToken');
 var setAuthToken = require('./module/setAuthToken');
 var clearAuthToken = require('./module/clearAuthToken');
 var getCaptcha = require('./module/getCaptcha');
-var activateSwitch = require('./module/activateSwitch');
-var getResultID = require('./module/getResultID');
-var getResult = require('./module/getResult');
 
 $(document).on('click', '#refresh-captcha', getCaptcha);
-
-$(document).on('click', '.question-choices [type="radio"]', activateSwitch);
 
 $(document).on('submit', '#create-user-form', function(event) {
   event.preventDefault();
@@ -51,7 +46,23 @@ $(document).on('submit', '#create-user-form', function(event) {
 });
 
 $(document).on('click', '#get-party-result-btn', function() {
-  getResultID('party')
+  setAuthToken();
+  setCSRFToken();
+
+  var formData = new FormData();
+  formData.append('category', 'party');
+
+  $.ajax({
+    url: '/api/results/',
+    type: 'POST',
+    data: formData,
+    contentType: false,
+    processData: false
+  }).done(function(data) {
+    location.href = '/result/' + data.id + '/';
+  }).fail(function(data) {
+    console.log('Failed to get result ID: ' + data);
+  }); 
 });
 
 $(document).ready(function() {
@@ -122,13 +133,27 @@ $(document).ready(function() {
           }
         }
       });
+      
+      $('#section-virtual-dom').remove();
+      $('.question-weight').bootstrapSwitch({
+        'offText': '공감되면 눌러주세요', 'onText': '공감되지 않으면 눌러주세요', 'handleWidth': '170px'});
     }).fail(function(data) {
       console.log('Failed to get questions: ' + data);
     }); 
   } else if (pathname == '/result/') {
   } else if (/result\/(\d+)/.test(pathname)) {
     var answerID = pathname.match(/result\/(\d+)/)[1]
-    getResult(answerID);    
+    
+    setAuthToken();
+    
+    $.ajax({
+      url: '/api/results/' + answerID + '/',
+      type: 'GET'
+    }).done(function(data) {
+      $('#result-detail').html(data.record);
+    }).fail(function(data) {
+      console.log('Failed to get result: ' + data);
+    }); 
   }
 
   $('#loading-icon').addClass('hidden');
