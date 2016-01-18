@@ -3,32 +3,15 @@
 {% block container %}
 <div id="page-scroll-container">
 	<div class="section">
-		<div id="result-detail"></div>
-		<div>
-			<h3>정당 유사도</h1>
-			<h6>2016.06.15</h6> 
-			<div class="progress">
-				<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-					User A : 40%
-				</div>
-			</div>
-			<div class="progress">
-				<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-					User B: 20%
-				</div>
-			</div>
-			<div class="progress">
-				<div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
-					User C : 60%
-				</div>
-			</div>
-			<div class="progress">
-				<div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
-					User D : 80%
-				</div>
-			</div>	
-		</div>
-		<div id="share-btn-group">
+		
+		<h3 id="result-category"></h1>
+		<h6 id="record-updated-at"></h6> 
+		<div id="result-chart"></div>
+		<div id="label-list"></div>
+		
+		<div class="space"></div>
+		
+		<div class="hidden" id="share-btn-group">
 			{# Facebook #}
 			<a href="https://www.facebook.com/sharer/sharer.php?u=https://pingkorea.com{{ request.path }}" target="_blank" class="share-btn">
 				<img src="https://res.cloudinary.com/modupen/image/upload/v1439919716/social%20media%20logo/facebook.svg"/>
@@ -49,14 +32,31 @@
 			<a href="javascript:;" class="share-btn" id="kakaotalk-share">
 				<img src="https://res.cloudinary.com/modupen/image/upload/v1439919716/social%20media%20logo/kakaotalk.svg" />
 			</a>
-			<h6>공유하면 이 결과를 누구나 볼 수 있습니다</h6>
+			<h6>공유하면 이 결과를 누구나 볼 수 있습니다.</h6>
+			<h6>언제든 비공개로 전환할 수 있습니다.</h6>
 		</div>
 		
 		<div class="space"></div>
 		
-		<a class="btn btn-primary btn-lg btn-block" href="/" role="button">
+		<a type="button" class="btn btn-primary btn-lg btn-block hidden" href="/result/" role="button" id="move-to-result-list-btn">
+			결과 리스트로 이동하기
+		</a>
+		
+		<button type="button" class="btn btn-primary btn-lg btn-block hidden" id="update-public-field-btn" data-loading-text="업데이트 중입니다">
+			비공개로 전환하기
+		</button>
+		
+		<div class="alert alert-info hidden" id="update-public-field-alert-message" role="alert">
+			비공개로 전환했습니다
+		</div>
+		
+		<a type="button" class="btn btn-primary btn-lg btn-block hidden" href="/" role="button" id="move-to-main-page-btn">
 			나도 확인해보기
 		</a>
+		
+		<div class="alert alert-danger hidden" id="forbidden-alert-message" role="alert">
+			존재하지 않거나 비공개입니다
+		</div>
 	</div>
 </div>
 {% endblock %}

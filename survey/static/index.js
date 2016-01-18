@@ -57,7 +57,7 @@ $(document).on('submit', '#create-user-form', function(event) {
       
       // Clear original survey data
       $('.question-choice').attr('checked', false); 
-      $('.question-weight').removeClass('active');
+      $('.question-weight').removeClass('active').html('공감이 되면 눌러주세요');
       $('.answer-id').val('');
       $('.original-choice-id').val('');
       $('.original-weight').val('');
@@ -377,28 +377,130 @@ $(document).ready(function() {
   } 
   // Result detail page
   else if (/result\/(\d+)/.test(pathname)) {
-    // Inititate fullpage.js with options
-    $('#page-scroll-container').fullpage({
-      paddingTop: $('#header').outerHeight(),
-    });
-    
-    var answerID = pathname.match(/result\/(\d+)/)[1]
+    var resultID = pathname.match(/result\/(\d+)/)[1]
     
     // Set authentication token at HTTP header
     setAuthToken();
     
-    // Get answer object
+    // Get result object
     $.ajax({
-      url: '/api/results/' + answerID + '/',
+      url: '/api/results/' + resultID + '/',
       type: 'GET'
     }).done(function(data) {
-      $('#result-detail').html(data.record);
+      switch (data.category) {
+        case 'party': 
+          $('#result-category').html('정당 유사도');
+          break;
+        default:
+          break;
+      }
+      var updatedAt = new Date(data.updated_at);
+      $('#record-updated-at').html('최종 업데이트 : ' + updatedAt.getFullYear() + '-' +
+        updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
+      
+      var rows = JSON.parse(data.record.replace(/'/g, '"'));
+      // TODO sorting
+      rows.forEach(function(row, index) {
+        switch (index % 4) {
+          case 0:
+            $('#result-chart').append('<div class="progress">' +
+              '<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" style="width: ' +
+                row.value + '%">' + row.value + '%' + '</div></div>');
+            $('#label-list').append('<span class="label label-success">' + row.key + '</span>');
+            break;
+          case 1:
+            $('#result-chart').append('<div class="progress">' +
+              '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: ' +
+                row.value + '%">' + row.value + '%' + '</div></div>');
+            $('#label-list').append('<span class="label label-info">' + row.key + '</span>');
+            break;
+          case 2:
+            $('#result-chart').append('<div class="progress">' +
+              '<div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" style="width: ' +
+                row.value + '%">' + row.value + '%' + '</div></div>');
+            $('#label-list').append('<span class="label label-warning">' + row.key + '</span>');
+            break;
+          case 3:
+            $('#result-chart').append('<div class="progress">' +
+              '<div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" style="width: ' +
+                row.value + '%">' + row.value + '%' + '</div></div>');
+            $('#label-list').append('<span class="label label-danger">' + row.key + '</span>');
+            break;
+          default:
+            break;
+        }
+      });
+      
+      // When user is owner of result
+      if (data.user == localStorage.getItem('user_id')) {
+        $('#share-btn-group').removeClass('hidden');
+        $('#move-to-result-list-btn').removeClass('hidden');
+        if (data.is_public) $('#update-public-field-btn').removeClass('hidden');
+        
+        // Update result to public 
+        $(document).on('click', '.share-btn', function() {
+          var formData = new FormData();
+          formData.append('is_public', true);
+          
+          setAuthToken();
+          setCSRFToken();
+          
+          $.ajax({
+            url: '/api/results/' + resultID+ '/',
+            type: 'PATCH',
+            data: formData,
+            contentType: false,
+            processData: false
+          }).done(function(data) {
+            $('#update-public-field-btn').removeClass('hidden');
+            $('#update-public-field-alert-message').addClass('hidden');
+          }).fail(function(data) {
+            console.log('Failed to update result to public: ' + data);
+          }); 
+        });
+        
+        // Update result to not public
+        $(document).on('click', '#update-public-field-btn', function() {
+          $('#update-public-field-btn').button('loading');
+          
+          var formData = new FormData();
+          formData.append('is_public', false);
+          
+          setAuthToken();
+          setCSRFToken();
+          
+          $.ajax({
+            url: '/api/results/' + resultID + '/',
+            type: 'PATCH',
+            data: formData,
+            contentType: false,
+            processData: false
+          }).done(function(data) {
+            $('#update-public-field-btn').addClass('hidden');
+            $('#update-public-field-alert-message').removeClass('hidden');
+          }).fail(function(data) {
+            console.log('Failed to update result to public: ' + data);
+          }).always(function() {
+            $('#update-public-field-btn').button('reset');
+          }); 
+        });
+      } else {
+        $('#move-to-main-page-btn').removeClass('hidden');
+      }
     }).fail(function(data) {
+      // When result is not exist or not public
+      $('#forbidden-alert-message').removeClass('hidden');
+      $('#move-to-main-page-btn').removeClass('hidden');
       console.log('Failed to get result: ' + data);
+    }).always(function() {
+      // Inititate fullpage.js with options
+      $('#page-scroll-container').fullpage({
+        paddingTop: $('#header').outerHeight(),
+      });
     }); 
     
     // Social media sharing feature
-    /* Kakao talk sharing
+    /* TODO Kakao talk sharing
     Kakao.init('');
     Kakao.Link.createTalkLinkButton({
       container: '#kakaotalk-share',
@@ -424,11 +526,11 @@ $(document).ready(function() {
       return false;
     });
     
-    // Alert that twitter sharing in IE is not working properly
+    // Alert that twitter sharing in IE(<11) is not working properly
     $(document).on('click', '#twitter-share', function() {
       // Check whether browser is IE or not
       if (window.navigator.userAgent.indexOf("MSIE ") > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
-        alert("Internet Explorer 에서 트위터 공유는 정상적으로 작동하지 않습니다.");
+        alert("IE 10 이하에서 트위터 공유는 정상적으로 작동하지 않습니다.");
         return false;
       }
     });

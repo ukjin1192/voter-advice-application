@@ -249,6 +249,13 @@ pre {
  * Result detail
  * ============= */
 
+#label-list {
+
+	.label {
+		margin: 3px;
+	}
+}
+
 #share-btn-group {
 	padding: 20px 0 10px 0;
 	text-align: center;
@@ -265,6 +272,11 @@ pre {
 			max-width: 50px;
 		}
 	}
+}
+
+#move-to-main-page-btn {
+	color: white;
+	margin-bottom: 20px;
 }
 
 /* ===============================
