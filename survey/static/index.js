@@ -26,6 +26,7 @@ $(document).on('submit', '#create-user-form', function(event) {
 
   // Clear alert message and hide it
   $('#create-user-form-alert-message').html('').addClass('hidden');
+  $('#create-user-submit-btn').button('loading');
 
   var formData = new FormData();
   formData.append('captcha_key', $('#captcha-key').val());
@@ -69,6 +70,8 @@ $(document).on('submit', '#create-user-form', function(event) {
     }
   }).fail(function(data) {
     console.log('Failed to create user: ' + data);
+  }).always(function() {
+    $('#create-user-submit-btn').button('reset');
   }); 
 });
 
@@ -76,6 +79,8 @@ $(document).on('click', '#get-party-result-btn', function() {
   // Set authentication and CSRF tokens  at HTTP header
   setAuthToken();
   setCSRFToken();
+
+  $('#get-party-result-btn').button('loading');
 
   var formData = new FormData();
   formData.append('category', 'party');
@@ -91,6 +96,8 @@ $(document).on('click', '#get-party-result-btn', function() {
     location.href = '/result/' + data.id + '/';
   }).fail(function(data) {
     console.log('Failed to get result ID: ' + data);
+  }).always(function() {
+    $('#get-party-result-btn').button('reset');
   }); 
 });
 
@@ -274,11 +281,30 @@ $(document).ready(function() {
           else if (index == 1) {
             if (localStorage.getItem('token') == null) return false;
           }
-          // TODO save tags
+          // TODO Save tags
           else if (index == 2) {
           }
-          // TODO save additional info
+          // Save additional info
           else if (index == totalSections) {
+            var formData = new FormData();
+            formData.append('sex', $('input[name="sex"]:checked').val());
+            formData.append('year_of_birth', $('#year-of-birth').val());
+            formData.append('supporting_party', $('#supporting-party').val());
+            
+            setAuthToken();
+            setCSRFToken();
+            
+            $.ajax({
+              url: '/api/users/' + localStorage.getItem('user_id') + '/',
+              type: 'PATCH',
+              data: formData,
+              contentType: false,
+              processData: false
+            }).done(function(data) {
+              console.log('Succeed to update user: ' + data);
+            }).fail(function(data) {
+              console.log('Failed to update user: ' + data);
+            }); 
           }
         }
       });
