@@ -61,6 +61,9 @@ $(document).on('submit', '#create-user-form', function(event) {
       $('.answer-id').val('');
       $('.original-choice-id').val('');
       $('.original-weight').val('');
+      $('input[name="sex"]').attr('checked', false);
+      $('#year-of-birth').val('');
+      $('#supporting-party').val('');
       
       // Set authentication token at HTTP header
       setAuthToken();
@@ -72,7 +75,58 @@ $(document).on('submit', '#create-user-form', function(event) {
     console.log('Failed to create user: ' + data);
   }).always(function() {
     $('#create-user-submit-btn').button('reset');
+    $('#continue-survey-btn').addClass('hidden');
+    $('#edit-survey-btn').addClass('hidden');
+    $('#move-to-result-list-btn').addClass('hidden');
   }); 
+});
+
+$(document).on('click', '#submit-survey-btn', function() {
+  // Clear alert message
+  $('#submit-survey-alert-message').addClass('hidden').html('');
+
+  // Save additional info
+  var formData = new FormData();
+  formData.append('sex', $('input[name="sex"]:checked').val());
+  formData.append('year_of_birth', $('#year-of-birth').val());
+  formData.append('supporting_party', $('#supporting-party').val());
+  
+  setAuthToken();
+  setCSRFToken();
+  
+  $.ajax({
+    url: '/api/users/' + localStorage.getItem('user_id') + '/',
+    type: 'PATCH',
+    data: formData,
+    contentType: false,
+    processData: false
+  }).done(function(data) {
+    console.log('Succeed to update user: ' + data);
+  }).fail(function(data) {
+    console.log('Failed to update user: ' + data);
+  });
+  
+  // Check user chose all questions
+  var totalQuestions = $('.question').length;
+  var unansweredQuestions = [];
+
+  for (var i = 0; i < totalQuestions; i++) {
+    var question = $($('.question')[i]); 
+    if (question.find('.question-choice[type="radio"]:checked').length == 0 || 
+        question.find('.answer-id').val() == '') {
+      unansweredQuestions.push(i + 1);
+    }
+  }
+
+  // When user does not completed survey 
+  if (unansweredQuestions.length > 0) {
+    $('#submit-survey-alert-message').
+      html('다음 질문들의 답을 택해주세요 : ' + unansweredQuestions.join(', ')).removeClass('hidden');
+  }
+  // Move to result list page when user completed survey
+  else {
+    location.href = '/result/';
+  }
 });
 
 $(document).on('click', '#get-party-result-btn', function() {
