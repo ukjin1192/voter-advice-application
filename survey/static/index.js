@@ -54,6 +54,13 @@ $(document).on('submit', '#create-user-form', function(event) {
       $('#captcha-key').val('');
       $('#captcha-value').val('');
       
+      // Clear original survey data
+      $('.question-choice').attr('checked', false); 
+      $('.question-weight').removeClass('active');
+      $('.answer-id').val('');
+      $('.original-choice-id').val('');
+      $('.original-weight').val('');
+      
       // Set authentication token at HTTP header
       setAuthToken();
       
@@ -163,10 +170,10 @@ $(document).ready(function() {
             if (completedSurvey) {
               $('#edit-survey-btn, #move-to-result-list-btn').removeClass('hidden');
             } else {
-              var lastQuestionOrder = $('.question-choice[type="radio"]:checked').last().
-                closest('section').find('.question-order').val();
+              var lastQuestionOrder = parseInt($('.question-choice[type="radio"]:checked').last().
+                closest('section').find('.question-order').val());
               if (lastQuestionOrder >= 1 && lastQuestionOrder < totalQuestions) {
-                $('#continue-survey-btn').attr('href', '#' + (lastQuestionOrder + 1)).removeClass('hidden');
+                $('#continue-survey-btn').attr('href', '#Q' + (lastQuestionOrder + 1)).removeClass('hidden');
               } else if (lastQuestionOrder == totalQuestions) {
                 $('#continue-survey-btn').attr('href', '#additional').removeClass('hidden');
               } else {
