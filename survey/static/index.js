@@ -86,6 +86,7 @@ $(document).on('submit', '#create-user-form', function(event) {
 $(document).on('click', '#submit-survey-btn', function() {
   // Clear alert message
   $('#submit-survey-alert-message').addClass('hidden').html('');
+  $('#submit-survey-btn').button('loading');
 
   // Save additional info
   var formData = new FormData();
@@ -106,6 +107,8 @@ $(document).on('click', '#submit-survey-btn', function() {
     console.log('Succeed to update user: ' + data);
   }).fail(function(data) {
     console.log('Failed to update user: ' + data);
+  }).always(function() {
+    $('#submit-survey-btn').button('reset');
   });
   
   // Check user chose all questions

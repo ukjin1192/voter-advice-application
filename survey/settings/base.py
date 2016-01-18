@@ -172,7 +172,9 @@ SEX_CHOICES = (
 )
 PARTY_CHOICES = (
     ('party_a', 'Party A'),
-    ('party_b', 'Party B')
+    ('party_b', 'Party B'),
+    ('party_c', 'Party C'),
+    ('party_d', 'Party D')
 )
 USER_CATEGORY_CHOICES = (
     ('party', 'Party'),
