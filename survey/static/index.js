@@ -90,7 +90,7 @@ $(document).on('click', '#submit-survey-btn', function() {
 
   // Save additional info
   var formData = new FormData();
-  formData.append('sex', $('input[name="sex"]:checked').val());
+  if ($('input[name="sex"]:checked').val() != undefined) formData.append('sex', $('input[name="sex"]:checked').val());
   formData.append('year_of_birth', $('#year-of-birth').val());
   formData.append('supporting_party', $('#supporting-party').val());
   
@@ -346,7 +346,7 @@ $(document).ready(function() {
           // Save additional info
           else if (index == totalSections) {
             var formData = new FormData();
-            formData.append('sex', $('input[name="sex"]:checked').val());
+            if ($('input[name="sex"]:checked').val() != undefined) formData.append('sex', $('input[name="sex"]:checked').val());
             formData.append('year_of_birth', $('#year-of-birth').val());
             formData.append('supporting_party', $('#supporting-party').val());
             
