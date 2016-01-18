@@ -196,14 +196,6 @@ pre {
  * Sidebar
  * ======= */
 
-/* ============
- * Progress bar
- * ============ */
-
-#progress-bar {
-	margin: 10px 0;
-}
-
 /* ====================
  * Main page with survey
  * ===================== */
@@ -245,6 +237,32 @@ pre {
 				margin-bottom: 10px;
 				text-align: left;
 			}
+		}
+	}
+}
+
+/* ===========
+ * Result list
+ * =========== */
+
+/* =============
+ * Result detail
+ * ============= */
+
+#share-btn-group {
+	padding: 20px 0 10px 0;
+	text-align: center;
+	background-color: white;
+	color: $light-grey-color;
+	font-style: italic;
+
+	.share-btn {
+		display: inline;
+		padding: 7px;
+		
+		img {
+			width: 12%;
+			max-width: 50px;
 		}
 	}
 }

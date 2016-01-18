@@ -1,5 +1,62 @@
 {% extends "base.html" %}
 
 {% block container %}
-<div id="result-detail"></div>
+<div id="page-scroll-container">
+	<div class="section">
+		<div id="result-detail"></div>
+		<div>
+			<h3>정당 유사도</h1>
+			<h6>2016.06.15</h6> 
+			<div class="progress">
+				<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+					User A : 40%
+				</div>
+			</div>
+			<div class="progress">
+				<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+					User B: 20%
+				</div>
+			</div>
+			<div class="progress">
+				<div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%">
+					User C : 60%
+				</div>
+			</div>
+			<div class="progress">
+				<div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%">
+					User D : 80%
+				</div>
+			</div>	
+		</div>
+		<div id="share-btn-group">
+			{# Facebook #}
+			<a href="https://www.facebook.com/sharer/sharer.php?u=https://pingkorea.com{{ request.path }}" target="_blank" class="share-btn">
+				<img src="https://res.cloudinary.com/modupen/image/upload/v1439919716/social%20media%20logo/facebook.svg"/>
+			</a>
+			{# Twitter #}
+			<a href="https://twitter.com/intent/tweet?text=[핑] 당신의 위치를 확인하세요&url=https://pingkorea.com{{ request.path }}" target="_blank" class="share-btn" id="twitter-share">
+				<img src="https://res.cloudinary.com/modupen/image/upload/v1439919716/social%20media%20logo/twitter.svg" />
+			</a>
+			{# Google+ #}
+			<a href="https://plus.google.com/share?url=https://pingkorea.com{{ request.path }}" target="_blank" class="share-btn">
+				<img src="https://res.cloudinary.com/modupen/image/upload/v1439919716/social%20media%20logo/google_plus.svg" />
+			</a>
+			{# LINE #}
+			<a href="line://msg/text/[핑] 당신의 위치를 확인하세요 https://pingkorea.com{{ request.path }}" class="share-btn" id="line-share">
+				<img src="https://res.cloudinary.com/modupen/image/upload/v1439919716/social%20media%20logo/line.svg" />
+			</a>
+			{# Kakao talk #}
+			<a href="javascript:;" class="share-btn" id="kakaotalk-share">
+				<img src="https://res.cloudinary.com/modupen/image/upload/v1439919716/social%20media%20logo/kakaotalk.svg" />
+			</a>
+			<h6>공유하면 이 결과를 누구나 볼 수 있습니다</h6>
+		</div>
+		
+		<div class="space"></div>
+		
+		<a class="btn btn-primary btn-lg btn-block" href="/" role="button">
+			나도 확인해보기
+		</a>
+	</div>
+</div>
 {% endblock %}

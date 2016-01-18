@@ -70,14 +70,16 @@ $(document).on('submit', '#create-user-form', function(event) {
       
       // Move to 1st survey page
       $.fn.fullpage.moveSectionDown();
+      
+      // Hide buttons for participated user
+      $('#continue-survey-btn').addClass('hidden');
+      $('#edit-survey-btn').addClass('hidden');
+      $('#move-to-result-list-btn').addClass('hidden');
     }
   }).fail(function(data) {
     console.log('Failed to create user: ' + data);
   }).always(function() {
     $('#create-user-submit-btn').button('reset');
-    $('#continue-survey-btn').addClass('hidden');
-    $('#edit-survey-btn').addClass('hidden');
-    $('#move-to-result-list-btn').addClass('hidden');
   }); 
 });
 
@@ -368,14 +370,24 @@ $(document).ready(function() {
   } 
   // Result list page
   else if (pathname == '/result/') {
+    // Inititate fullpage.js with options
+    $('#page-scroll-container').fullpage({
+      paddingTop: $('#header').outerHeight(),
+    });
   } 
   // Result detail page
   else if (/result\/(\d+)/.test(pathname)) {
+    // Inititate fullpage.js with options
+    $('#page-scroll-container').fullpage({
+      paddingTop: $('#header').outerHeight(),
+    });
+    
     var answerID = pathname.match(/result\/(\d+)/)[1]
     
     // Set authentication token at HTTP header
     setAuthToken();
     
+    // Get answer object
     $.ajax({
       url: '/api/results/' + answerID + '/',
       type: 'GET'
@@ -384,6 +396,42 @@ $(document).ready(function() {
     }).fail(function(data) {
       console.log('Failed to get result: ' + data);
     }); 
+    
+    // Social media sharing feature
+    /* Kakao talk sharing
+    Kakao.init('');
+    Kakao.Link.createTalkLinkButton({
+      container: '#kakaotalk-share',
+      label: '[핑] 당신의 위치를 확인하세요',
+      image: {
+        src: 'http://res.cloudinary.com/modupen/image/upload/v1441194561/basic%20component/kakaotalk_share.png',
+        width: '274',
+        height: '99'
+      },
+      webButton: {
+        text: '나도 확인해보기',
+        url: window.location.href
+      }
+    });
+    */
+    
+    // Alert that kakaotalk and line messenger sharing is only available at mobile
+    $(document).on('click', '#line-share, #kakaotalk-share', function() {
+      // Detect desktop browser
+      if (!('ontouchstart' in window)) {
+        alert("모바일에서만 가능합니다");
+      }
+      return false;
+    });
+    
+    // Alert that twitter sharing in IE is not working properly
+    $(document).on('click', '#twitter-share', function() {
+      // Check whether browser is IE or not
+      if (window.navigator.userAgent.indexOf("MSIE ") > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+        alert("Internet Explorer 에서 트위터 공유는 정상적으로 작동하지 않습니다.");
+        return false;
+      }
+    });
   }
 });
 
