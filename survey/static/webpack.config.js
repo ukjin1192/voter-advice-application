@@ -2,6 +2,7 @@
 
 var webpack = require('webpack');
 var path = require('path');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 require('es6-promise').polyfill();
 
 var productionMode = JSON.parse(process.env.production_mode || '0');
@@ -25,15 +26,19 @@ module.exports = {
   plugins: productionMode ? [
     // Use jquery variable globally
     new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
-      "window.jQuery": "jquery"
+      $: 'jquery',
+      jQuery: 'jquery',
+      'window.jQuery': 'jquery'
     }),
     // Separate main file with vendors
     new webpack.optimize.CommonsChunkPlugin(
       'vendor',
       'vendor.bundle.js'
     ),
+		// Extract CSS text from bundle into a file
+    new ExtractTextPlugin('[name].css', {
+			allChunks: true
+		}),
     // Minify JS files
     new webpack.optimize.UglifyJsPlugin({
       minimize: true
@@ -41,15 +46,19 @@ module.exports = {
   ] : [
     // Use jquery variable globally
     new webpack.ProvidePlugin({
-      $: "jquery",
-      jQuery: "jquery",
-      "window.jQuery": "jquery"
+      $: 'jquery',
+      jQuery: 'jquery',
+      'gindow.jQuery': 'jquery'
     }),
     // Separate main file with vendors
     new webpack.optimize.CommonsChunkPlugin(
       'vendor',
       'vendor.bundle.js'
-    )
+    ),
+		// Extract CSS text from bundle into a file
+    new ExtractTextPlugin('[name].css', {
+			allChunks: true
+		})
   ],
   resolve: {
     extensions: ['', '.js', '.es6']
@@ -57,10 +66,12 @@ module.exports = {
   module: {
     loaders: [
       {
+        test: /\.css$/,
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
+      },
+      {
         test: /\.scss$/,
-        // 1. Convert SCSS to CSS
-        // 2. Insert CSS to <style> tag
-        loader: "style-loader!css-loader!sass-loader"
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader!sass-loader')
       },
       {
         test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/, 

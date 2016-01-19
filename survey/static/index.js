@@ -83,14 +83,14 @@ $(document).on('submit', '#create-user-form', function(event) {
   }); 
 });
 
-// Auto scrolling when user chose choice
+// Auto scrolling when user chose choice1
 $(document).on('click', '.question-choice', function() {
   $.fn.fullpage.moveSectionDown();
 });
 
 $(document).on('click', '#submit-survey-btn', function() {
-  if ($('input[name="sex"]:checked').val() == undefined && 
-    $('#year-of-birth').val() == '' && $('#supporting-party').val() == '') {
+  if ($('input[name="sex"]:checked').val() != undefined ||
+    $('#year-of-birth').val() != '' || $('#supporting-party').val() != '') {
     
     // Clear alert message
     $('#submit-survey-alert-message').addClass('hidden').html('');
@@ -245,15 +245,9 @@ $(document).ready(function() {
             if (completedSurvey) {
               $('#edit-survey-btn, #move-to-result-list-btn').removeClass('hidden');
             } else {
-              var lastQuestionOrder = parseInt($('.question-choice[type="radio"]:checked').last().
-                closest('section').find('.question-order').val());
-              if (lastQuestionOrder >= 1 && lastQuestionOrder < totalQuestions) {
-                $('#continue-survey-btn').attr('href', '#Q' + (lastQuestionOrder + 1)).removeClass('hidden');
-              } else if (lastQuestionOrder == totalQuestions) {
-                $('#continue-survey-btn').attr('href', '#additional').removeClass('hidden');
-              } else {
-                $('#continue-survey-btn').attr('href', '#tag').removeClass('hidden');
-              }
+              var firstUnaswerdQuestionOrder = parseInt($('.answer-id[value=""]').closest('.question').
+                find('.question-order').val());
+              $('#continue-survey-btn').attr('href', '#Q' + firstUnaswerdQuestionOrder).removeClass('hidden');
             }
             $('#create-user-submit-btn').html('새로 시작하기 (기존 데이터 삭제)');
           }).fail(function(data) {
@@ -354,7 +348,7 @@ $(document).ready(function() {
           }
           // Save additional info
           else if (index == totalSections) {
-            if ($('input[name="sex"]:checked').val() == undefined && 
+            if ($('input[name="sex"]:checked').val() == undefined &&
               $('#year-of-birth').val() == '' && $('#supporting-party').val() == '') return ;
             
             var formData = new FormData();
