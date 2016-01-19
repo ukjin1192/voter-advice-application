@@ -56,7 +56,7 @@
 		
 		<form class="form-group" id="add-tag-form">
 			<div class="input-group short-width-group">
-				<input type="text" class="form-control" id="tag-input" placeholder="단체명" required />
+				<input type="text" class="form-control" id="tag-input" placeholder="준비중입니다" required disabled />
 				<div class="input-group-btn">
 					<button type="submit" class="btn btn-default">
 						<span class="glyphicon glyphicon-plus"></span>
@@ -79,7 +79,7 @@
 		
 		<form class="form-group" id="add-celebrity-form">
 			<div class="input-group short-width-group">
-				<input type="text" class="form-control" id="celebrity-input" placeholder="이름" required />
+				<input type="text" class="form-control" id="celebrity-input" placeholder="준비중입니다" required disabled />
 				<div class="input-group-btn">
 					<button type="submit" class="btn btn-default">
 						<span class="glyphicon glyphicon-plus"></span>
@@ -92,6 +92,12 @@
 			<span class="label label-primary cursor-pointer">유명인 A</span>
 			<span class="label label-primary cursor-pointer">유명인 B</span>
 			<h6 class="grey-color">클릭해서 삭제할 수 있어요</h6>
+		</div>
+		
+		<div class="space"></div>
+		
+		<div class="alert alert-info" role="alert">
+			스크롤 또는 키보드로 위/아래 이동을 할 수 있어요
 		</div>
 	</div>
 
@@ -124,7 +130,7 @@
 		<h3>지지정당이 있으세요?</h3>
 		<div class="short-width-group">
 			<select class="form-control" id="supporting-party">
-				<option></option>
+				<option>클릭해서 선택하세요</option>
 				{% for party in 'PARTY_CHOICES'|get_settings_variable  %}
 				<option value="{{ party.0 }}">{{ party.1 }}</option>
 				{% endfor %}
@@ -135,7 +141,7 @@
 		
 		<h3>어느 지역에 있나요?</h3>
 		<div class="short-width-group">
-			<input type="text" class="form-control" id="district" placeholder="지역구" />
+			<input type="text" class="form-control" id="district" placeholder="준비중입니다" disabled />
 		</div>
 		
 		<div class="space"></div>

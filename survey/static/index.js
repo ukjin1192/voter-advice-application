@@ -83,33 +83,42 @@ $(document).on('submit', '#create-user-form', function(event) {
   }); 
 });
 
-$(document).on('click', '#submit-survey-btn', function() {
-  // Clear alert message
-  $('#submit-survey-alert-message').addClass('hidden').html('');
-  $('#submit-survey-btn').button('loading');
+// Auto scrolling when user chose choice
+$(document).on('click', '.question-choice', function() {
+  $.fn.fullpage.moveSectionDown();
+});
 
-  // Save additional info
-  var formData = new FormData();
-  if ($('input[name="sex"]:checked').val() != undefined) formData.append('sex', $('input[name="sex"]:checked').val());
-  formData.append('year_of_birth', $('#year-of-birth').val());
-  formData.append('supporting_party', $('#supporting-party').val());
-  
-  setAuthToken();
-  setCSRFToken();
-  
-  $.ajax({
-    url: '/api/users/' + localStorage.getItem('user_id') + '/',
-    type: 'PATCH',
-    data: formData,
-    contentType: false,
-    processData: false
-  }).done(function(data) {
-    console.log('Succeed to update user: ' + data);
-  }).fail(function(data) {
-    console.log('Failed to update user: ' + data);
-  }).always(function() {
-    $('#submit-survey-btn').button('reset');
-  });
+$(document).on('click', '#submit-survey-btn', function() {
+  if ($('input[name="sex"]:checked').val() == undefined && 
+    $('#year-of-birth').val() == '' && $('#supporting-party').val() == '') {
+    
+    // Clear alert message
+    $('#submit-survey-alert-message').addClass('hidden').html('');
+    $('#submit-survey-btn').button('loading');
+    
+    // Save additional info
+    var formData = new FormData();
+    if ($('input[name="sex"]:checked').val() != undefined) formData.append('sex', $('input[name="sex"]:checked').val());
+    if ($('#year-of-birth').val() != '') formData.append('year_of_birth', $('#year-of-birth').val());
+    if ($('#supporting-party').val() != '') formData.append('supporting_party', $('#supporting-party').val());
+    
+    setAuthToken();
+    setCSRFToken();
+    
+    $.ajax({
+      url: '/api/users/' + localStorage.getItem('user_id') + '/',
+      type: 'PATCH',
+      data: formData,
+      contentType: false,
+      processData: false
+    }).done(function(data) {
+      console.log('Succeed to update user: ' + data);
+    }).fail(function(data) {
+      console.log('Failed to update user: ' + data);
+    }).always(function() {
+      $('#submit-survey-btn').button('reset');
+    });
+  }
   
   // Check user chose all questions
   var totalQuestions = $('.question').length;
@@ -345,10 +354,14 @@ $(document).ready(function() {
           }
           // Save additional info
           else if (index == totalSections) {
+            if ($('input[name="sex"]:checked').val() == undefined && 
+              $('#year-of-birth').val() == '' && $('#supporting-party').val() == '') return ;
+            
             var formData = new FormData();
             if ($('input[name="sex"]:checked').val() != undefined) formData.append('sex', $('input[name="sex"]:checked').val());
-            formData.append('year_of_birth', $('#year-of-birth').val());
-            formData.append('supporting_party', $('#supporting-party').val());
+            if ($('#year-of-birth').val() != '') formData.append('year_of_birth', $('#year-of-birth').val());
+            if ($('#supporting-party').val() != '') formData.append('supporting_party', $('#supporting-party').val());
+            if ($('input[name="sex"]:checked').val() != undefined) formData.append('sex', $('input[name="sex"]:checked').val());
             
             setAuthToken();
             setCSRFToken();
@@ -402,7 +415,10 @@ $(document).ready(function() {
         updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
       
       var rows = JSON.parse(data.record.replace(/'/g, '"'));
-      // TODO sorting
+      // Sorting as descending order
+      rows = rows.sort(function(a, b){
+        return a.value < b.value;
+      });
       rows.forEach(function(row, index) {
         switch (index % 4) {
           case 0:
