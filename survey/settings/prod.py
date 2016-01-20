@@ -36,3 +36,6 @@ CACHES = {
         }
     }
 }
+
+# Silk is live profiling and inspection tool
+RUN_SILK = DEBUG
