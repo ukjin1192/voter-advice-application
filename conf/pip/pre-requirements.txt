@@ -1,0 +1,9 @@
+$ apt-get install imagemagick libjpeg-dev libfreetype6 libfreetype6-dev zlib1g-dev
+
+# 32bit : i386-linux-gnu, 64bit : x86_64-linux-gnu
+$ ln -s /usr/lib/x86_64-linux-gnu/libjpeg.so /usr/lib 
+$ ln -s /usr/lib/x86_64-linux-gnu/libfreetype.so /usr/lib 
+$ ln -s /usr/lib/x86_64-linux-gnu/libz.so /usr/lib 
+
+# Only for ubuntu 14.04 LTS version 
+$ ln -s /usr/include/freetype2 /usr/include/freetype 
