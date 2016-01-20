@@ -130,7 +130,7 @@
 		<h3>지지정당이 있으세요?</h3>
 		<div class="short-width-group">
 			<select class="form-control" id="supporting-party">
-				<option>클릭해서 선택하세요</option>
+				<option value="">클릭해서 선택하세요</option>
 				{% for party in 'PARTY_CHOICES'|get_settings_variable  %}
 				<option value="{{ party.0 }}">{{ party.1 }}</option>
 				{% endfor %}

@@ -355,7 +355,6 @@ $(document).ready(function() {
             if ($('input[name="sex"]:checked').val() != undefined) formData.append('sex', $('input[name="sex"]:checked').val());
             if ($('#year-of-birth').val() != '') formData.append('year_of_birth', $('#year-of-birth').val());
             if ($('#supporting-party').val() != '') formData.append('supporting_party', $('#supporting-party').val());
-            if ($('input[name="sex"]:checked').val() != undefined) formData.append('sex', $('input[name="sex"]:checked').val());
             
             setAuthToken();
             setCSRFToken();
