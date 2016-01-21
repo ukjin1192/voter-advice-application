@@ -21,7 +21,7 @@
 				<span class="input-group-addon cursor-pointer" id="refresh-captcha">
 					<span class="glyphicon glyphicon-refresh"></span>
 				</span>
-				<input type="text" class="form-control" id="captcha-value" placeholder="왼쪽 문자를 입력해주세요" required />
+				<input type="text" class="form-control" id="captcha-value" placeholder="왼쪽 문자를 입력해주세요" autocomplete="off" required />
 			</div>
 			
 			<div class="space"></div>
@@ -33,21 +33,23 @@
 			</button>
 		</form>
 		
-		<div class="alert alert-info hidden" id="check-data-existence-message" role="alert">
-			기존 데이터를 가져오는 중입니다
+		<div class="short-width-group">
+			<div class="alert alert-info hidden" id="check-data-existence-message" role="alert">
+				기존 데이터를 가져오는 중입니다
+			</div>
+			
+			<a href="#" type="button" class="btn btn-primary btn-lg btn-block hidden" id="continue-survey-btn">
+				이어하기
+			</a>
+			
+			<a href="#tag" type="button" class="btn btn-primary btn-lg btn-block hidden" id="edit-survey-btn">
+				수정하기
+			</a>
+			
+			<a href="/result/" type="button" class="btn btn-primary btn-lg btn-block hidden" id="move-to-result-list-btn">
+				결과 보기
+			</a>
 		</div>
-		
-		<a href="#" type="button" class="btn btn-primary btn-lg btn-block hidden" id="continue-survey-btn">
-			이어하기
-		</a>
-		
-		<a href="#tag" type="button" class="btn btn-primary btn-lg btn-block hidden" id="edit-survey-btn">
-			수정하기
-		</a>
-		
-		<a href="/result/" type="button" class="btn btn-primary btn-lg btn-block hidden" id="move-to-result-list-btn">
-			결과 보기
-		</a>
 	</div>
 
 	<div class="section">
@@ -122,7 +124,7 @@
 		
 		<h3>언제 태어나셨나요?</h3>
 		<div class="short-width-group">
-			<input type="number" class="form-control" id="year-of-birth" min="1910" max="2010" placeholder="출생년도" />
+			<input type="number" class="form-control" id="year-of-birth" min="1910" max="2010" placeholder="출생년도" autocomplete="off" />
 		</div>
 		
 		<div class="space"></div>
@@ -141,7 +143,7 @@
 		
 		<h3>어느 지역에 있나요?</h3>
 		<div class="short-width-group">
-			<input type="text" class="form-control" id="district" placeholder="준비중입니다" disabled />
+			<input type="text" class="form-control" id="district" placeholder="준비중입니다" autocomplete="off" disabled />
 		</div>
 		
 		<div class="space"></div>
