@@ -210,6 +210,20 @@ pre {
 		#captcha-value {
 			height: 44px;
 		}
+
+		.back-to-top {
+			position: absolute;
+			left: 5px;
+			bottom: 10px;
+			color: $light-grey-color;
+		}
+
+		.go-to-bottom {
+			position: absolute;
+			right: 5px;
+			bottom: 10px;
+			color: $light-grey-color;
+		}
 		
 		.question {
 			
@@ -226,7 +240,8 @@ pre {
 				margin-bottom: 20px;
 				padding: 15px;
 				text-align: left;
-				border-radius: 0 0 5px 5px;
+				// border-radius: 0 0 5px 5px;
+				border-radius: 5px;
 				background-color: white;
 			}
 			

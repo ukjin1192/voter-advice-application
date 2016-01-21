@@ -6,9 +6,12 @@
 <div class="hidden" id="page-scroll-container">
 
 	<div class="section">
+		{% comment %}
 		<h3>길동이와 나의 정치 궁합은?</h3>
 		<h1><strong>123,456</strong></h1>
 		<h4>명이 자신의 위치를 확인하고 갔습니다</h4>
+		{% endcomment %}
+		<h2>나와 가장 비슷한 정당은?</h2>
 		
 		<div class="space"></div>
 		
@@ -42,7 +45,7 @@
 				이어하기
 			</a>
 			
-			<a href="#tag" type="button" class="btn btn-primary btn-lg btn-block hidden" id="edit-survey-btn">
+			<a href="#Q1" type="button" class="btn btn-primary btn-lg btn-block hidden" id="edit-survey-btn">
 				수정하기
 			</a>
 			
@@ -52,6 +55,7 @@
 		</div>
 	</div>
 
+	{% comment %}
 	<div class="section">
 		<h3>내가 속한 단체는?</h3>
 		<h5>단체 속에 나를 알아볼 수 있어요</h5>
@@ -102,6 +106,7 @@
 			스크롤 또는 키보드로 <span class="glyphicon glyphicon-sort" aria-hidden="true"></span> 이동을 할 수 있어요
 		</div>
 	</div>
+	{% endcomment %}
 
 	<div class="section">
 		<div class="progress">
@@ -167,7 +172,7 @@
 		<input type="hidden" class="question-order" value="" />
 		<img class="question-image" data-src="" />
 	 	<div class="question-explanation"></div>
-		<div class="question-weight-container">
+		<div class="question-weight-container hidden">
 			<button type="button" class="btn btn-default question-weight" data-toggle="button" autocomplete="off">
 				공감이 되면 눌러주세요
 			</button>
@@ -177,5 +182,7 @@
 		<input type="hidden" class="original-choice-id" value="" />
 		<input type="hidden" class="original-weight" value="" />
 	</div>
+	<a href="#main" class="back-to-top">맨 위로 이동</a>
+	<a href="#additional" class="go-to-bottom">맨 아래로 이동</a>
 </div>
 {% endblock %}

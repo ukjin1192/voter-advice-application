@@ -134,8 +134,14 @@ $(document).on('click', '#submit-survey-btn', function() {
 
   // When user does not completed survey 
   if (unansweredQuestions.length > 0) {
-    $('#submit-survey-alert-message').
-      html('다음 질문들의 답을 택해주세요 : ' + unansweredQuestions.join(', ')).removeClass('hidden');
+    $('#submit-survey-alert-message').append('다음 질문들의 답을 택해주세요 : ' );
+    
+    for (var i = 0; i < unansweredQuestions.length; i++) {
+      $('#submit-survey-alert-message').append('<a href="#Q' + unansweredQuestions[i] + '">#' + 
+          unansweredQuestions[i] + ' </a>');
+    }
+    
+    $('#submit-survey-alert-message').removeClass('hidden');
   }
   // Move to result list page when user completed survey
   else {
@@ -183,7 +189,8 @@ $(document).ready(function() {
       type: 'GET'
     }).done(function(data) {
       var totalQuestions = data.length;
-      var totalSections = totalQuestions + 3;
+      // var totalSections = totalQuestions + 3;
+      var totalSections = totalQuestions + 2;
       
       data.forEach(function(question, index) {
         var sectionDOM = $('#section-virtual-dom').clone().removeClass('hidden').removeAttr('id');
@@ -266,7 +273,8 @@ $(document).ready(function() {
         localStorage.clear();
       }
       
-      var anchorsList = ['main', 'tag'];
+      // var anchorsList = ['main', 'tag'];
+      var anchorsList = ['main', ];
       for (var i = 1; i < totalQuestions + 1; i++) {
         anchorsList.push('Q' + i);
       }
@@ -343,9 +351,9 @@ $(document).ready(function() {
           else if (index == 1) {
             if (localStorage.getItem('token') == null) return false;
           }
-          // TODO Save tags
+          /* TODO Save tags
           else if (index == 2) {
-          }
+          }*/
           // Save additional info
           else if (index == totalSections) {
             if ($('input[name="sex"]:checked').val() == undefined &&
