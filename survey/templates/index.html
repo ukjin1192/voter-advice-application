@@ -16,6 +16,7 @@
 		<div class="space"></div>
 		
 		<form class="form-group short-width-group" id="create-user-form">
+			{% comment %}
 			<input type="hidden" id="captcha-key" value="" />
 			<div class="input-group">
 				<span class="input-group-addon" id="captcha-image-container">
@@ -30,6 +31,7 @@
 			<div class="space"></div>
 			
 			<div class="alert alert-danger hidden" id="create-user-form-alert-message" role="alert"></div>
+			{% endcomment %}
 			
 			<button type="submit" class="btn btn-primary btn-lg btn-block" id="create-user-submit-btn" data-loading-text="유효성을 확인중입니다">
 				나도 확인해보기

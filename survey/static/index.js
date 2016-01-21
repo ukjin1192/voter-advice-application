@@ -25,12 +25,12 @@ $(document).on('submit', '#create-user-form', function(event) {
   event.preventDefault();
 
   // Clear alert message and hide it
-  $('#create-user-form-alert-message').html('').addClass('hidden');
+  // $('#create-user-form-alert-message').html('').addClass('hidden');
   $('#create-user-submit-btn').button('loading');
 
   var formData = new FormData();
-  formData.append('captcha_key', $('#captcha-key').val());
-  formData.append('captcha_value', $('#captcha-value').val());
+  // formData.append('captcha_key', $('#captcha-key').val());
+  // formData.append('captcha_value', $('#captcha-value').val());
 
   // Clear authentication and CSRF tokens at HTTP header
   clearAuthToken();
@@ -52,8 +52,8 @@ $(document).on('submit', '#create-user-form', function(event) {
       localStorage.setItem('user_id', data.id);
       
       // Clear captcha input form
-      $('#captcha-key').val('');
-      $('#captcha-value').val('');
+      // $('#captcha-key').val('');
+      // $('#captcha-value').val('');
       
       // Clear original survey data
       $('.question-choice').attr('checked', false); 
@@ -123,9 +123,10 @@ $(document).on('click', '#submit-survey-btn', function() {
   // Check user chose all questions
   var totalQuestions = $('.question').length;
   var unansweredQuestions = [];
+  var questions = $('.question'); 
 
   for (var i = 0; i < totalQuestions; i++) {
-    var question = $($('.question')[i]); 
+    var question = $(questions[i]); 
     if (question.find('.question-choice[type="radio"]:checked').length == 0 || 
         question.find('.answer-id').val() == '') {
       unansweredQuestions.push(i + 1);
@@ -134,7 +135,7 @@ $(document).on('click', '#submit-survey-btn', function() {
 
   // When user does not completed survey 
   if (unansweredQuestions.length > 0) {
-    $('#submit-survey-alert-message').append('다음 질문들의 답을 택해주세요 : ' );
+    $('#submit-survey-alert-message').html('다음 질문들의 답을 택해주세요 : ' );
     
     for (var i = 0; i < unansweredQuestions.length; i++) {
       $('#submit-survey-alert-message').append('<a href="#Q' + unansweredQuestions[i] + '">#' + 
@@ -181,7 +182,7 @@ $(document).ready(function() {
   // Main page with survey
   if (pathname == '/') {
     // Fill out captcha form
-    getCaptcha();
+    // getCaptcha();
     
     // Get all questions without user answers
     $.ajax({
@@ -290,7 +291,7 @@ $(document).ready(function() {
         onLeave: function(index, nextIndex, direction){
           var leavingSection = $(this);
           
-          if (index > 2 && index < totalSections) {
+          if (index > 1 && index < totalSections) {
             var choiceID = leavingSection.find('.question-choice[type="radio"]:checked').val();
             var originalChoiceID = leavingSection.find('.original-choice-id').val();
             var answerID = leavingSection.find('.answer-id').val();

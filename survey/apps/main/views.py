@@ -27,6 +27,7 @@ class UserViewSet(viewsets.ModelViewSet):
         """
         Create user if captcha is valid
         """
+        """
         if not all(x in request.data for x in ['captcha_key', 'captcha_value']):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
@@ -40,7 +41,7 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(
                     {'state': False, 'code': 1, 'message': 'Captcha input is not correct.'},
                     status=status.HTTP_200_OK)
-        
+        """
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
