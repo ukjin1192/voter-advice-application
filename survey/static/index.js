@@ -518,9 +518,9 @@ $(document).ready(function() {
       container: '#kakaotalk-share',
       label: '[핑] 당신의 위치를 확인하세요',
       image: {
-        src: 'http://res.cloudinary.com/modupen/image/upload/v1441194561/basic%20component/kakaotalk_share.png',
-        width: '274',
-        height: '99'
+        src: '',
+        width: '',
+        height: ''
       },
       webButton: {
         text: '나도 확인해보기',
