@@ -180,6 +180,8 @@ class Question(models.Model):
         verbose_name = _('Category'),
         choices = getattr(settings, 'QUESTION_CATEGORY_CHOICES'),
         max_length = 255,
+        blank = True,
+        null = True
     )
     image_url = models.CharField(
         verbose_name = _('Image URL'),
