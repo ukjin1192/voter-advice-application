@@ -31,9 +31,10 @@
 			<div class="space"></div>
 			
 			<div class="alert alert-danger hidden" id="create-user-form-alert-message" role="alert"></div>
-			{% endcomment %}
 			
 			<button type="submit" class="btn btn-primary btn-lg btn-block" id="create-user-submit-btn" data-loading-text="유효성을 확인중입니다">
+			{% endcomment %}
+			<button type="submit" class="btn btn-primary btn-lg btn-block" id="create-user-submit-btn">
 				나도 확인해보기
 			</button>
 		</form>
@@ -51,9 +52,14 @@
 				수정하기
 			</a>
 			
+			{% comment %}
 			<a href="/result/" type="button" class="btn btn-primary btn-lg btn-block hidden" id="move-to-result-list-btn">
 				결과 보기
 			</a>
+			{% endcomment %}
+			<button class="btn btn-primary btn-lg btn-block hidden" id="move-to-result-list-btn" data-loading-text="잠시만 기다려주세요">
+				결과 보기
+			</button>
 		</div>
 	</div>
 
@@ -158,7 +164,7 @@
 		<div class="alert alert-danger hidden" id="submit-survey-alert-message" role="alert"></div>
 		
 		<div class="short-width-group">
-			<button class="btn btn-primary btn-lg btn-block" id="submit-survey-btn" data-loading-text="유효성을 확인중입니다">
+			<button class="btn btn-primary btn-lg btn-block" id="submit-survey-btn" data-loading-text="잠시만 기다려주세요">
 				결과 확인하기
 			</button>
 		</div>

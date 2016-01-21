@@ -146,12 +146,61 @@ $(document).on('click', '#submit-survey-btn', function() {
   }
   // Move to result list page when user completed survey
   else {
-    location.href = '/result/';
+    // location.href = '/result/';
+    $('#submit-survey-btn').button('loading');
+    
+    // Set authentication and CSRF tokens at HTTP header
+    setAuthToken();
+    setCSRFToken();
+    
+    var formData = new FormData();
+    formData.append('category', 'party');
+    
+    $.ajax({
+      url: '/api/results/',
+      type: 'POST',
+      data: formData,
+      contentType: false,
+      processData: false
+    }).done(function(data) {
+      // Move to result detail page
+      location.href = '/result/' + data.id + '/';
+    }).fail(function(data) {
+      console.log('Failed to get result ID: ' + data);
+    }).always(function() {
+      $('#submit-survey-btn').button('reset');
+    }); 
   }
 });
 
+$(document).on('click', '#move-to-result-list-btn', function() {
+  // Set authentication and CSRF tokens at HTTP header
+  setAuthToken();
+  setCSRFToken();
+
+  $('#move-to-result-list-btn').button('loading');
+
+  var formData = new FormData();
+  formData.append('category', 'party');
+
+  $.ajax({
+    url: '/api/results/',
+    type: 'POST',
+    data: formData,
+    contentType: false,
+    processData: false
+  }).done(function(data) {
+    // Move to result detail page
+    location.href = '/result/' + data.id + '/';
+  }).fail(function(data) {
+    console.log('Failed to get result ID: ' + data);
+  }).always(function() {
+    $('#move-to-result-list-btn').button('reset');
+  }); 
+});
+
 $(document).on('click', '#get-party-result-btn', function() {
-  // Set authentication and CSRF tokens  at HTTP header
+  // Set authentication and CSRF tokens at HTTP header
   setAuthToken();
   setCSRFToken();
 
@@ -285,7 +334,7 @@ $(document).ready(function() {
       $('#page-scroll-container').removeClass('hidden').fullpage({
         // Enable anchor and history feature
         anchors: anchorsList,
-        paddingTop: $('#header').outerHeight(),
+        // paddingTop: $('#header').outerHeight(),
         // Disables featutre moving to specific section when loaded
         animateAnchor: false,
         onLeave: function(index, nextIndex, direction){
@@ -390,7 +439,7 @@ $(document).ready(function() {
   else if (pathname == '/result/') {
     // Inititate fullpage.js with options
     $('#page-scroll-container').fullpage({
-      paddingTop: $('#header').outerHeight(),
+      // paddingTop: $('#header').outerHeight(),
     });
   } 
   // Result detail page
@@ -516,7 +565,7 @@ $(document).ready(function() {
     }).always(function() {
       // Inititate fullpage.js with options
       $('#page-scroll-container').fullpage({
-        paddingTop: $('#header').outerHeight(),
+        // paddingTop: $('#header').outerHeight(),
       });
     }); 
     
