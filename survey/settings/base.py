@@ -171,10 +171,10 @@ SEX_CHOICES = (
     ('female', 'Female')
 )
 PARTY_CHOICES = (
-    ('party_a', 'Party A'),
-    ('party_b', 'Party B'),
-    ('party_c', 'Party C'),
-    ('party_d', 'Party D')
+    ('party_a', '새누리당'),
+    ('party_b', '더민주당'),
+    ('party_c', '국민의당'),
+    ('party_d', '정의당'),
 )
 USER_CATEGORY_CHOICES = (
     ('party', 'Party'),

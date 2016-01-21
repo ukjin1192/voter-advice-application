@@ -465,7 +465,12 @@ $(document).ready(function() {
       $('#record-updated-at').html('최종 업데이트 : ' + updatedAt.getFullYear() + '-' +
         updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
       
-      var rows = JSON.parse(data.record.replace(/'/g, '"'));
+      var rows = JSON.parse(data.record.replace(/'/g, '"').
+        replace(/party_a/g, '새누리당').
+        replace(/party_b/g, '더민주당').
+        replace(/party_c/g, '국민의당').
+        replace(/party_d/g, '정의당'));
+      
       // Sorting as descending order
       rows = rows.sort(function(a, b){
         return a.value < b.value;

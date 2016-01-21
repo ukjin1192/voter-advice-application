@@ -216,16 +216,16 @@ class ResultViewSet(viewsets.ModelViewSet):
         target_data = []
         updated_at_list = []
         if request.data['category'] == 'party':
-            #try:
             for party_name in getattr(settings, 'PARTY_CHOICES'):
-                party = User.objects.get(category='party', caption=party_name[0])
-                answer = utilities.get_survey_data_of_user(party)
-                party_dict = {'name': party_name[0], 
-                        'weighted_factor_list': answer['weighted_factor_list']}
-                target_data.append(party_dict)
-                updated_at_list.append(answer['updated_at'])
-            #except:
-            #    return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                try:
+                    party = User.objects.get(category='party', caption=party_name[0])
+                    answer = utilities.get_survey_data_of_user(party)
+                    party_dict = {'name': party_name[0], 
+                            'weighted_factor_list': answer['weighted_factor_list']}
+                    target_data.append(party_dict)
+                    updated_at_list.append(answer['updated_at'])
+                except:
+                    pass
         
         # Only get ID of existing result
         if result is not None and result.updated_at > max(updated_at_list):
