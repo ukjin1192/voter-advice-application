@@ -15,8 +15,8 @@
   {# Search option #}
   <meta name="google" value="notranslate" />
   <meta name="author" content="Ping Korea" />
-  <meta name="description" content="정치성향 테스트, Survey to recognize where my political tendency positioned" />
-  <meta name="keywords" content="핑코리아, ping, ping korea, politial tendency, political survey" />
+  <meta name="description" content="정치성향 테스트 (A Korean Voter Advice Application)" />
+  <meta name="keywords" content="핑, 핑코리아, ping, ping korea" />
 
   {# Facebook Open Graph Tag #}
   {% comment %}
@@ -24,7 +24,6 @@
   <meta property="og:site_name" content="Ping Korea" />
   <meta property="og:url" content="https://pingkorea.com/" />
   <meta property="og:description" content="정치성향 테스트" />
-  <meta property="fb:app_id" content="{{ 'FACEBOOK_APP_ID'|get_settings_variable }}" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="" />
   {% endcomment %}
@@ -98,32 +97,6 @@
     </div>
   </noscript>
   
-  {% comment %}
-  <header class="container-fit" id="header">
-    {# Show if browser is not supported #}
-    <div class="alert alert-warning hidden" id="browser-support-warning" role="alert"></div>
-    
-    <nav id="navbar">
-      <div class="container">
-        <div class="row">
-          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <div class="pull-left" title="메뉴">
-              <span class="glyphicon glyphicon-menu-hamburger" id="toggle-sidebar"></span>
-            </div>
-          </div>
-          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 text-center">
-            <a href="/" id="home-link" title="홈으로 이동">
-              핑<span class="label label-primary" id="beta-logo">Beta</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </nav>
-  </header>
-  {% endcomment %}
-
-  <section id="sidebar"></section>
-
   <section class="container-fit">
     <div class="container">
       {% block container %}{% endblock %}

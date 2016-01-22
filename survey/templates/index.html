@@ -6,17 +6,12 @@
 <div class="hidden" id="page-scroll-container">
 
 	<div class="section">
-		{% comment %}
-		<h3>길동이와 나의 정치 궁합은?</h3>
-		<h1><strong>123,456</strong></h1>
-		<h4>명이 자신의 위치를 확인하고 갔습니다</h4>
-		{% endcomment %}
-		<h2>나와 가장 비슷한 정당은?</h2>
+		<h2>나랑 어울리는 정당은?</h2>
+		<h5 class="help-block">예상 소요시간 : 1분</h5>
 		
 		<div class="space"></div>
 		
 		<form class="form-group short-width-group" id="create-user-form">
-			{% comment %}
 			<input type="hidden" id="captcha-key" value="" />
 			<div class="input-group">
 				<span class="input-group-addon" id="captcha-image-container">
@@ -32,10 +27,8 @@
 			
 			<div class="alert alert-danger hidden" id="create-user-form-alert-message" role="alert"></div>
 			
-			<button type="submit" class="btn btn-primary btn-lg btn-block" id="create-user-submit-btn" data-loading-text="유효성을 확인중입니다">
-			{% endcomment %}
-			<button type="submit" class="btn btn-primary btn-lg btn-block" id="create-user-submit-btn">
-				나도 확인해보기
+			<button type="submit" class="btn btn-primary btn-lg btn-block" id="create-user-submit-btn" data-loading-text="잠시만 기다려주세요">
+				확인해보기
 			</button>
 		</form>
 		
@@ -44,83 +37,21 @@
 				기존 데이터를 가져오는 중입니다
 			</div>
 			
-			<a href="#" type="button" class="btn btn-primary btn-lg btn-block hidden" id="continue-survey-btn">
+			<a href="#" class="btn btn-primary btn-lg btn-block hidden" id="continue-survey-btn">
 				이어하기
 			</a>
 			
-			<a href="#Q1" type="button" class="btn btn-primary btn-lg btn-block hidden" id="edit-survey-btn">
+			<a href="#Q1" class="btn btn-primary btn-lg btn-block hidden" id="edit-survey-btn">
 				수정하기
 			</a>
 			
-			{% comment %}
-			<a href="/result/" type="button" class="btn btn-primary btn-lg btn-block hidden" id="move-to-result-list-btn">
-				결과 보기
-			</a>
-			{% endcomment %}
-			<button class="btn btn-primary btn-lg btn-block hidden" id="move-to-result-list-btn" data-loading-text="잠시만 기다려주세요">
+			<button class="btn btn-primary btn-lg btn-block hidden" id="move-to-result-page-btn" data-loading-text="잠시만 기다려주세요">
 				결과 보기
 			</button>
 		</div>
 	</div>
 
-	{% comment %}
 	<div class="section">
-		<h3>내가 속한 단체는?</h3>
-		<h5>단체 속에 나를 알아볼 수 있어요</h5>
-		
-		<form class="form-group" id="add-tag-form">
-			<div class="input-group short-width-group">
-				<input type="text" class="form-control" id="tag-input" placeholder="준비중입니다" required disabled />
-				<div class="input-group-btn">
-					<button type="submit" class="btn btn-default">
-						<span class="glyphicon glyphicon-plus"></span>
-					</button>
-				</div>
-			</div>
-		</form>
-		
-		<div id="tag-list">
-			<span class="label label-primary cursor-pointer">단체 A</span>
-			<span class="label label-primary cursor-pointer">단체 B</span>
-			<h6 class="grey-color">클릭해서 삭제할 수 있어요</h6>
-		</div>
-		
-		<div class="space"></div>
-		<div class="space"></div>
-		
-		<h3>비교해보고 싶은 유명인은?</h3>
-		<h5>유명인과 나를 비교해볼 수 있어요</h5>
-		
-		<form class="form-group" id="add-celebrity-form">
-			<div class="input-group short-width-group">
-				<input type="text" class="form-control" id="celebrity-input" placeholder="준비중입니다" required disabled />
-				<div class="input-group-btn">
-					<button type="submit" class="btn btn-default">
-						<span class="glyphicon glyphicon-plus"></span>
-					</button>
-				</div>
-			</div>
-		</form>
-		
-		<div id="celebrity-list">
-			<span class="label label-primary cursor-pointer">유명인 A</span>
-			<span class="label label-primary cursor-pointer">유명인 B</span>
-			<h6 class="grey-color">클릭해서 삭제할 수 있어요</h6>
-		</div>
-		
-		<div class="space"></div>
-		
-		<div class="alert alert-info" role="alert">
-			스크롤 또는 키보드로 <span class="glyphicon glyphicon-sort" aria-hidden="true"></span> 이동을 할 수 있어요
-		</div>
-	</div>
-	{% endcomment %}
-
-	<div class="section">
-		<div class="progress">
-			<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: 100%"></div>
-		</div>
-		
 		<h3>성별이 어떻게 되세요?</h3>
 		<div>
 			<label class="radio-inline">
@@ -146,24 +77,16 @@
 		<div class="short-width-group">
 			<select class="form-control" id="supporting-party">
 				<option value="">클릭해서 선택하세요</option>
-				{% for party in 'PARTY_CHOICES'|get_settings_variable  %}
-				<option value="{{ party.0 }}">{{ party.1 }}</option>
-				{% endfor %}
 			</select>
 		</div>
 		
 		<div class="space"></div>
 		
-		<h3>어느 지역에 있나요?</h3>
 		<div class="short-width-group">
-			<input type="text" class="form-control" id="district" placeholder="준비중입니다" autocomplete="off" disabled />
-		</div>
-		
-		<div class="space"></div>
-		
-		<div class="alert alert-danger hidden" id="submit-survey-alert-message" role="alert"></div>
-		
-		<div class="short-width-group">
+			<a href="#" class="btn btn-warning btn-lg btn-block hidden" id="move-to-unanswered-question-btn">
+				미응답한 질문 채우러가기
+			</a>
+			
 			<button class="btn btn-primary btn-lg btn-block" id="submit-survey-btn" data-loading-text="잠시만 기다려주세요">
 				결과 확인하기
 			</button>
@@ -178,17 +101,10 @@
 		</div>
 		<input type="hidden" class="question-id" value="" />
 		<input type="hidden" class="question-order" value="" />
-		<img class="question-image" data-src="" />
 	 	<div class="question-explanation"></div>
-		<div class="question-weight-container hidden">
-			<button type="button" class="btn btn-default question-weight" data-toggle="button" autocomplete="off">
-				공감이 되면 눌러주세요
-			</button>
-		</div>
 		<div class="question-choices"></div>
 		<input type="hidden" class="answer-id" value="" />
 		<input type="hidden" class="original-choice-id" value="" />
-		<input type="hidden" class="original-weight" value="" />
 	</div>
 	<a href="#main" class="back-to-top">맨 위로 이동</a>
 	<a href="#additional" class="go-to-bottom">맨 아래로 이동</a>

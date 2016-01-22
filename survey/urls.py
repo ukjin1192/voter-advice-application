@@ -30,20 +30,8 @@ urlpatterns = [
         TemplateView.as_view(template_name='index.html')
     ),
     url(
-        r'^result/$', 
-        TemplateView.as_view(template_name='result_list.html')
-    ),
-    url(
         r'^result/(?P<pk>[0-9]+)/$', 
-        TemplateView.as_view(template_name='result_detail.html')
-    ),
-    url(
-        r'^terms/$', 
-        TemplateView.as_view(template_name='terms.html')
-    ),
-    url(
-        r'^voc/$', 
-        TemplateView.as_view(template_name='voc.html')
+        TemplateView.as_view(template_name='result.html')
     ),
 ]
 

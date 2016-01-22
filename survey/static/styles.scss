@@ -72,6 +72,10 @@ a, a:focus, a:hover, a:active, a:visited {
 	cursor: pointer;
 	color: inherit;
 	outline: 0;
+
+	&.btn {
+		color: white;
+	}
 }
 
 pre {
@@ -135,65 +139,6 @@ pre {
 	max-width: 330px;
 }
 
-/* ==============
- * Navigation bar
- * ============== */
-
-#header {
-	position: fixed;
-	top: 0;
-	width: 100%;
-	text-align: center; 
-	background-color: white; 
-	z-index: 100;
-	
-	#browser-support-warning {
-		margin-bottom: 0;
-	}
-
-	#navbar {
-		width: inherit;
-		padding: 10px 0;
-		
-		#toggle-sidebar {
-			top: 8px;
-			// Make clickable area bigger
-			margin: -10px;
-			padding: 10px;
-			font-size: 27px;
-			color: $blue-color;
-			cursor: pointer;
-		}
-		
-		#home-link {
-			// Make clickable area bigger
-			margin: -10px -30px;
-			padding: 10px 30px;
-			font-weight: 700;
-			font-size: 2.0em;
-			text-align: center;
-			color: $blue-color;
-			cursor: pointer;
-			
-			#beta-logo {
-				position: absolute;
-				top: -7px;
-				margin-left: -10px;
-				font-size: 0.3em;
-				transform: rotate(30deg);
-				-webkit-transform: rotate(30deg);
-				-moz-transform: rotate(30deg);
-				-ms-transform: rotate(30deg);
-				-o-transform: rotate(30deg);
-			}
-		}
-	}
-}
-
-/* =======
- * Sidebar
- * ======= */
-
 /* ====================
  * Main page with survey
  * ===================== */
@@ -210,38 +155,28 @@ pre {
 		#captcha-value {
 			height: 44px;
 		}
-
+		
 		.back-to-top {
 			position: absolute;
 			left: 5px;
 			bottom: 10px;
-			color: $light-grey-color;
+			color: $grey-color;
 		}
-
+		
 		.go-to-bottom {
 			position: absolute;
 			right: 5px;
 			bottom: 10px;
-			color: $light-grey-color;
+			color: $grey-color;
 		}
 		
 		.question {
-			
-			.question-weight-container {
-				margin-bottom: 10px;
-			}
-			
-			.question-image {
-				max-width: 100%;
-				border-radius: 5px 5px 0 0;
-			}
 			
 			.question-explanation {
 				margin-bottom: 20px;
 				padding: 15px;
 				text-align: left;
 				font-size: 1.4em;
-				// border-radius: 0 0 5px 5px;
 				border-radius: 5px;
 				background-color: white;
 			}
@@ -256,12 +191,8 @@ pre {
 	}
 }
 
-/* ===========
- * Result list
- * =========== */
-
 /* =============
- * Result detail
+ * Result page
  * ============= */
 
 #label-list {

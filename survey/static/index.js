@@ -11,26 +11,17 @@ var getCaptcha = require('./module/getCaptcha');
 
 $(document).on('click', '#refresh-captcha', getCaptcha);
 
-$(document).on('click', '.question-weight', function() {
-  var button = $(this);
-  if (button.hasClass('active')) {
-    button.html('공감이 안되면 눌러주세요');
-  } else {
-    button.html('공감이 되면 눌러주세요');
-  }
-});
-
 // Validate captcha input and create user
 $(document).on('submit', '#create-user-form', function(event) {
   event.preventDefault();
 
   // Clear alert message and hide it
-  // $('#create-user-form-alert-message').html('').addClass('hidden');
+  $('#create-user-form-alert-message').html('').addClass('hidden');
   $('#create-user-submit-btn').button('loading');
 
   var formData = new FormData();
-  // formData.append('captcha_key', $('#captcha-key').val());
-  // formData.append('captcha_value', $('#captcha-value').val());
+  formData.append('captcha_key', $('#captcha-key').val());
+  formData.append('captcha_value', $('#captcha-value').val());
 
   // Clear authentication and CSRF tokens at HTTP header
   clearAuthToken();
@@ -52,29 +43,20 @@ $(document).on('submit', '#create-user-form', function(event) {
       localStorage.setItem('user_id', data.id);
       
       // Clear captcha input form
-      // $('#captcha-key').val('');
-      // $('#captcha-value').val('');
+      $('#captcha-key, #captcha-value').val('');
       
       // Clear original survey data
-      $('.question-choice').attr('checked', false); 
-      $('.question-weight').removeClass('active').html('공감이 되면 눌러주세요');
-      $('.answer-id').val('');
-      $('.original-choice-id').val('');
-      $('.original-weight').val('');
-      $('input[name="sex"]').attr('checked', false);
-      $('#year-of-birth').val('');
-      $('#supporting-party').val('');
+      $('.question-choice, input[name="sex"]').attr('checked', false); 
+      $('.answer-id, .original-choice-id, #year-of-birth, #supporting-party').val('');
+      
+      // Hide buttons for participated user
+      $('#continue-survey-btn, #edit-survey-btn, #move-to-result-page-btn').addClass('hidden');
       
       // Set authentication token at HTTP header
       setAuthToken();
       
-      // Move to 1st survey page
+      // Move to 1st question page
       $.fn.fullpage.moveSectionDown();
-      
-      // Hide buttons for participated user
-      $('#continue-survey-btn').addClass('hidden');
-      $('#edit-survey-btn').addClass('hidden');
-      $('#move-to-result-list-btn').addClass('hidden');
     }
   }).fail(function(data) {
     console.log('Failed to create user: ' + data);
@@ -83,17 +65,16 @@ $(document).on('submit', '#create-user-form', function(event) {
   }); 
 });
 
-// Auto scrolling when user chose choice1
+// Auto scrolling when user click choice
 $(document).on('click', '.question-choice', function() {
   $.fn.fullpage.moveSectionDown();
+  $('#move-to-unanswered-question-btn').addClass('hidden');
 });
 
 $(document).on('click', '#submit-survey-btn', function() {
   if ($('input[name="sex"]:checked').val() != undefined ||
     $('#year-of-birth').val() != '' || $('#supporting-party').val() != '') {
     
-    // Clear alert message
-    $('#submit-survey-alert-message').addClass('hidden').html('');
     $('#submit-survey-btn').button('loading');
     
     // Save additional info
@@ -121,40 +102,21 @@ $(document).on('click', '#submit-survey-btn', function() {
   }
   
   // Check user chose all questions
-  var totalQuestions = $('.question').length;
-  var unansweredQuestions = [];
-  var questions = $('.question'); 
-
-  for (var i = 0; i < totalQuestions; i++) {
-    var question = $(questions[i]); 
-    if (question.find('.question-choice[type="radio"]:checked').length == 0 || 
-        question.find('.answer-id').val() == '') {
-      unansweredQuestions.push(i + 1);
-    }
-  }
+  var firstUnaswerdQuestionOrder = parseInt($('.answer-id[value=""]').closest('.question').find('.question-order').val());
 
   // When user does not completed survey 
-  if (unansweredQuestions.length > 0) {
-    $('#submit-survey-alert-message').html('다음 질문들의 답을 택해주세요 : ' );
-    
-    for (var i = 0; i < unansweredQuestions.length; i++) {
-      $('#submit-survey-alert-message').append('<a href="#Q' + unansweredQuestions[i] + '">#' + 
-          unansweredQuestions[i] + ' </a>');
-    }
-    
-    $('#submit-survey-alert-message').removeClass('hidden');
+  if (isNaN(firstUnaswerdQuestionOrder) == false) {
+    $('#move-to-unanswered-question-btn').attr('href', '#Q' + firstUnaswerdQuestionOrder).removeClass('hidden');
   }
-  // Move to result list page when user completed survey
+  // Move to result page when user completed survey
   else {
-    // location.href = '/result/';
     $('#submit-survey-btn').button('loading');
+    
+    var formData = new FormData();
     
     // Set authentication and CSRF tokens at HTTP header
     setAuthToken();
     setCSRFToken();
-    
-    var formData = new FormData();
-    formData.append('category', 'party');
     
     $.ajax({
       url: '/api/results/',
@@ -163,7 +125,7 @@ $(document).on('click', '#submit-survey-btn', function() {
       contentType: false,
       processData: false
     }).done(function(data) {
-      // Move to result detail page
+      // Move to result page
       location.href = '/result/' + data.id + '/';
     }).fail(function(data) {
       console.log('Failed to get result ID: ' + data);
@@ -173,15 +135,14 @@ $(document).on('click', '#submit-survey-btn', function() {
   }
 });
 
-$(document).on('click', '#move-to-result-list-btn', function() {
+$(document).on('click', '#move-to-result-page-btn', function() {
   // Set authentication and CSRF tokens at HTTP header
   setAuthToken();
   setCSRFToken();
 
-  $('#move-to-result-list-btn').button('loading');
-
   var formData = new FormData();
-  formData.append('category', 'party');
+
+  $('#move-to-result-page-btn').button('loading');
 
   $.ajax({
     url: '/api/results/',
@@ -190,38 +151,12 @@ $(document).on('click', '#move-to-result-list-btn', function() {
     contentType: false,
     processData: false
   }).done(function(data) {
-    // Move to result detail page
+    // Move to result page
     location.href = '/result/' + data.id + '/';
   }).fail(function(data) {
     console.log('Failed to get result ID: ' + data);
   }).always(function() {
-    $('#move-to-result-list-btn').button('reset');
-  }); 
-});
-
-$(document).on('click', '#get-party-result-btn', function() {
-  // Set authentication and CSRF tokens at HTTP header
-  setAuthToken();
-  setCSRFToken();
-
-  $('#get-party-result-btn').button('loading');
-
-  var formData = new FormData();
-  formData.append('category', 'party');
-
-  $.ajax({
-    url: '/api/results/',
-    type: 'POST',
-    data: formData,
-    contentType: false,
-    processData: false
-  }).done(function(data) {
-    // Move to result detail page
-    location.href = '/result/' + data.id + '/';
-  }).fail(function(data) {
-    console.log('Failed to get result ID: ' + data);
-  }).always(function() {
-    $('#get-party-result-btn').button('reset');
+    $('#move-to-result-page-btn').button('reset');
   }); 
 });
 
@@ -231,7 +166,7 @@ $(document).ready(function() {
   // Main page with survey
   if (pathname == '/') {
     // Fill out captcha form
-    // getCaptcha();
+    getCaptcha();
     
     // Get all questions without user answers
     $.ajax({
@@ -239,15 +174,13 @@ $(document).ready(function() {
       type: 'GET'
     }).done(function(data) {
       var totalQuestions = data.length;
-      // var totalSections = totalQuestions + 3;
       var totalSections = totalQuestions + 2;
       
       data.forEach(function(question, index) {
         var sectionDOM = $('#section-virtual-dom').clone().removeClass('hidden').removeAttr('id');
-        sectionDOM.find('.progress-bar').css('width', (index + 1) / (totalQuestions + 1) * 100 + '%');
+        sectionDOM.find('.progress-bar').css('width', (index + 1) / totalQuestions * 100 + '%');
         sectionDOM.find('.question-id').val(question.id);
         sectionDOM.find('.question-order').val(index + 1);
-        sectionDOM.find('.question-image').attr('data-src', question.image_url);
         sectionDOM.find('.question-explanation').html(question.explanation);
         
         var choices = question.choices;
@@ -279,7 +212,7 @@ $(document).ready(function() {
           $('#year-of-birth').val(data.year_of_birth);
           $('#supporting-party').find('option[value="' + data.supporting_party + '"]').attr('selected', true);
           
-          var completedSurvey = data.user_participated;
+          var completedSurvey = data.completed_survey;
           
           // Get user answers
           $.ajax({
@@ -292,16 +225,14 @@ $(document).ready(function() {
                 attr('checked', true).closest('.question');
               questionBlock.find('.answer-id').val(answer.id);
               questionBlock.find('.original-choice-id').val(answer.choice);
-              questionBlock.find('.original-weight').val(answer.weight);
-              if (answer.weight == 2) {
-                questionBlock.find('.question-weight').button('toggle');
-                questionBlock.find('.question-weight').html('공감이 안되면 눌러주세요');
-              }
             });
             
+            // When user completed survey
             if (completedSurvey) {
-              $('#edit-survey-btn, #move-to-result-list-btn').removeClass('hidden');
-            } else {
+              $('#edit-survey-btn, #move-to-result-page-btn').removeClass('hidden');
+            } 
+            // When user does not completed survey
+            else {
               var firstUnaswerdQuestionOrder = parseInt($('.answer-id[value=""]').closest('.question').
                 find('.question-order').val());
               $('#continue-survey-btn').attr('href', '#Q' + firstUnaswerdQuestionOrder).removeClass('hidden');
@@ -320,10 +251,10 @@ $(document).ready(function() {
           $('#check-data-existence-message').addClass('hidden');
         }); 
       } else{
+        clearAuthToken();
         localStorage.clear();
       }
       
-      // var anchorsList = ['main', 'tag'];
       var anchorsList = ['main', ];
       for (var i = 1; i < totalQuestions + 1; i++) {
         anchorsList.push('Q' + i);
@@ -334,7 +265,6 @@ $(document).ready(function() {
       $('#page-scroll-container').removeClass('hidden').fullpage({
         // Enable anchor and history feature
         anchors: anchorsList,
-        // paddingTop: $('#header').outerHeight(),
         // Disables featutre moving to specific section when loaded
         animateAnchor: false,
         onLeave: function(index, nextIndex, direction){
@@ -344,16 +274,12 @@ $(document).ready(function() {
             var choiceID = leavingSection.find('.question-choice[type="radio"]:checked').val();
             var originalChoiceID = leavingSection.find('.original-choice-id').val();
             var answerID = leavingSection.find('.answer-id').val();
-            var weight = leavingSection.find('.question-weight').hasClass('active') + 1;
-            var originalWeight = leavingSection.find('.original-weight').val();
             
             if (choiceID != undefined) {
               // Create answer
               if (answerID == '') {
                 var formData = new FormData();
                 formData.append('choice_id', choiceID);
-                formData.append('weight', weight);
-                formData.append('duration', 4);
                 
                 setAuthToken();
                 setCSRFToken();
@@ -367,17 +293,14 @@ $(document).ready(function() {
                 }).done(function(data) {
                   leavingSection.find('.answer-id').val(data.id);
                   leavingSection.find('.original-choice-id').val(choiceID);
-                  leavingSection.find('.original-weight').val(weight);
                 }).fail(function(data) {
                   console.log('Failed to create answer: ' + data);
                 }); 
               }
               // Update answer
-              else if (originalChoiceID != choiceID || originalWeight != weight) {
+              else if (originalChoiceID != choiceID) {
                 var formData = new FormData();
                 formData.append('choice_id', choiceID);
-                formData.append('weight', weight);
-                formData.append('duration', 4);
                 
                 setAuthToken();
                 setCSRFToken();
@@ -390,7 +313,6 @@ $(document).ready(function() {
                   processData: false
                 }).done(function(data) {
                   leavingSection.find('.original-choice-id').val(choiceID);
-                  leavingSection.find('.original-weight').val(weight);
                 }).fail(function(data) {
                   console.log('Failed to update answer: ' + data);
                 }); 
@@ -401,48 +323,25 @@ $(document).ready(function() {
           else if (index == 1) {
             if (localStorage.getItem('token') == null) return false;
           }
-          /* TODO Save tags
-          else if (index == 2) {
-          }*/
-          // Save additional info
-          else if (index == totalSections) {
-            if ($('input[name="sex"]:checked').val() == undefined &&
-              $('#year-of-birth').val() == '' && $('#supporting-party').val() == '') return ;
-            
-            var formData = new FormData();
-            if ($('input[name="sex"]:checked').val() != undefined) formData.append('sex', $('input[name="sex"]:checked').val());
-            if ($('#year-of-birth').val() != '') formData.append('year_of_birth', $('#year-of-birth').val());
-            if ($('#supporting-party').val() != '') formData.append('supporting_party', $('#supporting-party').val());
-            
-            setAuthToken();
-            setCSRFToken();
-            
-            $.ajax({
-              url: '/api/users/' + localStorage.getItem('user_id') + '/',
-              type: 'PATCH',
-              data: formData,
-              contentType: false,
-              processData: false
-            }).done(function(data) {
-              console.log('Succeed to update user: ' + data);
-            }).fail(function(data) {
-              console.log('Failed to update user: ' + data);
-            }); 
-          }
         }
       });
     }).fail(function(data) {
       console.log('Failed to get questions: ' + data);
     }); 
+    
+    // Get parties
+    $.ajax({
+      url: '/api/parties/',
+      type: 'GET'
+    }).done(function(data) {
+      data.forEach(function(party, index) {
+        $('#supporting-party').append('<option value="' + party.name + '">' + party.name + '</option>');
+      }); 
+    }).fail(function(data) {
+      console.log('Failed to get parties: ' + data);
+    }); 
   } 
-  // Result list page
-  else if (pathname == '/result/') {
-    // Inititate fullpage.js with options
-    $('#page-scroll-container').fullpage({
-      // paddingTop: $('#header').outerHeight(),
-    });
-  } 
-  // Result detail page
+  // Result page
   else if (/result\/(\d+)/.test(pathname)) {
     var resultID = pathname.match(/result\/(\d+)/)[1]
     
@@ -454,62 +353,29 @@ $(document).ready(function() {
       url: '/api/results/' + resultID + '/',
       type: 'GET'
     }).done(function(data) {
-      switch (data.category) {
-        case 'party': 
-          $('#result-category').html('정당 유사도');
-          break;
-        default:
-          break;
-      }
       var updatedAt = new Date(data.updated_at);
       $('#record-updated-at').html('최종 업데이트 : ' + updatedAt.getFullYear() + '-' +
         updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
       
-      var rows = JSON.parse(data.record.replace(/'/g, '"').
-        replace(/party_a/g, '새누리당').
-        replace(/party_b/g, '더민주당').
-        replace(/party_c/g, '국민의당').
-        replace(/party_d/g, '정의당'));
+      var rows = JSON.parse(data.record.replace(/'/g, '"'));
       
       // Sorting as descending order
       rows = rows.sort(function(a, b){
         return a.value < b.value;
       });
+      
       rows.forEach(function(row, index) {
-        switch (index % 4) {
-          case 0:
-            $('#result-chart').append('<div class="progress">' +
-              '<div class="progress-bar progress-bar-success progress-bar-striped" role="progressbar" style="width: ' +
-                row.value + '%">' + row.value + '%' + '</div></div>');
-            $('#label-list').append('<span class="label label-success">' + row.key + '</span>');
-            break;
-          case 1:
-            $('#result-chart').append('<div class="progress">' +
-              '<div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar" style="width: ' +
-                row.value + '%">' + row.value + '%' + '</div></div>');
-            $('#label-list').append('<span class="label label-info">' + row.key + '</span>');
-            break;
-          case 2:
-            $('#result-chart').append('<div class="progress">' +
-              '<div class="progress-bar progress-bar-warning progress-bar-striped" role="progressbar" style="width: ' +
-                row.value + '%">' + row.value + '%' + '</div></div>');
-            $('#label-list').append('<span class="label label-warning">' + row.key + '</span>');
-            break;
-          case 3:
-            $('#result-chart').append('<div class="progress">' +
-              '<div class="progress-bar progress-bar-danger progress-bar-striped" role="progressbar" style="width: ' +
-                row.value + '%">' + row.value + '%' + '</div></div>');
-            $('#label-list').append('<span class="label label-danger">' + row.key + '</span>');
-            break;
-          default:
-            break;
-        }
+        $('#result-chart').append('<div class="progress">' +
+          '<div class="progress-bar progress-bar-striped" role="progressbar" style="width: ' +
+            row.value + '%; background-color: ' + row.color + ';">' + row.value + '%' + '</div></div>');
+        $('#label-list').append('<span class="label" style="background-color: ' + row.color + ';">' + row.key + '</span>');
       });
       
       // When user is owner of result
       if (data.user == localStorage.getItem('user_id')) {
+        $('#move-to-main-page-btn').html('설문 수정하기');
         $('#share-btn-group').removeClass('hidden');
-        $('#move-to-result-list-btn').removeClass('hidden');
+        
         if (data.is_public) $('#update-public-field-btn').removeClass('hidden');
         
         // Update result to public 
@@ -560,22 +426,17 @@ $(document).ready(function() {
           }); 
         });
       } else {
-        $('#move-to-main-page-btn').removeClass('hidden');
+        $('#move-to-main-page-btn').html('나도 확인해보기');
       }
     }).fail(function(data) {
       // When result is not exist or not public
       $('#forbidden-alert-message').removeClass('hidden');
-      $('#move-to-main-page-btn').removeClass('hidden');
+      $('#move-to-main-page-btn').html('설문 참여하기');
       console.log('Failed to get result: ' + data);
-    }).always(function() {
-      // Inititate fullpage.js with options
-      $('#page-scroll-container').fullpage({
-        // paddingTop: $('#header').outerHeight(),
-      });
     }); 
     
     // Social media sharing feature
-    /* TODO Kakao talk sharing
+    /* Kakao talk sharing
     Kakao.init('');
     Kakao.Link.createTalkLinkButton({
       container: '#kakaotalk-share',

@@ -45,7 +45,7 @@ class User(AbstractBaseUser):
         verbose_name = _('Username'),
         max_length = 255,
         unique = True,
-        null = True
+        null = False
     )
     # DRF JWT package requires email field in User class
     email = models.CharField(
@@ -70,23 +70,13 @@ class User(AbstractBaseUser):
     )
     supporting_party = models.CharField(
         verbose_name = _('Supporting party'),
-        choices = getattr(settings, 'PARTY_CHOICES'),
         max_length = 255,
         blank = True,
         null = True
     )
-    category = models.CharField(
-        verbose_name = _('Category'),
-        choices = getattr(settings, 'USER_CATEGORY_CHOICES'),
-        max_length = 255,
-        blank = True,
-        null = True
-    )
-    caption = models.CharField(
-        verbose_name = _('Caption'),
-        max_length = 255,
-        blank = True,
-        null = True
+    completed_survey = models.BooleanField(
+        verbose_name = _('Complete survey'),
+        default = False
     )
     is_active = models.BooleanField(
         verbose_name = _('Active'),
@@ -132,17 +122,20 @@ class User(AbstractBaseUser):
         return self.is_admin
 
 
-class Survey(models.Model):
+class Party(models.Model):
     """
-    Survey information
+    Party information
     """
-    participants = models.ManyToManyField(
-        'User',
-        related_name='participated_survey',
-        blank = True
+    user = models.OneToOneField(
+        'User'
     )
-    title = models.CharField(
-        verbose_name = _('Title'),
+    name = models.CharField(
+        verbose_name = _('Name'),
+        max_length = 255
+    )
+    color = models.CharField(
+        verbose_name = _('Color'),
+        help_text = _('HEX value (e.g. #EEEEEE)'),
         max_length = 255
     )
     created_at = models.DateTimeField(
@@ -156,38 +149,21 @@ class Survey(models.Model):
     )
 
     class Meta:
-        verbose_name = _('Survey')
-        verbose_name_plural = _('Surveys')
-        ordering = ['-id']
+        verbose_name = _('Party')
+        verbose_name_plural = _('Parties')
+        ordering = ['id']
 
     def __unicode__(self):
-        return unicode(self.title) or u''
+        return unicode(self.id) or u''
 
 
 class Question(models.Model):
     """
-    Question under specific survey
+    Question information
     """
-    survey = models.ForeignKey(
-        'Survey',
-        related_name = 'questions'
-    )
     explanation = models.CharField(
         verbose_name = _('Explanation'),
         max_length = 255
-    )
-    category = models.CharField(
-        verbose_name = _('Category'),
-        choices = getattr(settings, 'QUESTION_CATEGORY_CHOICES'),
-        max_length = 255,
-        blank = True,
-        null = True
-    )
-    image_url = models.CharField(
-        verbose_name = _('Image URL'),
-        max_length = 255,
-        blank = True,
-        null = True
     )
     created_at = models.DateTimeField(
         verbose_name = _('Created datetime'),
@@ -256,16 +232,6 @@ class Answer(models.Model):
         'Choice',
         related_name = 'answers'
     )
-    duration = models.DurationField(
-        verbose_name = _('Duration'),
-        validators = [MinValueValidator(timedelta(seconds=getattr(settings, 'MIN_DURATION_IN_SECONDS'))), ]
-    )
-    weight = models.PositiveSmallIntegerField(
-        verbose_name = _('Weight'),
-        validators = [MaxValueValidator(getattr(settings, 'MAX_WEIGHT_VALUE')), 
-            MinValueValidator(getattr(settings, 'MIN_WEIGHT_VALUE'))],
-        default = getattr(settings, 'MIN_WEIGHT_VALUE')
-    )
     created_at = models.DateTimeField(
         verbose_name = _('Created datetime'),
         auto_now_add = True,
@@ -287,20 +253,11 @@ class Answer(models.Model):
 
 class Result(models.Model):
     """
-    Result of user's survey
+    Result survey
     """
     user = models.ForeignKey(
         'User',
         related_name = 'results'
-    )
-    survey = models.ForeignKey(
-        'Survey',
-        related_name = 'whole_results_of_survey'
-    )
-    category = models.CharField(
-        verbose_name = _('Category'),
-        choices = getattr(settings, 'RESULT_CATEGORY_CHOICES'),
-        max_length = 255,
     )
     record = models.TextField(
         verbose_name = _('Record'),

@@ -28,6 +28,25 @@ class UserPermission(permissions.BasePermission):
             return False
 
 
+class PartyPermission(permissions.BasePermission):
+    """
+    List : anyone
+    Create : X
+    Retrieve : X
+    Update : X
+    Partial update : X
+    Destroy : X
+    """
+    def has_permission(self, request, view):
+        if view.action == 'list':
+            return True
+        else:
+            return False
+
+    def has_object_permission(self, request, view, obj):
+        return False
+
+
 class QuestionPermission(permissions.BasePermission):
     """
     List : anyone

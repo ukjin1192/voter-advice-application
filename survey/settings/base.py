@@ -163,33 +163,7 @@ MIN_YEAR_OF_BIRTH = 1910
 MAX_YEAR_OF_BIRTH = 2010
 MIN_FACTOR_VALUE = -2
 MAX_FACTOR_VALUE = 2
-MIN_WEIGHT_VALUE = 1
-MAX_WEIGHT_VALUE = 2
-MIN_DURATION_IN_SECONDS = 3
 SEX_CHOICES = (
     ('male', 'Male'),
     ('female', 'Female')
 )
-PARTY_CHOICES = (
-    ('party_a', '새누리당'),
-    ('party_b', '더민주당'),
-    ('party_c', '국민의당'),
-    ('party_d', '정의당'),
-)
-USER_CATEGORY_CHOICES = (
-    ('party', 'Party'),
-)
-QUESTION_CATEGORY_CHOICES = (
-    ('category_a', 'Category A'),
-    ('category_b', 'Category B')
-)
-RESULT_CATEGORY_CHOICES = (
-    ('party', 'Party'),
-)
-
-# Custom variables
-FACTOR_MAX_DISTANCE = 8     # Distance between maximum factor value and minimum factor value
-
-# Facebook application ID and secret code
-FACEBOOK_APP_ID = config.get('facebook', 'app_id')
-FACEBOOK_SECRET_CODE = config.get('facebook', 'secret_code')

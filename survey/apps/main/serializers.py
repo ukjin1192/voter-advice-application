@@ -1,7 +1,7 @@
 #!usr/bin/python
 # -*- coding: utf-8 -*-
 
-from main.models import User, Survey, Question, Choice, Answer, Result 
+from main.models import User, Party, Question, Choice, Answer, Result 
 from rest_framework import serializers
 
 
@@ -9,7 +9,14 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'sex', 'year_of_birth', 'supporting_party')
+        fields = ('id', 'sex', 'year_of_birth', 'supporting_party', 'completed_survey')
+
+
+class PartySerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Party
+        fields = ('id', 'name', 'color')
 
 
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
@@ -17,7 +24,7 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Question
-        fields = ('id', 'explanation', 'category', 'image_url', 'choices')
+        fields = ('id', 'explanation', 'choices')
 
     def get_choices(self, obj):
         """
@@ -42,7 +49,7 @@ class AnswerSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Answer
-        fields = ('id', 'user', 'choice', 'duration', 'weight', 'updated_at')
+        fields = ('id', 'user', 'choice', 'updated_at')
 
 
 class ResultSerializer(serializers.HyperlinkedModelSerializer):
@@ -50,4 +57,4 @@ class ResultSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Result
-        fields = ('id', 'user', 'category', 'record', 'is_public', 'updated_at')
+        fields = ('id', 'user', 'record', 'is_public', 'updated_at')

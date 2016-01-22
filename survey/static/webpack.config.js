@@ -13,7 +13,6 @@ module.exports = {
     vendor: [
       'jquery', 
       'jquery.cookie', 
-      'lodash',
       'bootstrap-webpack',
       'fullpage.js'
     ]

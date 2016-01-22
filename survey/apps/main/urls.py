@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import url
-from main.views import UserViewSet, QuestionViewSet, AnswerViewSet, ResultViewSet
+from main.views import UserViewSet, PartyViewSet, QuestionViewSet, AnswerViewSet, ResultViewSet
 
 
 user_list = UserViewSet.as_view({
@@ -9,6 +9,16 @@ user_list = UserViewSet.as_view({
     'post': 'create'
 })
 user_detail = UserViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
+party_list = PartyViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+party_detail = PartyViewSet.as_view({
     'get': 'retrieve',
     'put': 'update',
     'patch': 'partial_update',
@@ -55,6 +65,16 @@ urlpatterns = [
         r'^users/(?P<pk>[0-9]+)/$',
         user_detail,
         name='user-detail'
+    ),
+    url(
+        r'^parties/$',
+        party_list,
+        name='party-list'
+    ),
+    url(
+        r'^parties/(?P<pk>[0-9]+)/$',
+        party_detail,
+        name='party-detail'
     ),
     url(
         r'^questions/$',
