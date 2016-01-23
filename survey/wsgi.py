@@ -33,3 +33,9 @@ application = get_wsgi_application()
 
 # Load celery
 djcelery.setup_loader()
+
+if int(config.get('django', 'development_mode')) == 0:
+    # Production mode
+    from newrelic import agent
+    agent.initialize(ROOT_DIR + '/conf/sensitive/configuration.ini')
+    application = agent.wsgi_application()(application)
