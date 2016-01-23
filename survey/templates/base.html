@@ -62,6 +62,12 @@
     {# Support CSS Media Query #}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
   <![endif]-->
+
+  {# Google Analytics #}
+  {% if 'DEBUG'|get_settings_variable == False %}
+  <script type="text/javascript" src="{% static '3rd-party/googleAnalytics.js' %}"></script>
+  <script type="text/javascript" src="{% static '3rd-party/heapAnalytics.js' %}"></script>
+  {% endif %}
 </head>
 <body>
   {# Loading icon #}
