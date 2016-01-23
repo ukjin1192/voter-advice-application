@@ -13,6 +13,8 @@ var getCaptcha = require('./module/getCaptcha');
 if ($('#use-captcha').val() == 'True') var useCaptcha = true;
 else var useCaptcha = false;
 
+var minDurationInSeconds = parseInt($('#min-duration-in-seconds').val()); 
+
 $(document).on('click', '#refresh-captcha', getCaptcha);
 
 // Validate captcha input and create user
@@ -71,10 +73,22 @@ $(document).on('submit', '#create-user-form', function(event) {
   }); 
 });
 
-// Auto scrolling when user click choice
 $(document).on('click', '.question-choice', function() {
-  $.fn.fullpage.moveSectionDown();
-  $('#move-to-unanswered-question-btn').addClass('hidden');
+  var leavingSection = $(this).closest('.section');
+  var duration = new Date().getTime() / 1000 - localStorage.getItem('duration');
+
+  // When user think enough or already answered question
+  if (duration > minDurationInSeconds || leavingSection.find('.answer-id').val() != '') {
+    // Auto scrolling
+    $.fn.fullpage.moveSectionDown();
+    leavingSection.find('.duration-alert-message').addClass('hidden');
+    $('#move-to-unanswered-question-btn').addClass('hidden');
+  }
+  // Too short duration to choose choice 
+  else {
+    leavingSection.find('.duration-alert-message').removeClass('hidden');
+    return false;
+  }
 });
 
 $(document).on('click', '#submit-survey-btn', function() {
@@ -269,10 +283,19 @@ $(document).ready(function() {
       
       // Inititate fullpage.js with options
       $('#page-scroll-container').removeClass('hidden').fullpage({
+        
         // Enable anchor and history feature
         anchors: anchorsList,
+        
         // Disables featutre moving to specific section when loaded
         animateAnchor: false,
+        
+        afterLoad: function(anchorLink, index){
+          var loadedSection = $(this);
+          
+          if (index > 1 && index < totalSections) localStorage.setItem('duration', new Date().getTime() / 1000);
+        },
+          
         onLeave: function(index, nextIndex, direction){
           var leavingSection = $(this);
           

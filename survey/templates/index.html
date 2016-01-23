@@ -5,6 +5,8 @@
 {% block container %}
 <div class="hidden" id="page-scroll-container">
 
+	<input type="hidden" id="min-duration-in-seconds" value="{{ 'MIN_DURATION_IN_SECONDS'|get_settings_variable }}" />
+
 	<div class="section">
 		<h2>나랑 어울리는 정당은?</h2>
 		<h5 class="help-block">예상 소요시간 : 1분</h5>
@@ -111,6 +113,9 @@
 		<div class="question-choices"></div>
 		<input type="hidden" class="answer-id" value="" />
 		<input type="hidden" class="original-choice-id" value="" />
+	</div>
+	<div class="alert alert-warning duration-alert-message hidden" role="alert">
+		조금만 더 생각해주세요
 	</div>
 	<a href="#main" class="back-to-top">맨 위로 이동</a>
 	<a href="#additional" class="go-to-bottom">맨 아래로 이동</a>

@@ -167,6 +167,7 @@ SEX_CHOICES = (
     ('male', 'Male'),
     ('female', 'Female')
 )
+MIN_DURATION_IN_SECONDS = 3
 
 # Captcha for humanvalidation
 USE_CAPTCHA = False
