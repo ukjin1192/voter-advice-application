@@ -219,27 +219,34 @@ class ResultViewSet(viewsets.ModelViewSet):
         except:
             result = None
         
+        # Data of comparison target
         target_data = []
         updated_at_list = []
         parties = Party.objects.select_related('user').all()
         
         for party in parties:
             try:
-                answer = utilities.get_survey_data_of_user(party.user)
-                party_dict = {'name': party.name, 'color': party.color, 'factor_list': answer['factor_list']}
+                party_data = utilities.get_survey_data_of_user(party.user)
+                party_dict = {'name': party.name, 'color': party.color, 'factor_list': party_data['factor_list']}
                 target_data.append(party_dict)
-                updated_at_list.append(answer['updated_at'])
+                updated_at_list.append(party_data['updated_at'])
             except:
                 pass
         
-        # Only get ID of existing result
-        if result is not None and result.updated_at > max(updated_at_list):
+        user_data = utilities.get_survey_data_of_user(request.user)
+        
+        # Get ID of result object only if 
+        #   (1) Result is exsit
+        #   (2) User's answers are not updated after result object created 
+        #   (3) Comparison targets's answers are not updated after result object created
+        if result is not None and \
+                result.updated_at > user_data['updated_at'] and \
+                result.updated_at > max(updated_at_list):
             return Response(
                     {'state': True, 'id': result.id, 'message': 'Result already exist.'},
                     status=status.HTTP_200_OK)
         
-        answer = utilities.get_survey_data_of_user(request.user)
-        record = utilities.get_one_dimensional_result(answer['factor_list'], *target_data)
+        record = utilities.get_one_dimensional_result(user_data['factor_list'], *target_data)
         
         data = request.data
         data['record'] = record
