@@ -11,7 +11,11 @@
 		
 		<div class="space"></div>
 		
+		{% with captcha='USE_CAPTCHA'|get_settings_variable %}
+		<input type="hidden" id="use-captcha" value="{{ captcha }}" />
+		
 		<form class="form-group short-width-group" id="create-user-form">
+			{% if captcha %} 
 			<input type="hidden" id="captcha-key" value="" />
 			<div class="input-group">
 				<span class="input-group-addon" id="captcha-image-container">
@@ -26,11 +30,13 @@
 			<div class="space"></div>
 			
 			<div class="alert alert-danger hidden" id="create-user-form-alert-message" role="alert"></div>
+			{% endif %}
 			
 			<button type="submit" class="btn btn-primary btn-lg btn-block" id="create-user-submit-btn" data-loading-text="잠시만 기다려주세요">
 				확인해보기
 			</button>
 		</form>
+		{% endwith %}
 		
 		<div class="short-width-group">
 			<div class="alert alert-info hidden" id="check-data-existence-message" role="alert">

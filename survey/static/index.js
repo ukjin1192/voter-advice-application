@@ -9,6 +9,10 @@ var setAuthToken = require('./module/setAuthToken');
 var clearAuthToken = require('./module/clearAuthToken');
 var getCaptcha = require('./module/getCaptcha');
 
+// Decide to use captcha validation or not
+if ($('#use-captcha').val() == 'True') var useCaptcha = true;
+else var useCaptcha = false;
+
 $(document).on('click', '#refresh-captcha', getCaptcha);
 
 // Validate captcha input and create user
@@ -16,12 +20,14 @@ $(document).on('submit', '#create-user-form', function(event) {
   event.preventDefault();
 
   // Clear alert message and hide it
-  $('#create-user-form-alert-message').html('').addClass('hidden');
+  if (useCaptcha) $('#create-user-form-alert-message').html('').addClass('hidden');
   $('#create-user-submit-btn').button('loading');
 
   var formData = new FormData();
-  formData.append('captcha_key', $('#captcha-key').val());
-  formData.append('captcha_value', $('#captcha-value').val());
+  if (useCaptcha) {
+    formData.append('captcha_key', $('#captcha-key').val());
+    formData.append('captcha_value', $('#captcha-value').val());
+  }
 
   // Clear authentication and CSRF tokens at HTTP header
   clearAuthToken();
@@ -35,7 +41,7 @@ $(document).on('submit', '#create-user-form', function(event) {
     processData: false
   }).done(function(data) {
     // When captcha input is not valid
-    if (data.state == false) {
+    if (data.state == false && useCaptcha == true) {
       $('#create-user-form-alert-message').html('일치하지 않습니다').removeClass('hidden');
     } else {
       // Save user's token and ID
@@ -43,7 +49,7 @@ $(document).on('submit', '#create-user-form', function(event) {
       localStorage.setItem('user_id', data.id);
       
       // Clear captcha input form
-      $('#captcha-key, #captcha-value').val('');
+      if (useCaptcha) $('#captcha-key, #captcha-value').val('');
       
       // Clear original survey data
       $('.question-choice, input[name="sex"]').attr('checked', false); 
@@ -166,7 +172,7 @@ $(document).ready(function() {
   // Main page with survey
   if (pathname == '/') {
     // Fill out captcha form
-    getCaptcha();
+    if (useCaptcha) getCaptcha();
     
     // Get all questions without user answers
     $.ajax({

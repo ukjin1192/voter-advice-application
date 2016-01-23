@@ -167,3 +167,6 @@ SEX_CHOICES = (
     ('male', 'Male'),
     ('female', 'Female')
 )
+
+# Captcha for humanvalidation
+USE_CAPTCHA = False
