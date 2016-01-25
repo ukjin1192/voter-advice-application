@@ -191,9 +191,9 @@ pre {
 	}
 }
 
-/* =============
+/* ===========
  * Result page
- * ============= */
+ * =========== */
 
 #label-list {
 
@@ -365,4 +365,27 @@ pre {
   -webkit-animation: uil-ring-anim 1s linear infinite;
   -o-animation: uil-ring-anim 1s linear infinite;
   animation: uil-ring-anim 1s linear infinite;
+}
+
+/* ============
+ * Slot machine
+ * ============ */
+
+.slot-machine {
+	position: relative;
+	display: inline-block;
+	overflow: hidden; 
+	width: 100%;
+	height: 80px;
+}
+
+.slot-machine__items_container {
+	position: absolute;
+	width: 100%;
+}
+
+.slot-machine__item {
+	height: 80px;
+	font-weight: bold;
+	font-size: 65px;
 }

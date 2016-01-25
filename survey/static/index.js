@@ -9,6 +9,28 @@ var setAuthToken = require('./module/setAuthToken');
 var clearAuthToken = require('./module/clearAuthToken');
 var getCaptcha = require('./module/getCaptcha');
 
+function buildSlotItem (text) {
+  return $('<div>').addClass('slot-machine__item').text(text)
+}
+
+function buildSlotContents ($container, wordList) {
+  var $items = wordList.map(buildSlotItem);
+  $container.append($items);
+}
+
+function popPushNItems ($container, n) {
+  var $children = $container.find('.slot-machine__item');
+  $children.slice(0, n).insertAfter($children.last());
+  if (n === $children.length) popPushNItems($container, 1);
+}
+
+function rotateContents ($container, n) {
+  setTimeout(function () {
+    popPushNItems($container, n);
+    $container.css({top: 0});
+  }, 300);    
+}
+
 // Decide to use captcha validation or not
 if ($('#use-captcha').val() == 'True') var useCaptcha = true;
 else var useCaptcha = false;
@@ -363,9 +385,22 @@ $(document).ready(function() {
       url: '/api/parties/',
       type: 'GET'
     }).done(function(data) {
+      var $wordbox = $('#wordbox');
+      var wordList = [];
+      
       data.forEach(function(party, index) {
         $('#supporting-party').append('<option value="' + party.name + '">' + party.name + '</option>');
+        wordList.push(party.name);
       }); 
+      
+      wordList = _.shuffle(wordList);
+      buildSlotContents($wordbox, wordList);  
+      setInterval(function() { 
+        var wordIndex = Math.floor(Math.random() * wordList.length);
+        $wordbox.animate({top: -wordIndex * 80}, 500, 'swing', function () {
+          rotateContents($wordbox, wordIndex);
+        });
+      }, 2000);
     }).fail(function(data) {
       console.log('Failed to get parties: ' + data);
     }); 
@@ -504,4 +539,5 @@ $(document).ready(function() {
 
 $(window).load(function() {
   $('#loading-icon').addClass('hidden');
+
 });

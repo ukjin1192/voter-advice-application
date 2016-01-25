@@ -3,11 +3,15 @@
 {% load custom_filter %}
 
 {% block container %}
+<input type="hidden" id="min-duration-in-seconds" value="{{ 'MIN_DURATION_IN_SECONDS'|get_settings_variable }}" />
+
 <div class="hidden" id="page-scroll-container">
 
-	<input type="hidden" id="min-duration-in-seconds" value="{{ 'MIN_DURATION_IN_SECONDS'|get_settings_variable }}" />
-
 	<div class="section">
+		<div class="slot-machine">
+			<div class="slot-machine__items_container" id="wordbox"></div>
+		</div>	
+		
 		<h2>나랑 어울리는 정당은?</h2>
 		<h5 class="help-block">예상 소요시간 : 1분</h5>
 		
