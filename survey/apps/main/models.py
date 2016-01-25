@@ -165,6 +165,10 @@ class Question(models.Model):
         verbose_name = _('Explanation'),
         max_length = 255
     )
+    image_url = models.CharField(
+        verbose_name = _('Image URL'),
+        max_length = 255
+    )
     created_at = models.DateTimeField(
         verbose_name = _('Created datetime'),
         auto_now_add = True,

@@ -20,7 +20,7 @@ class PartyAdmin(admin.ModelAdmin):
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'explanation')
+    list_display = ('id', 'explanation', 'image_url')
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'
     ordering = ('-id', )
