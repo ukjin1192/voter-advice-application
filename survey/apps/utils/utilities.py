@@ -59,3 +59,71 @@ def get_one_dimensional_result(user_data, *target_data):
                 +  "'color': '" + single_target_data['color'] + "'}")
 
     return '[' + ', '.join(similarity) + ']'
+
+
+def get_rotation_matrix():
+    """
+    Get rotation matrix with whole data
+    Rotation matrix will be used for PCA method
+    [Output example for 3 questions]
+        numpy.array([
+            [-0.01098383,  0.91666209],
+            [-0.07372826,  0.39770633],
+            [ 0.99721788,  0.03950055]])
+    """
+    all_list = []
+    completed_users = User.objects.filter(completed_survey=True)
+
+    for completed_user in completed_users:
+        all_list.append(get_survey_data_of_user(completed_user)['factor_list'])
+
+    all_list = numpy.array(all_list)
+    weighted_list = all_list.astype(float)
+    qnum = all_list.shape[1]
+    mean_vec = numpy.mean(weighted_list, axis=0)
+    cov_mat = (weighted_list - mean_vec).T.dot((weighted_list - mean_vec)) / (weighted_list.shape[0]-1)
+    eig_vals, eig_vecs = numpy.linalg.eigh(cov_mat)
+
+    for ev in eig_vecs:
+        numpy.testing.assert_array_almost_equal(1.0, numpy.linalg.norm(ev))
+    
+    # make a list of (eigenvalue, eigenvector) tuples
+    eig_pairs = [(numpy.abs(eig_vals[i]), eig_vecs[:,i]) for i in range(len(eig_vals))]
+    
+    # sort the tuples from high to low 
+    eig_pairs.sort()
+    eig_pairs.reverse()
+    tot = sum(eig_vals)
+    sorted(eig_vals, reverse=True)
+    
+    # SCREE PLOT (Examine Heuristically)
+    # var_exp = [(i/tot)*100 for i in sorted(eig_vals, reverse=True)]
+    
+    # Changes with Desired Dimensions (d = 2 for the moment)
+    rotation_matrix = numpy.hstack((eig_pairs[0][1].reshape(qnum,1), eig_pairs[1][1].reshape(qnum,1)))
+
+    return rotation_matrix
+
+
+def get_two_dimensional_result(rotation_matrix, *target_data):
+    """
+    Get two dimensional result which multiply target data(including user data) by rotation matrix
+    [Input]
+        rotation_matrix = numpy.array([
+            [-0.01098383,  0.91666209],
+            [-0.07372826,  0.39770633],
+            [ 0.99721788,  0.03950055]])
+        target_data = [
+            {'name': 'User A', 'factor_list': [-1, 1, 2]}, 
+            {'name': 'User B', 'factor_list': [-2, 0, -2]}]
+    [Output]
+        [{'name': 'User A', 'coordinates': (1.9316913344094013, -0.43995466242180009)}, 
+        {'name': 'User B', 'coordinates': (-1.972468097093643, -1.9123252796738086)}]
+    """
+    for single_target_data in target_data:
+        factor_list = numpy.array(single_target_data['factor_list'])
+        coordinates = tuple(factor_list.dot(rotation_matrix))
+        del single_target_data['factor_list']
+        single_target_data['coordinates'] = coordinates
+
+    return list(target_data)
