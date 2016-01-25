@@ -199,6 +199,7 @@ pre {
 
 	.label {
 		margin: 3px;
+		font-size: 1em;
 	}
 }
 
@@ -377,15 +378,15 @@ pre {
 	overflow: hidden; 
 	width: 100%;
 	height: 80px;
-}
 
-.slot-machine__items_container {
-	position: absolute;
-	width: 100%;
-}
+	.slot-machine__items_container {
+		position: absolute;
+		width: 100%;
 
-.slot-machine__item {
-	height: 80px;
-	font-weight: bold;
-	font-size: 65px;
+		.slot-machine__item {
+			height: 80px;
+			font-weight: bold;
+			font-size: 65px;
+		}
+	}
 }
