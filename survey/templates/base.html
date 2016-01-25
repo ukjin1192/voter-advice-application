@@ -111,6 +111,11 @@
 
   <script type="text/javascript" src="{% static 'dist/vendor.bundle.js' %}"></script>
   <script type="text/javascript" src="{% static 'dist/bundle.js' %}"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+  <script type="text/javascript" src="http://dimplejs.org/dist/dimple.v2.1.6.min.js"></script>
+
+  {% block custom_javascript %}{% endblock %}
 
   {# Support Placehoder for IE below version 10 #}
   <!--[if lte IE 9]>

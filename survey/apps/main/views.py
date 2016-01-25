@@ -288,3 +288,41 @@ class ResultViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         serializer.save()
+
+
+
+from django.http import JsonResponse
+
+def temp(request):
+    rotation_matrix = utilities.get_rotation_matrix()
+
+    target_data = []
+    parties = Party.objects.select_related('user').all()
+    
+    for party in parties:
+        try:
+            party_data = utilities.get_survey_data_of_user(party.user)
+            party_dict = {'name': str(party.name), 
+                'color': str(party.color), 
+                'factor_list': party_data['factor_list'], 
+                'z_coordinates': 20}
+            target_data.append(party_dict)
+        except:
+            pass
+
+    user_id = request.GET['userID']
+
+    try:
+        user = User.objects.get(id=int(user_id))
+        user_data = utilities.get_survey_data_of_user(user)
+        user_dict = {'name': '나', 
+            'color': '#9b59b6', 
+            'factor_list': user_data['factor_list'], 
+            'z_coordinates': 20}
+        target_data.append(user_dict)
+    except:
+        pass
+
+    coordinates_list = utilities.get_two_dimensional_result(rotation_matrix, *target_data)
+
+    return JsonResponse({'coordinates_list': coordinates_list})

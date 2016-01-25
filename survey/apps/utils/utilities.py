@@ -124,6 +124,7 @@ def get_two_dimensional_result(rotation_matrix, *target_data):
         factor_list = numpy.array(single_target_data['factor_list'])
         coordinates = tuple(factor_list.dot(rotation_matrix))
         del single_target_data['factor_list']
-        single_target_data['coordinates'] = coordinates
+        single_target_data['x_coordinates'] = coordinates[0]
+        single_target_data['y_coordinates'] = coordinates[1]
 
     return list(target_data)
