@@ -223,7 +223,7 @@ $(document).ready(function() {
         sectionDOM.find('.progress-bar').css('width', (index + 1) / totalQuestions * 100 + '%');
         sectionDOM.find('.question-id').val(question.id);
         sectionDOM.find('.question-order').val(index + 1);
-        sectionDOM.find('.question-image').attr('src', question.image_url);
+        sectionDOM.find('.question-image').attr('data-src', question.image_url);
         sectionDOM.find('.question-explanation').html(question.explanation);
         
         var choices = question.choices;
