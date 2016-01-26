@@ -96,19 +96,19 @@ $(document).on('submit', '#create-user-form', function(event) {
 });
 
 $(document).on('click', '.question-choice', function() {
-  var leavingSection = $(this).closest('.section');
+  var $leavingSection = $(this).closest('.section');
   var duration = new Date().getTime() / 1000 - localStorage.getItem('duration');
 
   // When user think enough or already answered question
-  if (duration > minDurationInSeconds || leavingSection.find('.answer-id').val() != '') {
+  if (duration > minDurationInSeconds || $leavingSection.find('.answer-id').val() != '') {
     // Auto scrolling
     $.fn.fullpage.moveSectionDown();
-    leavingSection.find('.duration-alert-message').addClass('hidden');
+    $leavingSection.find('.duration-alert-message').addClass('hidden');
     $('#move-to-unanswered-question-btn').addClass('hidden');
   }
   // Too short duration to choose choice 
   else {
-    leavingSection.find('.duration-alert-message').removeClass('hidden');
+    $leavingSection.find('.duration-alert-message').removeClass('hidden');
     return false;
   }
 });
@@ -219,21 +219,21 @@ $(document).ready(function() {
       var totalSections = totalQuestions + 2;
       
       data.forEach(function(question, index) {
-        var sectionDOM = $('#section-virtual-dom').clone().removeClass('hidden').removeAttr('id');
-        sectionDOM.find('.progress-bar').css('width', (index + 1) / totalQuestions * 100 + '%');
-        sectionDOM.find('.question-id').val(question.id);
-        sectionDOM.find('.question-order').val(index + 1);
-        sectionDOM.find('.question-image').attr('data-src', question.image_url);
-        sectionDOM.find('.question-explanation').html(question.explanation);
+        var $section = $('#section-virtual-dom').clone().removeClass('hidden').removeAttr('id');
+        $section.find('.progress-bar').css('width', (index + 1) / totalQuestions * 100 + '%');
+        $section.find('.question-id').val(question.id);
+        $section.find('.question-order').val(index + 1);
+        $section.find('.question-image').attr('data-src', question.image_url);
+        $section.find('.question-explanation').html(question.explanation);
         
         var choices = question.choices;
         choices.forEach(function(choice) {
-          sectionDOM.find('.question-choices').append('<div class="radio"><label>' + '<input type="radio" ' +
+          $section.find('.question-choices').append('<div class="radio"><label>' + '<input type="radio" ' +
             'class="question-choice" name="question-' + question.id + '" value="' + choice.id + '" />' + 
             choice.context + '</label></div>');
         });
         
-        $('#page-scroll-container .section').last().before(sectionDOM);
+        $('#page-scroll-container .section').last().before($section);
       });
       
       $('#section-virtual-dom').remove();
@@ -264,10 +264,10 @@ $(document).ready(function() {
           }).done(function(data) {
             // Fill out answers
             data.forEach(function(answer, index) {
-              var questionBlock = $('.question-choice[type="radio"][value="' + answer.choice + '"]').
+              var $question = $('.question-choice[type="radio"][value="' + answer.choice + '"]').
                 attr('checked', true).closest('.question');
-              questionBlock.find('.answer-id').val(answer.id);
-              questionBlock.find('.original-choice-id').val(answer.choice);
+              $question.find('.answer-id').val(answer.id);
+              $question.find('.original-choice-id').val(answer.choice);
             });
             
             // When user completed survey
@@ -314,18 +314,18 @@ $(document).ready(function() {
         animateAnchor: false,
         
         afterLoad: function(anchorLink, index){
-          var loadedSection = $(this);
+          var $loadedSection = $(this);
           
           if (index > 1 && index < totalSections) localStorage.setItem('duration', new Date().getTime() / 1000);
         },
           
         onLeave: function(index, nextIndex, direction){
-          var leavingSection = $(this);
+          var $leavingSection = $(this);
           
           if (index > 1 && index < totalSections) {
-            var choiceID = leavingSection.find('.question-choice[type="radio"]:checked').val();
-            var originalChoiceID = leavingSection.find('.original-choice-id').val();
-            var answerID = leavingSection.find('.answer-id').val();
+            var choiceID = $leavingSection.find('.question-choice[type="radio"]:checked').val();
+            var originalChoiceID = $leavingSection.find('.original-choice-id').val();
+            var answerID = $leavingSection.find('.answer-id').val();
             
             if (choiceID != undefined) {
               // Create answer
@@ -343,8 +343,8 @@ $(document).ready(function() {
                   contentType: false,
                   processData: false
                 }).done(function(data) {
-                  leavingSection.find('.answer-id').val(data.id);
-                  leavingSection.find('.original-choice-id').val(choiceID);
+                  $leavingSection.find('.answer-id').val(data.id);
+                  $leavingSection.find('.original-choice-id').val(choiceID);
                 }).fail(function(data) {
                   console.log('Failed to create answer: ' + data);
                 }); 
@@ -364,7 +364,7 @@ $(document).ready(function() {
                   contentType: false,
                   processData: false
                 }).done(function(data) {
-                  leavingSection.find('.original-choice-id').val(choiceID);
+                  $leavingSection.find('.original-choice-id').val(choiceID);
                 }).fail(function(data) {
                   console.log('Failed to update answer: ' + data);
                 }); 
@@ -540,5 +540,4 @@ $(document).ready(function() {
 
 $(window).load(function() {
   $('#loading-icon').addClass('hidden');
-
 });
