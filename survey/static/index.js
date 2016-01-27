@@ -198,6 +198,9 @@ $(document).ready(function() {
       var totalQuestions = data.length;
       var totalSections = totalQuestions + 2;
       
+      // Shuffle question list
+      data = _.shuffle(data);
+      
       data.forEach(function(question, index) {
         var $section = $('#section-virtual-dom').clone().removeClass('hidden').removeAttr('id');
         $section.find('.progress-bar').css('width', (index + 1) / totalQuestions * 100 + '%');
