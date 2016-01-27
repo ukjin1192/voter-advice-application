@@ -52,6 +52,10 @@ def run_server():
         local("./manage.py runserver 0.0.0.0:8000")
 
 
+def stop_server():
+    local("sudo fuser -k 8000/tcp")
+
+
 def run_celery():
     with lcd(ROOT_DIR):
         local("./manage.py celeryd_detach --logfile=logs/celery_daemon.log --pidfile=logs/celery_daemon.pid")
