@@ -22,9 +22,9 @@ $full-transparent: rgba(0, 0, 0, 0);
 $almost-transparent: rgba(0, 0, 0, 0.3);
 $half-transparent: rgba(0, 0, 0, 0.5);
 
-/* ======================
- * Device width variables
- * ====================== */
+/* ===============
+ * Width variables
+ * =============== */
 
 $screen-xxs-max: 320px;
 $screen-xs-min: 321px;
@@ -36,6 +36,8 @@ $screen-md-max: 1199px;
 $screen-lg-min: 1200px;
 $screen-lg-max: 1585px;
 $screen-xlg-min: 1586px;
+
+$question-image-width: 480px;
 
 /* =====================
  * Default tag attribute 
@@ -177,20 +179,23 @@ pre {
 				
 				.question-image {
 					width: 100%;
-					// max-width: 480px;
+					
+					@media screen and (min-width: $question-image-width) {
+						width: $question-image-width;
+					}
 				}
 				
 				.question-explanation {
 					position: absolute;
 					top: 0;
 					width: 100%;
-					// max-width: 480px;
 					height: 100%;
 					display: -webkit-box;
 					display: -moz-box;
 					display: -ms-flexbox;
 					display: -webkit-flex;
 					display: flex;
+					padding: 10px;
 					justify-content: center;
 					-webkit-box-align: center;
 					-moz-box-align: center;
@@ -202,6 +207,12 @@ pre {
 					color: white;
 					font-size: 1.4em;
 					z-index: 100;
+					
+					@media screen and (min-width: $question-image-width) {
+						width: $question-image-width;
+						left: 50%;
+						margin-left: -1 * $question-image-width / 2;
+					}
 				}
 			}
 			

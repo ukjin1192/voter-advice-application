@@ -4,11 +4,12 @@
 require('bootstrap-webpack!./bootstrap.config.js');
 require('./styles.scss');
 
-var setCSRFToken = require('./module/setCSRFToken');
-var setAuthToken = require('./module/setAuthToken');
-var clearAuthToken = require('./module/clearAuthToken');
-var getCaptcha = require('./module/getCaptcha');
-var activateSlotMachine = require('./module/activateSlotMachine');
+// Load modules
+var setCSRFToken = require('./module/setCSRFToken.js');
+var setAuthToken = require('./module/setAuthToken.js');
+var clearAuthToken = require('./module/clearAuthToken.js');
+var getCaptcha = require('./module/getCaptcha.js');
+var activateSlotMachine = require('./module/activateSlotMachine.js');
 
 // Decide to use captcha validation or not
 if ($('#use-captcha').val() == 'True') var useCaptcha = true;
