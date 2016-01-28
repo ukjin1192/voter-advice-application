@@ -250,7 +250,7 @@ class ResultViewSet(viewsets.ModelViewSet):
             # Get ID of result object(=DO NOT CREATE NEW ONE) only if 
             #   (1) Result is exsit
             #   (2) User's answers are not updated after result object is created 
-            #   (3) Comparison targets's answers are not updated after result object is created
+            #   (3) Answers of comparison targets are not updated after result object is created
             if result is not None and \
                     result.updated_at > user_data['updated_at'] and \
                     result.updated_at > max(updated_at_list):
@@ -266,7 +266,7 @@ class ResultViewSet(viewsets.ModelViewSet):
             # Get ID of result object(=DO NOT CREATE NEW ONE) only if 
             #   (1) Result is exsit
             #   (2) User's answers are not updated after result object is created 
-            #   (3) Comparison targets's answers are not updated after result object is created
+            #   (3) Answers of comparison targets are not updated after result object is created
             #   (4) Rotation matrix is not updated after result object is created
             if result is not None and \
                     result.updated_at > user_data['updated_at'] and \
@@ -279,7 +279,6 @@ class ResultViewSet(viewsets.ModelViewSet):
                 'color': '#9b59b6',
                 'factor_list': user_data['factor_list']}
             target_data.append(user_dict)
-            
             
             record = utilities.get_two_dimensional_result(rotation_matrix, *target_data)
         

@@ -12,6 +12,7 @@ var setAuthToken = require('./module/setAuthToken.js');
 var clearAuthToken = require('./module/clearAuthToken.js');
 var getCaptcha = require('./module/getCaptcha.js');
 var activateSlotMachine = require('./module/activateSlotMachine.js');
+var loadResultPage = require('./module/loadResultPage.js');
 
 // Decide to use captcha validation or not
 if ($('#use-captcha').val() == 'True') var useCaptcha = true;
@@ -136,55 +137,93 @@ $(document).on('submit', '#update-user-form', function(event) {
   // Move to result page when user completed survey
   else {
     $('#submit-survey-btn').button('loading');
-    
-    var formData = new FormData();
-    formData.append('category', 'party_1d');
-    
-    // Set authentication and CSRF tokens at HTTP header
-    setAuthToken();
-    setCSRFToken();
-    
-    $.ajax({
-      url: '/api/results/',
-      type: 'POST',
-      data: formData,
-      contentType: false,
-      processData: false
-    }).done(function(data) {
-      // Move to result page
-      location.href = '/result/' + data.id + '/';
-    }).fail(function(data) {
-      console.log('Failed to get result ID: ' + data);
-    }).always(function() {
-      $('#submit-survey-btn').button('reset');
-    }); 
+    loadResultPage('party_2d');
+    $('#submit-survey-btn').button('reset');
   }
 });
 
 $(document).on('click', '#move-to-result-page-btn', function() {
-  // Set authentication and CSRF tokens at HTTP header
+  $('#move-to-result-page-btn').button('loading');
+  loadResultPage('party_2d');
+  $('#move-to-result-page-btn').button('reset');
+});
+
+$(document).on('click', '#move-to-one-dimensional-result-page-btn', function() {
+  $('#move-to-one-dimensional-result-page-btn').button('loading');
+  loadResultPage('party_1d');
+  $('#move-to-one-dimensional-result-page-btn').button('reset');
+});
+
+$(document).on('click', '#move-to-two-dimensional-result-page-btn', function() {
+  $('#move-to-two-dimensional-result-page-btn').button('loading');
+  loadResultPage('party_2d');
+  $('#move-to-two-dimensional-result-page-btn').button('reset');
+});
+
+// Update result to public 
+$(document).on('click', '.share-btn', function() {
+  var formData = new FormData();
+  formData.append('is_public', true);
+  
   setAuthToken();
   setCSRFToken();
-
-  var formData = new FormData();
-  formData.append('category', 'party_1d');
-
-  $('#move-to-result-page-btn').button('loading');
-
+  
   $.ajax({
-    url: '/api/results/',
-    type: 'POST',
+    url: '/api/results/' + resultID+ '/',
+    type: 'PATCH',
     data: formData,
     contentType: false,
     processData: false
   }).done(function(data) {
-    // Move to result page
-    location.href = '/result/' + data.id + '/';
+    $('#update-public-field-btn').removeClass('hidden');
+    $('#update-public-field-alert-message').addClass('hidden');
   }).fail(function(data) {
-    console.log('Failed to get result ID: ' + data);
-  }).always(function() {
-    $('#move-to-result-page-btn').button('reset');
+    console.log('Failed to update result to public: ' + data);
   }); 
+});
+
+// Update result to non-public
+$(document).on('click', '#update-public-field-btn', function() {
+  $('#update-public-field-btn').button('loading');
+  
+  var formData = new FormData();
+  formData.append('is_public', false);
+  
+  setAuthToken();
+  setCSRFToken();
+  
+  $.ajax({
+    url: '/api/results/' + resultID + '/',
+    type: 'PATCH',
+    data: formData,
+    contentType: false,
+    processData: false
+  }).done(function(data) {
+    $('#update-public-field-btn').addClass('hidden');
+    $('#update-public-field-alert-message').removeClass('hidden');
+  }).fail(function(data) {
+    console.log('Failed to update result to public: ' + data);
+  }).always(function() {
+    $('#update-public-field-btn').button('reset');
+  }); 
+});
+
+// Alert that kakaotalk and line messenger sharing is only available at mobile
+$(document).on('click', '#line-share, #kakaotalk-share', function() {
+  // Detect desktop browser
+  if (!('ontouchstart' in window)) {
+    alert("모바일에서만 가능합니다");
+  }
+  return false;
+});
+
+// Alert that twitter sharing in IE(<11) is not working properly
+$(document).on('click', '#twitter-share', function() {
+  // Check whether browser is IE or not
+  if (window.navigator.userAgent.indexOf("MSIE ") > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
+    alert("IE 10 이하에서 트위터 공유는 정상적으로 작동하지 않습니다.");
+    return false;
+  }
 });
 
 $(document).ready(function() {
@@ -400,79 +439,88 @@ $(document).ready(function() {
       url: '/api/results/' + resultID + '/',
       type: 'GET'
     }).done(function(data) {
-      var updatedAt = new Date(data.updated_at);
-      $('#record-updated-at').html('최종 업데이트 : ' + updatedAt.getFullYear() + '-' +
-        updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
-      
-      var rows = JSON.parse(data.record.replace(/'/g, '"'));
-      
-      // Sorting as descending order
-      rows = rows.sort(function(a, b){
-        return a.value < b.value;
-      });
-      
-      rows.forEach(function(row, index) {
-        $('#result-chart').append('<div class="progress">' +
-          '<div class="progress-bar progress-bar-striped" role="progressbar" style="width: ' +
-            row.similarity + '%; background-color: ' + row.color + ';">' + row.similarity + '%' + '</div></div>');
-        $('#label-list').append('<span class="label" style="background-color: ' + row.color + ';">' + row.name + '</span>');
-      });
+      // One dimensional analysis
+      if (data.category == 'party_1d') {
+        $('#result-category').html('1차원');
+        
+        var updatedAt = new Date(data.updated_at);
+        $('#record-updated-at').html('최종 업데이트 : ' + updatedAt.getFullYear() + '-' +
+          updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
+        
+        var rows = JSON.parse(data.record.replace(/'/g, '"'));
+        
+        // Sorting as descending order
+        rows = rows.sort(function(a, b){
+          return a.value < b.value;
+        });
+        
+        rows.forEach(function(row, index) {
+          $('#one-dimensional-result').append('<div class="progress">' +
+            '<div class="progress-bar progress-bar-striped" role="progressbar" style="width: ' +
+              row.similarity + '%; background-color: ' + row.color + ';">' + row.similarity + '%' + '</div></div>');
+          $('#label-list').append('<span class="label" style="background-color: ' + row.color + ';">' + row.name + '</span>');
+        });
+        
+        $('#move-to-two-dimensional-result-page-btn').removeClass('hidden');
+      }
+      // Two dimensional analysis
+      else {
+        $('#result-category').html('2차원');
+        
+        var updatedAt = new Date(data.updated_at);
+        $('#record-updated-at').html('최종 업데이트 : ' + updatedAt.getFullYear() + '-' +
+          updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
+        
+        var chartWidth = $('#two-dimensional-result').width();
+        var svgBlock = dimple.newSvg('#two-dimensional-result', chartWidth, chartWidth);
+        var rows = JSON.parse(data.record.replace(/'/g, '"'));
+        var chart = new dimple.chart(svgBlock, rows);
+        
+        chart.setBounds(10, 10, chartWidth, chartWidth);
+        // chart.setMargins(100, 100, 100, 100);
+        
+        var xAxis = chart.addMeasureAxis('x', 'x_coordinate');
+        var yAxis = chart.addMeasureAxis('y', 'y_coordinate');
+        var zAxis = chart.addMeasureAxis('z', 'radius');
+        
+        xAxis.title = '가로축: 경제';
+        xAxis.fontSize = 12;
+        
+        yAxis.title = '세로축: 사회';
+        yAxis.fontSize = 12;
+        
+        var chartSeries = chart.addSeries('name', dimple.plot.bubble);
+        
+        rows.forEach(function(row, index) {
+          chart.assignColor(row.name, row.color);
+          $('#label-list').append('<span class="label" style="background-color: ' + row.color + ';">' + row.name + '</span>');
+        });
+        
+        chartSeries.afterDraw = function (shp, d, i) {
+            var shape = d3.select(shp);
+            svgBlock.append('text')
+                .attr('x', parseFloat(shape.attr('cx')))
+                .attr('y', parseFloat(shape.attr('cy')))
+                .style('text-anchor','middle')
+                .style('font-size', '1.2em')
+                .style('font-weight', 'bold')
+                .style('fill', 'white')
+                .text(rows[i].name);
+        };
+        
+        chart.draw(1000);
+        
+        $('#move-to-one-dimensional-result-page-btn').removeClass('hidden');
+      }
       
       // When user is owner of result
       if (data.user == localStorage.getItem('user_id')) {
         $('#move-to-main-page-btn').html('설문 수정하기');
         $('#share-btn-group').removeClass('hidden');
-        
         if (data.is_public) $('#update-public-field-btn').removeClass('hidden');
-        
-        // Update result to public 
-        $(document).on('click', '.share-btn', function() {
-          var formData = new FormData();
-          formData.append('is_public', true);
-          
-          setAuthToken();
-          setCSRFToken();
-          
-          $.ajax({
-            url: '/api/results/' + resultID+ '/',
-            type: 'PATCH',
-            data: formData,
-            contentType: false,
-            processData: false
-          }).done(function(data) {
-            $('#update-public-field-btn').removeClass('hidden');
-            $('#update-public-field-alert-message').addClass('hidden');
-          }).fail(function(data) {
-            console.log('Failed to update result to public: ' + data);
-          }); 
-        });
-        
-        // Update result to not public
-        $(document).on('click', '#update-public-field-btn', function() {
-          $('#update-public-field-btn').button('loading');
-          
-          var formData = new FormData();
-          formData.append('is_public', false);
-          
-          setAuthToken();
-          setCSRFToken();
-          
-          $.ajax({
-            url: '/api/results/' + resultID + '/',
-            type: 'PATCH',
-            data: formData,
-            contentType: false,
-            processData: false
-          }).done(function(data) {
-            $('#update-public-field-btn').addClass('hidden');
-            $('#update-public-field-alert-message').removeClass('hidden');
-          }).fail(function(data) {
-            console.log('Failed to update result to public: ' + data);
-          }).always(function() {
-            $('#update-public-field-btn').button('reset');
-          }); 
-        });
-      } else {
+      }
+      // When user is not authenticated
+      else {
         $('#move-to-main-page-btn').html('나도 확인해보기');
       }
     }).fail(function(data) {
@@ -481,95 +529,24 @@ $(document).ready(function() {
       $('#move-to-main-page-btn').html('설문 참여하기');
       console.log('Failed to get result: ' + data);
     }); 
-    
-    // Get result object (Two dimensional analysis)
-    var formData = new FormData();
-    formData.append('category', 'party_2d');
-     
-    $.ajax({
-      url: '/api/results/',
-      type: 'POST',
-      data: formData,
-      contentType: false,
-      processData: false
-    }).done(function(data) {
-      var rows = JSON.parse(data.record.replace(/'/g, '"'));
-      var chartWidth = $('#chartContainer').width();
-      var svgBlock = dimple.newSvg('#chartContainer', chartWidth, chartWidth);
-      var myChart = new dimple.chart(svgBlock, rows);
-      
-      myChart.setBounds(10, 10, chartWidth, chartWidth);
-      // myChart.setMargins(100, 100, 100, 100);
-      
-      var xAxis= myChart.addMeasureAxis('x', 'x_coordinate');
-      var yAxis = myChart.addMeasureAxis('y', 'y_coordinate');
-      var zAxis = myChart.addMeasureAxis('z', 'radius');
-      
-      xAxis.title = '가로축: 경제';
-      xAxis.fontSize = 12;
-      
-      yAxis.title = '세로축: 사회';
-      yAxis.fontSize = 12;
-      
-      var mySeries = myChart.addSeries('name', dimple.plot.bubble);
-      
-      rows.forEach(function(row, index) {
-        myChart.assignColor(row.name, row.color);
-      });
-      
-      mySeries.afterDraw = function (shp, d, i) {
-          var shape = d3.select(shp);
-          svg.append('text')
-              .attr('x', parseFloat(shape.attr('cx')-20))
-              .attr('y', parseFloat(shape.attr('cy')))
-              .style('test-anchor','middle')
-              .style('font-size', '20px')
-              .style('font-family', 'sans-serif')
-              .style('opacity', 0.7)
-              .text(rows[i].name)
-      };
-      
-      myChart.draw(1000);
-    }).fail(function(data) {
-      console.log('Failed to get two dimensional result: ' + data);
-    }); 
-    
-    // Social media sharing feature
-    /* Kakao talk sharing
-    Kakao.init('');
-    Kakao.Link.createTalkLinkButton({
-      container: '#kakaotalk-share',
-      label: '[핑] 당신의 위치를 확인하세요',
-      image: {
-        src: '',
-        width: '',
-        height: ''
-      },
-      webButton: {
-        text: '나도 확인해보기',
-        url: window.location.href
-      }
-    });
-    */
-    
-    // Alert that kakaotalk and line messenger sharing is only available at mobile
-    $(document).on('click', '#line-share, #kakaotalk-share', function() {
-      // Detect desktop browser
-      if (!('ontouchstart' in window)) {
-        alert("모바일에서만 가능합니다");
-      }
-      return false;
-    });
-    
-    // Alert that twitter sharing in IE(<11) is not working properly
-    $(document).on('click', '#twitter-share', function() {
-      // Check whether browser is IE or not
-      if (window.navigator.userAgent.indexOf("MSIE ") > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) {
-        alert("IE 10 이하에서 트위터 공유는 정상적으로 작동하지 않습니다.");
-        return false;
-      }
-    });
   }
+
+  /* TODO Kakao talk sharing
+  Kakao.init('');
+  Kakao.Link.createTalkLinkButton({
+    container: '#kakaotalk-share',
+    label: '[핑] 당신의 위치를 확인하세요',
+    image: {
+      src: '',
+      width: '',
+      height: ''
+    },
+    webButton: {
+      text: '나도 확인해보기',
+      url: window.location.href
+    }
+  });
+  */
 });
 
 $(window).load(function() {

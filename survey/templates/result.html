@@ -2,21 +2,20 @@
 
 {% block container %}
 <div class="text-center">
-	<h6>현재 정당 데이터는 랜덤으로 입력되어 있으므로, 결과값은 정확하지 않습니다 </h6>
-
-  <h3>정당 유사도 - 2차원</h1>
-  <div id="chartContainer"></div>
-
-  <div class="space"></div>
-
-	<h3>정당 유사도 - 1차원</h1>
+	<h3>정당유사도 <span class="label label-info" id="result-category"></span></h3>
 	<h6 id="record-updated-at"></h6> 
-	
-	<div id="result-chart"></div>
+	<div id="one-dimensional-result"></div>
+	<div id="two-dimensional-result"></div>
 	<div id="label-list"></div>
-	
+
 	<div class="space"></div>
-	
+
+	<div class="alert alert-warning" role="alert">
+		현재 정당 데이터는 랜덤으로 입력되어 있으므로, 결과값은 정확하지 않습니다
+		<br/>
+		추후에 이곳에는 "결과에 대한 해설" 및 "1차원과 2차원 분석 결과가 다른 이유"가 추가될 예정입니다
+	</div>
+
 	<div class="hidden" id="share-btn-group">
 		{# Facebook #}
 		<a href="https://www.facebook.com/sharer/sharer.php?u=https://pingkorea.com{{ request.path }}" target="_blank" class="share-btn">
@@ -43,6 +42,14 @@
 	</div>
 	
 	<div class="space"></div>
+
+	<button class="btn btn-primary btn-lg btn-block hidden" id="move-to-one-dimensional-result-page-btn" data-loading-text="잠시만 기다려주세요">
+		1차원 결과 보기
+	</button>
+
+	<button class="btn btn-primary btn-lg btn-block hidden" id="move-to-two-dimensional-result-page-btn" data-loading-text="잠시만 기다려주세요">
+		2차원 결과 보기
+	</button>
 	
 	<a href="/" class="btn btn-primary btn-lg btn-block" id="move-to-main-page-btn"></a>
 	
