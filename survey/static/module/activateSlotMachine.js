@@ -24,17 +24,18 @@ module.exports = function activateSlotMachine(wordList) {
     setTimeout(function () {
       popPushNItems($container, n);
       $container.css({top: 0});
-    }, 300);    
+    }, 300); 
   }
 
   buildSlotContents($wordbox, wordList);  
 
   setInterval(function() { 
     var wordIndex = Math.floor(Math.random() * wordList.length);
+    // Should be same with height of `slot-machine__item`
     $wordbox.animate({top: -wordIndex * 80}, 500, 'swing', function () {
       rotateContents($wordbox, wordIndex);
     });
-  }, 2000);
+  }, 1500);
 
   return;
 }

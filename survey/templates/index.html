@@ -66,45 +66,47 @@
 	</div>
 
 	<div class="section">
-		<h3>성별이 어떻게 되세요?</h3>
-		<div>
-			<label class="radio-inline">
-				<input type="radio" name="sex" value="male" />
-				남자
-			</label>
-			<label class="radio-inline">
-				<input type="radio" name="sex" value="female" />
-				여자
-			</label>
-		</div>
-		
-		<div class="space"></div>
-		
-		<h3>언제 태어나셨나요?</h3>
-		<div class="short-width-group">
-			<input type="number" class="form-control" id="year-of-birth" min="1910" max="2010" placeholder="출생년도" autocomplete="off" />
-		</div>
-		
-		<div class="space"></div>
-		
-		<h3>지지정당이 있으세요?</h3>
-		<div class="short-width-group">
-			<select class="form-control" id="supporting-party">
-				<option value="">클릭해서 선택하세요</option>
-			</select>
-		</div>
-		
-		<div class="space"></div>
-		
-		<div class="short-width-group">
-			<a href="#" class="btn btn-warning btn-lg btn-block hidden" id="move-to-unanswered-question-btn">
-				미응답한 질문 채우러가기
-			</a>
+		<form id="update-user-form">
+			<h3>성별이 어떻게 되세요?</h3>
+			<div>
+				<label class="radio-inline">
+					<input type="radio" name="sex" value="male" />
+					남자
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="sex" value="female" />
+					여자
+				</label>
+			</div>
 			
-			<button class="btn btn-primary btn-lg btn-block" id="submit-survey-btn" data-loading-text="잠시만 기다려주세요">
-				결과 확인하기
-			</button>
-		</div>
+			<div class="space"></div>
+			
+			<h3>언제 태어나셨나요?</h3>
+			<div class="short-width-group">
+				<input type="number" class="form-control" id="year-of-birth" min="{{ 'MIN_YEAR_OF_BIRTH'|get_settings_variable }}" max="{{ 'MAX_YEAR_OF_BIRTH'|get_settings_variable }}" placeholder="출생년도" autocomplete="off" />
+			</div>
+			
+			<div class="space"></div>
+			
+			<h3>지지정당이 있으세요?</h3>
+			<div class="short-width-group">
+				<select class="form-control" id="supporting-party">
+					<option value="">클릭해서 선택하세요</option>
+				</select>
+			</div>
+			
+			<div class="space"></div>
+			
+			<div class="short-width-group">
+				<a href="#" class="btn btn-warning btn-lg btn-block hidden" id="move-to-unanswered-question-btn">
+					미응답한 질문 채우러가기
+				</a>
+				
+				<button type="submit" class="btn btn-primary btn-lg btn-block" id="submit-survey-btn" data-loading-text="잠시만 기다려주세요">
+					결과 확인하기
+				</button>
+			</div>
+		<form>
 	</div>
 </div>
 

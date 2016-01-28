@@ -93,7 +93,9 @@ $(document).on('click', '.question-choice', function() {
   }
 });
 
-$(document).on('click', '#submit-survey-btn', function() {
+$(document).on('submit', '#update-user-form', function(event) {
+  event.preventDefault();
+
   if ($('input[name="sex"]:checked').val() != undefined ||
     $('#year-of-birth').val() != '' || $('#supporting-party').val() != '') {
     
@@ -198,7 +200,6 @@ $(document).ready(function() {
       var totalQuestions = data.length;
       var totalSections = totalQuestions + 2;
       
-      // Shuffle question list
       data = _.shuffle(data);
       
       data.forEach(function(question, index) {
@@ -210,6 +211,8 @@ $(document).ready(function() {
         $section.find('.question-explanation').html(question.explanation);
         
         var choices = question.choices;
+        choices = _.shuffle(choices);
+        
         choices.forEach(function(choice) {
           $section.find('.question-choices').append('<div class="radio"><label>' + '<input type="radio" ' +
             'class="question-choice" name="question-' + question.id + '" value="' + choice.id + '" />' + 
@@ -296,16 +299,13 @@ $(document).ready(function() {
         // Disables featutre moving to specific section when loaded
         animateAnchor: false,
         
-        afterLoad: function(anchorLink, index){
-          var $loadedSection = $(this);
-          
-          if (index > 1 && index < totalSections) localStorage.setItem('duration', new Date().getTime() / 1000);
-        },
-          
         onLeave: function(index, nextIndex, direction){
           var $leavingSection = $(this);
           
           if (index > 1 && index < totalSections) {
+            // Reset duration
+            localStorage.setItem('duration', new Date().getTime() / 1000);
+            
             var choiceID = $leavingSection.find('.question-choice[type="radio"]:checked').val();
             var originalChoiceID = $leavingSection.find('.original-choice-id').val();
             var answerID = $leavingSection.find('.answer-id').val();
