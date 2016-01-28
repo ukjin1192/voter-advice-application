@@ -100,6 +100,7 @@ class PartyViewSet(viewsets.ModelViewSet):
         """
         List all parties
         """
+        # TODO CACHE
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
@@ -117,6 +118,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
         """
         List all questions with choices
         """
+        # TODO CACHE
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
@@ -214,8 +216,14 @@ class ResultViewSet(viewsets.ModelViewSet):
         Create result if result is not exist or updated datetime is past than the comparison target
         Otherwise get ID of existing result
         """
+        if not all(x in request.data for x in ['category']) or \
+                request.data['category'] not in [i[0] for i in getattr(settings, 'RESULT_CATEGORY_CHOICES')]:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        category = request.data['category']
+        
         try:
-            result = Result.objects.filter(user=request.user).latest('id')
+            result = Result.objects.filter(category=category, user=request.user).latest('id')
         except:
             result = None
         
@@ -224,29 +232,56 @@ class ResultViewSet(viewsets.ModelViewSet):
         updated_at_list = []
         parties = Party.objects.select_related('user').all()
         
+        # TODO CACHE
         for party in parties:
             try:
                 party_data = utilities.get_survey_data_of_user(party.user)
-                party_dict = {'name': party.name, 'color': party.color, 'factor_list': party_data['factor_list']}
+                party_dict = {'name': party.name, 
+                        'color': party.color, 
+                        'factor_list': party_data['factor_list']}
                 target_data.append(party_dict)
                 updated_at_list.append(party_data['updated_at'])
             except:
                 pass
         
         user_data = utilities.get_survey_data_of_user(request.user)
-        
-        # Get ID of result object only if 
-        #   (1) Result is exsit
-        #   (2) User's answers are not updated after result object created 
-        #   (3) Comparison targets's answers are not updated after result object created
-        if result is not None and \
-                result.updated_at > user_data['updated_at'] and \
-                result.updated_at > max(updated_at_list):
-            return Response(
-                    {'state': True, 'id': result.id, 'message': 'Result already exist.'},
-                    status=status.HTTP_200_OK)
-        
-        record = utilities.get_one_dimensional_result(user_data['factor_list'], *target_data)
+            
+        if category == 'party_1d':
+            # Get ID of result object(=DO NOT CREATE NEW ONE) only if 
+            #   (1) Result is exsit
+            #   (2) User's answers are not updated after result object is created 
+            #   (3) Comparison targets's answers are not updated after result object is created
+            if result is not None and \
+                    result.updated_at > user_data['updated_at'] and \
+                    result.updated_at > max(updated_at_list):
+                return Response(
+                        {'state': True, 'id': result.id, 'message': 'Result already exist.'},
+                        status=status.HTTP_200_OK)
+            
+            record = utilities.get_one_dimensional_result(user_data['factor_list'], *target_data)
+        else:
+            # TODO CACHE
+            rotation_matrix = utilities.get_rotation_matrix()
+            
+            # Get ID of result object(=DO NOT CREATE NEW ONE) only if 
+            #   (1) Result is exsit
+            #   (2) User's answers are not updated after result object is created 
+            #   (3) Comparison targets's answers are not updated after result object is created
+            #   (4) Rotation matrix is not updated after result object is created
+            if result is not None and \
+                    result.updated_at > user_data['updated_at'] and \
+                    result.updated_at > max(updated_at_list):
+                return Response(
+                        {'state': True, 'id': result.id, 'message': 'Result already exist.'},
+                        status=status.HTTP_200_OK)
+            
+            user_dict = {'name': '나',
+                'color': '#9b59b6',
+                'factor_list': user_data['factor_list']}
+            target_data.append(user_dict)
+            
+            
+            record = utilities.get_two_dimensional_result(rotation_matrix, *target_data)
         
         data = request.data
         data['record'] = record
@@ -288,41 +323,3 @@ class ResultViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         serializer.save()
-
-
-
-from django.http import JsonResponse
-
-def temp(request):
-    rotation_matrix = utilities.get_rotation_matrix()
-
-    target_data = []
-    parties = Party.objects.select_related('user').all()
-    
-    for party in parties:
-        try:
-            party_data = utilities.get_survey_data_of_user(party.user)
-            party_dict = {'name': str(party.name), 
-                'color': str(party.color), 
-                'factor_list': party_data['factor_list'], 
-                'z_coordinates': 20}
-            target_data.append(party_dict)
-        except:
-            pass
-
-    user_id = request.GET['userID']
-
-    try:
-        user = User.objects.get(id=int(user_id))
-        user_data = utilities.get_survey_data_of_user(user)
-        user_dict = {'name': '나', 
-            'color': '#9b59b6', 
-            'factor_list': user_data['factor_list'], 
-            'z_coordinates': 20}
-        target_data.append(user_dict)
-    except:
-        pass
-
-    coordinates_list = utilities.get_two_dimensional_result(rotation_matrix, *target_data)
-
-    return JsonResponse({'coordinates_list': coordinates_list})

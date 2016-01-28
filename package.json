@@ -21,7 +21,9 @@
     "bootstrap": "~3.3.6",
     "bootstrap-webpack": "0.0.5",
     "lodash": "~3.10.1",
-    "fullpage.js": "~2.7.6"
+    "fullpage.js": "~2.7.6",
+    "d3": "~3.5.14",
+    "dimple-js": "~2.1.4"
   },
   "devDependencies": {
     "css-loader": "~0.23.1",

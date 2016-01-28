@@ -57,4 +57,4 @@ class ResultSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Result
-        fields = ('id', 'user', 'record', 'is_public', 'updated_at')
+        fields = ('id', 'user', 'record', 'category', 'is_public', 'updated_at')

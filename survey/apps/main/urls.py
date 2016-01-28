@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import url
-from main.views import UserViewSet, PartyViewSet, QuestionViewSet, AnswerViewSet, ResultViewSet, temp
+from main.views import UserViewSet, PartyViewSet, QuestionViewSet, AnswerViewSet, ResultViewSet
 
 
 user_list = UserViewSet.as_view({
@@ -105,9 +105,5 @@ urlpatterns = [
         r'^results/(?P<pk>[0-9]+)/$',
         result_detail,
         name='result-detail'
-    ),
-    url(
-        r'^results/temp/$',
-        temp
     ),
 ]

@@ -167,6 +167,10 @@ SEX_CHOICES = (
     ('male', 'Male'),
     ('female', 'Female')
 )
+RESULT_CATEGORY_CHOICES = (
+    ('party_1d', 'Party - One dimensional'),
+    ('party_2d', 'Party - Two dimentsional')
+)
 
 # Captcha for humanvalidation
 USE_CAPTCHA = False

@@ -43,10 +43,19 @@ def get_one_dimensional_result(user_data, *target_data):
         target_data = [{'name': 'User A', 'color': '#AEAEAE', 'factor_list': [1, 1, 1]},
                        {'name': 'User B', 'color': '#EEEEEE', 'factor_list': [2, 2, 2]}]
     [Output]
-        [{'key': 'User A', 'value': 62, 'color': '#AEAEAE'}, {'key': 'User B', 'value': 54, 'color': '#EEEEEE'}]
+        [{
+            'name': 'User A', 
+            'similarity': 62, 
+            'color': '#AEAEAE'
+        }, 
+        {
+            'name': 'User B', 
+            'similarity': 54, 
+            'color': '#EEEEEE'
+        }]
     """
     question_count = len(user_data)
-    similarity = []
+    record = []
 
     for single_target_data in target_data:
         target_factor_list = single_target_data['factor_list']
@@ -54,11 +63,11 @@ def get_one_dimensional_result(user_data, *target_data):
         factor_max_distance = getattr(settings, 'MAX_FACTOR_VALUE') - getattr(settings, 'MIN_FACTOR_VALUE')
         max_disagreement = float(question_count * factor_max_distance)
         agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
-        similarity.append("{'key': '" + single_target_data['name'] + "'," \
-                + "'value': " + str(agreement_score) + "," \
+        record.append("{'name': '" + single_target_data['name'] + "'," \
+                + "'similarity': " + str(agreement_score) + "," \
                 +  "'color': '" + single_target_data['color'] + "'}")
 
-    return '[' + ', '.join(similarity) + ']'
+    return '[' + ', '.join(record) + ']'
 
 
 def get_rotation_matrix():
@@ -114,17 +123,33 @@ def get_two_dimensional_result(rotation_matrix, *target_data):
             [-0.07372826,  0.39770633],
             [ 0.99721788,  0.03950055]])
         target_data = [
-            {'name': 'User A', 'factor_list': [-1, 1, 2]}, 
-            {'name': 'User B', 'factor_list': [-2, 0, -2]}]
+            {'name': 'User A', 'factor_list': [-1, 1, 2], 'color': '#AEAEAE'}, 
+            {'name': 'User B', 'factor_list': [-2, 0, -2], 'color': '#EEEEEE'}]
     [Output]
-        [{'name': 'User A', 'coordinates': (1.9316913344094013, -0.43995466242180009)}, 
-        {'name': 'User B', 'coordinates': (-1.972468097093643, -1.9123252796738086)}]
+        [{
+            'name': 'User A', 
+            'x_coordinate': 1.9316913344094013, 
+            'y_coordinate': -0.43995466242180009, 
+            'radius': 20, 
+            'color': '#AEAEAE'
+        }, 
+        {
+            'name': 'User B', 
+            'x_coordinate': -1.972468097093643, 
+            'y_coordinate': -1.9123252796738086, 
+            'radius': 20,
+            'color': '#EEEEEE'
+        }]
     """
+    record = []
+
     for single_target_data in target_data:
         factor_list = numpy.array(single_target_data['factor_list'])
         coordinates = tuple(factor_list.dot(rotation_matrix))
-        del single_target_data['factor_list']
-        single_target_data['x_coordinates'] = coordinates[0]
-        single_target_data['y_coordinates'] = coordinates[1]
+        record.append("{'name': '" + single_target_data['name'] + "'," \
+                + "'x_coordinate': " + str(coordinates[0]) + "," \
+                + "'y_coordinate': " + str(coordinates[1]) + "," \
+                + "'radius': 20," \
+                +  "'color': '" + single_target_data['color'] + "'}")
 
-    return list(target_data)
+    return '[' + ', '.join(record) + ']'

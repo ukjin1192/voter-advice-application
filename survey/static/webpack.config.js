@@ -15,7 +15,9 @@ module.exports = {
       'jquery.cookie', 
       'bootstrap-webpack',
       'lodash',
-      'fullpage.js'
+      'fullpage.js',
+      'd3',
+      'dimple-js'
     ]
   },
   output: {

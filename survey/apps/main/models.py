@@ -269,6 +269,11 @@ class Result(models.Model):
     record = models.TextField(
         verbose_name = _('Record'),
     ) 
+    category = models.CharField(
+        verbose_name = _('Category'),
+        choices = getattr(settings, 'RESULT_CATEGORY_CHOICES'),
+        max_length = 255
+    )
     is_public = models.BooleanField(
         verbose_name = _('Public'),
         default = False

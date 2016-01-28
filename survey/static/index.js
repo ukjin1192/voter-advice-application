@@ -4,6 +4,8 @@
 require('bootstrap-webpack!./bootstrap.config.js');
 require('./styles.scss');
 
+var dimple = require('dimple-js');
+
 // Load modules
 var setCSRFToken = require('./module/setCSRFToken.js');
 var setAuthToken = require('./module/setAuthToken.js');
@@ -136,6 +138,7 @@ $(document).on('submit', '#update-user-form', function(event) {
     $('#submit-survey-btn').button('loading');
     
     var formData = new FormData();
+    formData.append('category', 'party_1d');
     
     // Set authentication and CSRF tokens at HTTP header
     setAuthToken();
@@ -164,6 +167,7 @@ $(document).on('click', '#move-to-result-page-btn', function() {
   setCSRFToken();
 
   var formData = new FormData();
+  formData.append('category', 'party_1d');
 
   $('#move-to-result-page-btn').button('loading');
 
@@ -391,7 +395,7 @@ $(document).ready(function() {
     // Set authentication token at HTTP header
     setAuthToken();
     
-    // Get result object
+    // Get result object (One dimensional analysis)
     $.ajax({
       url: '/api/results/' + resultID + '/',
       type: 'GET'
@@ -410,8 +414,8 @@ $(document).ready(function() {
       rows.forEach(function(row, index) {
         $('#result-chart').append('<div class="progress">' +
           '<div class="progress-bar progress-bar-striped" role="progressbar" style="width: ' +
-            row.value + '%; background-color: ' + row.color + ';">' + row.value + '%' + '</div></div>');
-        $('#label-list').append('<span class="label" style="background-color: ' + row.color + ';">' + row.key + '</span>');
+            row.similarity + '%; background-color: ' + row.color + ';">' + row.similarity + '%' + '</div></div>');
+        $('#label-list').append('<span class="label" style="background-color: ' + row.color + ';">' + row.name + '</span>');
       });
       
       // When user is owner of result
@@ -476,6 +480,58 @@ $(document).ready(function() {
       $('#forbidden-alert-message').removeClass('hidden');
       $('#move-to-main-page-btn').html('설문 참여하기');
       console.log('Failed to get result: ' + data);
+    }); 
+    
+    // Get result object (Two dimensional analysis)
+    var formData = new FormData();
+    formData.append('category', 'party_2d');
+     
+    $.ajax({
+      url: '/api/results/',
+      type: 'POST',
+      data: formData,
+      contentType: false,
+      processData: false
+    }).done(function(data) {
+      var rows = JSON.parse(data.record.replace(/'/g, '"'));
+      var chartWidth = $('#chartContainer').width();
+      var svgBlock = dimple.newSvg('#chartContainer', chartWidth, chartWidth);
+      var myChart = new dimple.chart(svgBlock, rows);
+      
+      myChart.setBounds(10, 10, chartWidth, chartWidth);
+      // myChart.setMargins(100, 100, 100, 100);
+      
+      var xAxis= myChart.addMeasureAxis('x', 'x_coordinate');
+      var yAxis = myChart.addMeasureAxis('y', 'y_coordinate');
+      var zAxis = myChart.addMeasureAxis('z', 'radius');
+      
+      xAxis.title = '가로축: 경제';
+      xAxis.fontSize = 12;
+      
+      yAxis.title = '세로축: 사회';
+      yAxis.fontSize = 12;
+      
+      var mySeries = myChart.addSeries('name', dimple.plot.bubble);
+      
+      rows.forEach(function(row, index) {
+        myChart.assignColor(row.name, row.color);
+      });
+      
+      mySeries.afterDraw = function (shp, d, i) {
+          var shape = d3.select(shp);
+          svg.append('text')
+              .attr('x', parseFloat(shape.attr('cx')-20))
+              .attr('y', parseFloat(shape.attr('cy')))
+              .style('test-anchor','middle')
+              .style('font-size', '20px')
+              .style('font-family', 'sans-serif')
+              .style('opacity', 0.7)
+              .text(rows[i].name)
+      };
+      
+      myChart.draw(1000);
+    }).fail(function(data) {
+      console.log('Failed to get two dimensional result: ' + data);
     }); 
     
     // Social media sharing feature

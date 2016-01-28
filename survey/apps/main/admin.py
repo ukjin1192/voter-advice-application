@@ -41,7 +41,7 @@ class AnswerAdmin(admin.ModelAdmin):
 
 
 class ResultAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'record', 'is_public')
+    list_display = ('id', 'user', 'record', 'category', 'is_public')
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'
     ordering = ('-id', )
