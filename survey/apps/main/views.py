@@ -230,7 +230,7 @@ class ResultViewSet(viewsets.ModelViewSet):
         # Data of comparison target
         target_data = []
         updated_at_list = []
-        parties = Party.objects.select_related('user').all()
+        parties = Party.objects.select_related('user').filter(user__completed_survey=True)
         
         # TODO CACHE
         for party in parties:
@@ -268,6 +268,7 @@ class ResultViewSet(viewsets.ModelViewSet):
             #   (2) User's answers are not updated after result object is created 
             #   (3) Answers of comparison targets are not updated after result object is created
             #   (4) Rotation matrix is not updated after result object is created
+            # TODO Add 4th condition
             if result is not None and \
                     result.updated_at > user_data['updated_at'] and \
                     result.updated_at > max(updated_at_list):

@@ -416,7 +416,7 @@ $(document).ready(function() {
       
       data.forEach(function(party, index) {
         // Fill out supporting party list
-        $('#supporting-party').append('<option value="' + party.name + '">' + party.name + '</option>');
+        if (party.completed_survey) $('#supporting-party').append('<option value="' + party.name + '">' + party.name + '</option>');
         wordList.push(party.name);
       }); 
       
