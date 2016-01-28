@@ -1,7 +1,6 @@
 #!usr/bin/python
 # -*- coding: utf-8 -*-
 
-from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -168,6 +167,10 @@ class Question(models.Model):
     image_url = models.CharField(
         verbose_name = _('Image URL'),
         max_length = 255
+    )
+    duration_limit = models.PositiveSmallIntegerField(
+        verbose_name = _('Duration limit in seconds'),
+        default = 2
     )
     created_at = models.DateTimeField(
         verbose_name = _('Created datetime'),

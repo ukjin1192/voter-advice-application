@@ -15,8 +15,6 @@ var activateSlotMachine = require('./module/activateSlotMachine.js');
 if ($('#use-captcha').val() == 'True') var useCaptcha = true;
 else var useCaptcha = false;
 
-var minDurationInSeconds = parseInt($('#min-duration-in-seconds').val()); 
-
 $(document).on('click', '#refresh-captcha', getCaptcha);
 
 // Validate captcha input and create user
@@ -80,7 +78,8 @@ $(document).on('click', '.question-choice', function() {
   var duration = new Date().getTime() / 1000 - localStorage.getItem('duration');
 
   // When user think enough or already answered question
-  if (duration > minDurationInSeconds || $leavingSection.find('.answer-id').val() != '') {
+  if (duration > parseInt($leavingSection.find('.question-duration-limit').val()) || 
+    $leavingSection.find('.answer-id').val() != '') {
     // Auto scrolling
     $.fn.fullpage.moveSectionDown();
     $leavingSection.find('.duration-alert-message').addClass('hidden');
@@ -207,6 +206,7 @@ $(document).ready(function() {
         $section.find('.progress-bar').css('width', (index + 1) / totalQuestions * 100 + '%');
         $section.find('.question-id').val(question.id);
         $section.find('.question-order').val(index + 1);
+        $section.find('.question-duration-limit').val(question.duration_limit);
         $section.find('.question-image').attr('data-src', question.image_url);
         $section.find('.question-explanation').html(question.explanation);
         

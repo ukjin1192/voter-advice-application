@@ -3,8 +3,6 @@
 {% load custom_filter %}
 
 {% block container %}
-<input type="hidden" id="min-duration-in-seconds" value="{{ 'MIN_DURATION_IN_SECONDS'|get_settings_variable }}" />
-
 <div class="hidden" id="page-scroll-container">
 
 	<div class="section">
@@ -117,6 +115,7 @@
 		</div>
 		<input type="hidden" class="question-id" value="" />
 		<input type="hidden" class="question-order" value="" />
+		<input type="hidden" class="question-duration-limit" value="" />
 		<div class="question-contents-container">
 			<img class="question-image" data-src="" />
 			<div class="question-explanation"></div>
