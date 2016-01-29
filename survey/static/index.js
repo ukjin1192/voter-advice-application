@@ -4,8 +4,6 @@
 require('bootstrap-webpack!./bootstrap.config.js');
 require('./styles.scss');
 
-var dimple = require('dimple-js');
-
 // Load modules
 var setCSRFToken = require('./module/setCSRFToken.js');
 var setAuthToken = require('./module/setAuthToken.js');
@@ -13,6 +11,7 @@ var clearAuthToken = require('./module/clearAuthToken.js');
 var getCaptcha = require('./module/getCaptcha.js');
 var activateSlotMachine = require('./module/activateSlotMachine.js');
 var loadResultPage = require('./module/loadResultPage.js');
+var drawTwoDimensionalChart = require('./module/drawTwoDimensionalChart.js');
 
 // Decide to use captcha validation or not
 if ($('#use-captcha').val() == 'True') var useCaptcha = true;
@@ -98,10 +97,10 @@ $(document).on('click', '.question-choice', function() {
 $(document).on('submit', '#update-user-form', function(event) {
   event.preventDefault();
 
+  $('#submit-survey-btn').button('loading');
+
   if ($('input[name="sex"]:checked').val() != undefined ||
     $('#year-of-birth').val() != '' || $('#supporting-party').val() != '') {
-    
-    $('#submit-survey-btn').button('loading');
     
     // Save additional info
     var formData = new FormData();
@@ -123,41 +122,36 @@ $(document).on('submit', '#update-user-form', function(event) {
     }).fail(function(data) {
       console.log('Failed to update user: ' + data);
     }).always(function() {
-      $('#submit-survey-btn').button('reset');
     });
   }
-  
+
   // Check user chose all questions
   var firstUnaswerdQuestionOrder = parseInt($('.answer-id[value=""]').closest('.question').find('.question-order').val());
 
   // When user does not completed survey 
   if (isNaN(firstUnaswerdQuestionOrder) == false) {
     $('#move-to-unanswered-question-btn').attr('href', '#Q' + firstUnaswerdQuestionOrder).removeClass('hidden');
+    $('#submit-survey-btn').button('reset');
   }
   // Move to result page when user completed survey
   else {
-    $('#submit-survey-btn').button('loading');
     loadResultPage('party_2d');
-    $('#submit-survey-btn').button('reset');
   }
 });
 
 $(document).on('click', '#move-to-result-page-btn', function() {
   $('#move-to-result-page-btn').button('loading');
   loadResultPage('party_2d');
-  $('#move-to-result-page-btn').button('reset');
 });
 
 $(document).on('click', '#move-to-one-dimensional-result-page-btn', function() {
   $('#move-to-one-dimensional-result-page-btn').button('loading');
   loadResultPage('party_1d');
-  $('#move-to-one-dimensional-result-page-btn').button('reset');
 });
 
 $(document).on('click', '#move-to-two-dimensional-result-page-btn', function() {
   $('#move-to-two-dimensional-result-page-btn').button('loading');
   loadResultPage('party_2d');
-  $('#move-to-two-dimensional-result-page-btn').button('reset');
 });
 
 // Update result to public 
@@ -203,9 +197,9 @@ $(document).on('click', '#update-public-field-btn', function() {
     $('#update-public-field-alert-message').removeClass('hidden');
   }).fail(function(data) {
     console.log('Failed to update result to public: ' + data);
-  }).always(function() {
-    $('#update-public-field-btn').button('reset');
   }); 
+
+  $('#update-public-field-btn').button('reset');
 });
 
 // Alert that kakaotalk and line messenger sharing is only available at mobile
@@ -469,41 +463,16 @@ $(document).ready(function() {
         $('#record-updated-at').html('최종 업데이트 : ' + updatedAt.getFullYear() + '-' +
           updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
         
-        var chartWidth = $('#two-dimensional-result').width();
-        var svgBlock = dimple.newSvg('#two-dimensional-result', chartWidth, chartWidth);
         var rows = JSON.parse(data.record.replace(/'/g, '"'));
-        var chart = new dimple.chart(svgBlock, rows);
+        drawTwoDimensionalChart(rows);
         
-        var xAxis = chart.addMeasureAxis('x', 'x_coordinate');
-        var yAxis = chart.addMeasureAxis('y', 'y_coordinate');
-        var zAxis = chart.addMeasureAxis('z', 'radius');
-        
-        xAxis.title = '가로축: 경제';
-        xAxis.fontSize = 12;
-        
-        yAxis.title = '세로축: 사회';
-        yAxis.fontSize = 12;
-        
-        var chartSeries = chart.addSeries('name', dimple.plot.bubble);
-        
-        rows.forEach(function(row, index) {
-          chart.assignColor(row.name, row.color);
-          $('#label-list').append('<span class="label" style="background-color: ' + row.color + ';">' + row.name + '</span>');
-        });
-        
-        chartSeries.afterDraw = function (shp, d, i) {
-            var shape = d3.select(shp);
-            svgBlock.append('text')
-                .attr('x', parseFloat(shape.attr('cx')))
-                .attr('y', parseFloat(shape.attr('cy')))
-                .style('text-anchor','middle')
-                .style('font-size', '1.2em')
-                .style('font-weight', 'bold')
-                .style('fill', 'white')
-                .text(rows[i].name);
+        // Redraw chart when window resized (Prevent from resize event fires multiple times)
+        var redraw = function() {
+          $('#two-dimensional-result, #label-list').empty();
+          drawTwoDimensionalChart(rows);
         };
-        
-        chart.draw(1000);
+        var debouncedRedraw = _.debounce(redraw, 750);
+        $(window).on('resize', debouncedRedraw);
         
         $('#move-to-one-dimensional-result-page-btn').removeClass('hidden');
       }
