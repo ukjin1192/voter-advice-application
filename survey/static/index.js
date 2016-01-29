@@ -450,9 +450,7 @@ $(document).ready(function() {
         var rows = JSON.parse(data.record.replace(/'/g, '"'));
         
         // Sorting as descending order
-        rows = rows.sort(function(a, b){
-          return a.value < b.value;
-        });
+        rows = _.orderBy(rows, 'similarity', 'desc');
         
         rows.forEach(function(row, index) {
           $('#one-dimensional-result').append('<div class="progress">' +
@@ -473,10 +471,11 @@ $(document).ready(function() {
         
         var chartWidth = $('#two-dimensional-result').width();
         var svgBlock = dimple.newSvg('#two-dimensional-result', chartWidth, chartWidth);
+        // var svgBlock = dimple.newSvg('#two-dimensional-result');
         var rows = JSON.parse(data.record.replace(/'/g, '"'));
         var chart = new dimple.chart(svgBlock, rows);
         
-        chart.setBounds(10, 10, chartWidth, chartWidth);
+        // chart.setBounds(10, 10, chartWidth, chartWidth);
         // chart.setMargins(100, 100, 100, 100);
         
         var xAxis = chart.addMeasureAxis('x', 'x_coordinate');
