@@ -174,3 +174,6 @@ RESULT_CATEGORY_CHOICES = (
 
 # Captcha for humanvalidation
 USE_CAPTCHA = False
+
+# Time-to-live for cache
+CACHE_TTL = 60 * 60 * 24 * 7    # 7 days

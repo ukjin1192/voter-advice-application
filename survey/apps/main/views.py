@@ -2,16 +2,16 @@
 # -*- coding:utf-8 -*-
 
 from captcha.models import CaptchaStore
-from datetime import timedelta
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
+from django.core.cache import cache
 from main.models import User, Party, Question, Choice, Answer, Result 
 from main.permissions import UserPermission, PartyPermission, QuestionPermission, AnswerPermission, ResultPermission 
 from main.serializers import UserSerializer, PartySerializer, QuestionSerializer, AnswerSerializer, ResultSerializer
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
-from utils import utilities
+from utils import redis, utilities
 from uuid import uuid4
 
 
@@ -92,7 +92,7 @@ class PartyViewSet(viewsets.ModelViewSet):
     """
     Provides `list` action for party object
     """
-    queryset = Party.objects.all()
+    queryset = Party.objects.select_related('user').all()
     serializer_class = PartySerializer
     permission_classes = (PartyPermission, )
 
@@ -100,10 +100,12 @@ class PartyViewSet(viewsets.ModelViewSet):
         """
         List all parties
         """
-        # TODO CACHE
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        parties = cache.get('parties:whole')
+        if parties is not None:
+            return Response(parties)
+        else:
+            parties = redis.set_whole_parties_cache()
+            return Response(parties)
 
 
 class QuestionViewSet(viewsets.ModelViewSet):
@@ -118,10 +120,12 @@ class QuestionViewSet(viewsets.ModelViewSet):
         """
         List all questions with choices
         """
-        # TODO CACHE
-        queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
+        questions = cache.get('questions')
+        if questions is not None:
+            return Response(questions)
+        else:
+            questions = redis.set_questions_cache()
+            return Response(questions)
 
 
 class AnswerViewSet(viewsets.ModelViewSet):
@@ -230,9 +234,10 @@ class ResultViewSet(viewsets.ModelViewSet):
         # Data of comparison target
         target_data = []
         updated_at_list = []
-        parties = Party.objects.select_related('user').filter(user__completed_survey=True)
+        parties = cache.get('parties:valid')
+        if parties is None:
+            parties = redis.set_valid_parties_cache()
         
-        # TODO CACHE
         for party in parties:
             try:
                 party_data = utilities.get_survey_data_of_user(party.user)
@@ -260,18 +265,19 @@ class ResultViewSet(viewsets.ModelViewSet):
             
             record = utilities.get_one_dimensional_result(user_data['factor_list'], *target_data)
         else:
-            # TODO CACHE
-            rotation_matrix = utilities.get_rotation_matrix()
+            rotation_matrix = cache.get('rotation_matrix')
+            if rotation_matrix is None:
+                rotation_matrix = redis.set_rotation_matrix_cache()
             
             # Get ID of result object(=DO NOT CREATE NEW ONE) only if 
             #   (1) Result is exsit
             #   (2) User's answers are not updated after result object is created 
             #   (3) Answers of comparison targets are not updated after result object is created
             #   (4) Rotation matrix is not updated after result object is created
-            # TODO Add 4th condition
             if result is not None and \
                     result.updated_at > user_data['updated_at'] and \
-                    result.updated_at > max(updated_at_list):
+                    result.updated_at > max(updated_at_list) and \
+                    result.updated_at > rotation_matrix['updated_at']:
                 return Response(
                         {'state': True, 'id': result.id, 'message': 'Result already exist.'},
                         status=status.HTTP_200_OK)
@@ -281,7 +287,7 @@ class ResultViewSet(viewsets.ModelViewSet):
                 'factor_list': user_data['factor_list']}
             target_data.append(user_dict)
             
-            record = utilities.get_two_dimensional_result(rotation_matrix, *target_data)
+            record = utilities.get_two_dimensional_result(rotation_matrix['matrix'], *target_data)
         
         data = request.data
         data['record'] = record

@@ -38,7 +38,8 @@ class QuestionSerializer(serializers.HyperlinkedModelSerializer):
         Get all choices in specific question
         """
         choices = Choice.objects.filter(question=obj)
-        serializer = ChoiceSerializer(choices, many=True, context={'request': self.context['request']})
+        # serializer = ChoiceSerializer(choices, many=True, context={'request': self.context['request']})
+        serializer = ChoiceSerializer(choices, many=True)
         return serializer.data
 
 
