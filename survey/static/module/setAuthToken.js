@@ -3,10 +3,12 @@
 var $ = require('jquery');
 
 module.exports = function setAuthToken() {
-  $.ajaxSetup({
-    headers: {
-      'Authorization': 'JWT ' + localStorage.getItem('token')
-    }
-  });
+  if (localStorage.getItem('token') != null) {
+    $.ajaxSetup({
+      headers: {
+        'Authorization': 'JWT ' + localStorage.getItem('token')
+      }
+    });
+  }
   return;
 }
