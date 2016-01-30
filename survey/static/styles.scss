@@ -237,35 +237,36 @@ pre {
  * Result page
  * =========== */
 
-#label-list {
+#result-page {
+	padding-bottom: 20px;
 
-	.label {
-		display: inline-block;
-		margin: 3px;
-		font-size: 1em;
-	}
-}
-
-#share-btn-group {
-	padding: 20px 0 10px 0;
-	text-align: center;
-	background-color: white;
-	color: $light-grey-color;
-	font-style: italic;
-
-	.share-btn {
-		display: inline;
-		padding: 7px;
+	#label-list {
 		
-		img {
-			width: 12%;
-			max-width: 50px;
+		.label {
+			display: inline-block;
+			margin: 3px;
+			font-size: 1em;
 		}
 	}
-}
 
-#move-to-main-page-btn {
-	margin-bottom: 20px;
+	#share-btn-group {
+		margin-bottom: 20px;
+		padding: 20px 0 10px 0;
+		text-align: center;
+		background-color: white;
+		color: $light-grey-color;
+		font-style: italic;
+		
+		.share-btn {
+			display: inline;
+			padding: 7px;
+			
+			img {
+				width: 12%;
+				max-width: 50px;
+			}
+		}
+	}
 }
 
 /* ===============================

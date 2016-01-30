@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block container %}
-<div class="text-center">
+<div class="text-center" id="result-page">
 	<h3>정당유사도 <span class="label label-info" id="result-category"></span></h3>
 	<h6 id="record-updated-at"></h6> 
 	<div id="one-dimensional-result"></div>
@@ -41,8 +41,6 @@
 		<h6>언제든 비공개로 전환할 수 있습니다.</h6>
 	</div>
 	
-	<div class="space"></div>
-
 	<button class="btn btn-primary btn-lg btn-block hidden" id="move-to-one-dimensional-result-page-btn" data-loading-text="잠시만 기다려주세요">
 		1차원 결과 보기
 	</button>

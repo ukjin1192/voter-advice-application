@@ -487,6 +487,7 @@ $(document).ready(function() {
       }
       // When user is not authenticated
       else {
+        $('#move-to-one-dimensional-result-page-btn, #move-to-two-dimensional-result-page-btn').addClass('hidden');
         $('#move-to-main-page-btn').html('나도 확인해보기');
       }
     }).fail(function(data) {
