@@ -156,6 +156,7 @@ $(document).on('click', '#move-to-two-dimensional-result-page-btn', function() {
 
 // Update result to public 
 $(document).on('click', '.share-btn', function() {
+  var resultID = window.location.pathname.match(/result\/(\d+)/)[1]
   var formData = new FormData();
   formData.append('is_public', true);
   
@@ -163,7 +164,7 @@ $(document).on('click', '.share-btn', function() {
   setCSRFToken();
   
   $.ajax({
-    url: '/api/results/' + resultID+ '/',
+    url: '/api/results/' + resultID + '/',
     type: 'PATCH',
     data: formData,
     contentType: false,
@@ -179,7 +180,8 @@ $(document).on('click', '.share-btn', function() {
 // Update result to non-public
 $(document).on('click', '#update-public-field-btn', function() {
   $('#update-public-field-btn').button('loading');
-  
+
+  var resultID = window.location.pathname.match(/result\/(\d+)/)[1]
   var formData = new FormData();
   formData.append('is_public', false);
   
