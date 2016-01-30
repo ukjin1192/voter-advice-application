@@ -10,23 +10,38 @@ from main.serializers import UserSerializer, PartySerializer, QuestionSerializer
 from utils import utilities
 
 
-def set_whole_parties_cache():
+def set_party_list_cache():
     """
     Set whole parties cache
     """
     parties = Party.objects.select_related('user').all()
     serializer = PartySerializer(parties, many=True)
-    cache.set('parties:whole', serializer.data, timeout=getattr(settings, 'CACHE_TTL'))
+    cache.set('parties:list', serializer.data, timeout=getattr(settings, 'CACHE_TTL'))
     return serializer.data
 
 
-def set_valid_parties_cache():
+def set_survey_data_of_parties_cache():
     """
-    Set valid parties cache
+    Set survey data of parties cache
     """
     parties = Party.objects.select_related('user').filter(user__completed_survey=True)
-    cache.set('parties:valid', parties, timeout=getattr(settings, 'CACHE_TTL'))
-    return parties
+
+    parties_data = []
+    parties_updated_at = []
+
+    for party in parties:
+        try:
+            raw_data = utilities.get_survey_data_of_user(party.user)
+            party_data = {'name': party.name, 
+                    'color': party.color, 
+                    'factor_list': raw_data['factor_list']}
+            parties_data.append(party_data)
+            parties_updated_at.append(raw_data['updated_at'])
+        except:
+            pass
+
+    cache.set('parties:data', {'data': parties_data, 'updated_at': parties_updated_at}, timeout=getattr(settings, 'CACHE_TTL'))
+    return {'data': parties_data, 'updated_at': parties_updated_at}
 
 
 def set_questions_cache():
@@ -37,6 +52,15 @@ def set_questions_cache():
     serializer = QuestionSerializer(questions, many=True)
     cache.set('questions', serializer.data, timeout=getattr(settings, 'CACHE_TTL'))
     return serializer.data
+
+
+def set_questions_count_cache():
+    """
+    Set questions count cache
+    """
+    count = Question.objects.all().count()
+    cache.set('questions:count', count, timeout=getattr(settings, 'CACHE_TTL'))
+    return count
 
 
 def set_rotation_matrix_cache():

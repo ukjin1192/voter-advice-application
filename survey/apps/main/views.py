@@ -62,7 +62,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer.save(username=uuid4(), password=make_password(getattr(settings, 'TEMPORARY_PASSWORD')))
 
     def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
+        instance = request.user
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
@@ -71,7 +71,7 @@ class UserViewSet(viewsets.ModelViewSet):
         Partially update user
         """
         partial = kwargs.pop('partial', False)
-        instance = self.get_object()
+        instance = request.user
         
         if partial == False:
             return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -100,11 +100,11 @@ class PartyViewSet(viewsets.ModelViewSet):
         """
         List all parties
         """
-        parties = cache.get('parties:whole')
+        parties = cache.get('parties:list')
         if parties is not None:
             return Response(parties)
         else:
-            parties = redis.set_whole_parties_cache()
+            parties = redis.set_party_list_cache()
             return Response(parties)
 
 
@@ -132,7 +132,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
     """
     Provides `list`, `create` and `partial update` actions for answer object
     """
-    queryset = Answer.objects.all()
+    queryset = Answer.objects.select_related('choice').select_related('user').all()
     serializer_class = AnswerSerializer
     permission_classes = (AnswerPermission, )
 
@@ -140,7 +140,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
         """
         List all answers of user
         """
-        queryset = Answer.objects.filter(user=request.user)
+        queryset = Answer.objects.select_related('choice').select_related('user').filter(user=request.user)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -152,7 +152,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            choice = Choice.objects.get(id=int(request.data['choice_id']))
+            choice = Choice.objects.select_related('question').get(id=int(request.data['choice_id']))
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
@@ -166,7 +166,10 @@ class AnswerViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         
         # When user completed survey
-        if Answer.objects.filter(user=request.user).count() == Question.objects.all().count():
+        questions_count = cache.get('questions:count')
+        if questions_count is None:
+            questions_count = redis.set_questions_count_cache()
+        if Answer.objects.filter(user=request.user).count() == questions_count:
             user = request.user
             user.completed_survey = True
             user.save()
@@ -176,12 +179,12 @@ class AnswerViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user, choice_id=int(self.request.data['choice_id']))
 
-    def update(self, request, *args, **kwargs):
+    def update(self, request, pk, *args, **kwargs):
         """
         Partially update answer
         """
         partial = kwargs.pop('partial', False)
-        instance = self.get_object()
+        instance = Answer.objects.select_related('choice__question').get(id=pk)
         
         if partial == False:
             return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -190,7 +193,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
         try:
-            choice = Choice.objects.get(id=int(request.data['choice_id']))
+            choice = Choice.objects.select_related('question').get(id=int(request.data['choice_id']))
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
@@ -231,23 +234,13 @@ class ResultViewSet(viewsets.ModelViewSet):
         except:
             result = None
         
-        # Data of comparison target
-        target_data = []
-        updated_at_list = []
-        parties = cache.get('parties:valid')
+        parties = cache.get('parties:data')
         if parties is None:
-            parties = redis.set_valid_parties_cache()
+            parties = redis.set_survey_data_of_parties_cache()
         
-        for party in parties:
-            try:
-                party_data = utilities.get_survey_data_of_user(party.user)
-                party_dict = {'name': party.name, 
-                        'color': party.color, 
-                        'factor_list': party_data['factor_list']}
-                target_data.append(party_dict)
-                updated_at_list.append(party_data['updated_at'])
-            except:
-                pass
+        # Data of comparison target
+        target_data = parties['data']
+        parties_updated_at = parties['updated_at']
         
         user_data = utilities.get_survey_data_of_user(request.user)
             
@@ -258,7 +251,7 @@ class ResultViewSet(viewsets.ModelViewSet):
             #   (3) Answers of comparison targets are not updated after result object is created
             if result is not None and \
                     result.updated_at > user_data['updated_at'] and \
-                    result.updated_at > max(updated_at_list):
+                    result.updated_at > max(parties_updated_at):
                 return Response(
                         {'state': True, 'id': result.id, 'message': 'Result already exist.'},
                         status=status.HTTP_200_OK)
@@ -276,7 +269,7 @@ class ResultViewSet(viewsets.ModelViewSet):
             #   (4) Rotation matrix is not updated after result object is created
             if result is not None and \
                     result.updated_at > user_data['updated_at'] and \
-                    result.updated_at > max(updated_at_list) and \
+                    result.updated_at > max(parties_updated_at) and \
                     result.updated_at > rotation_matrix['updated_at']:
                 return Response(
                         {'state': True, 'id': result.id, 'message': 'Result already exist.'},
@@ -301,20 +294,20 @@ class ResultViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
-    def retrieve(self, request, *args, **kwargs):
+    def retrieve(self, request, pk, *args, **kwargs):
         """
         Retrieve result
         """
-        instance = self.get_object()
+        instance = Result.objects.select_related('user').get(id=pk)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-    def update(self, request, *args, **kwargs):
+    def update(self, request, pk, *args, **kwargs):
         """
         Partially update result
         """
         partial = kwargs.pop('partial', False)
-        instance = self.get_object()
+        instance = Result.objects.select_related('user').get(id=pk)
         
         if partial == False:
             return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
