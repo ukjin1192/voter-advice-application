@@ -84,12 +84,14 @@ $(document).on('click', '.question-choice', function() {
     $leavingSection.find('.answer-id').val() != '') {
     // Auto scrolling
     $.fn.fullpage.moveSectionDown();
-    $leavingSection.find('.duration-alert-message').addClass('hidden');
     $('#move-to-unanswered-question-btn').addClass('hidden');
   }
   // Too short duration to choose choice 
   else {
-    $leavingSection.find('.duration-alert-message').removeClass('hidden');
+    $('#question-validation-message').html('조금만 더 생각해주세요').removeClass('hidden');
+    setTimeout(function() {
+      $('#question-validation-message').addClass('hidden').html('');
+    }, 1500);
     return false;
   }
 });
