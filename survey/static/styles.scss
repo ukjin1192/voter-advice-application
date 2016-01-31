@@ -216,16 +216,52 @@ pre {
 			}
 			
 			.question-choices {
-				display: inline-block;
-				width: 100%;
-				text-align: center;
-				font-size: 1.2em;
 				
 				.radio {
+					position:relative;
+					display: block;
 					width: 100%;
+					height: 35px;
+					margin-bottom: 10px;
+					font-size: 1.1em;
+					
+					@media screen and (min-width: $question-image-width) {
+						width: $question-image-width;
+						left: 50%;
+						margin-left: -1 * $question-image-width / 2;
+					}
+					
+					input[type='radio'] {
+						position: absolute;
+						display: block;
+						top: 0;
+						left: 0;
+						right: 0;
+						bottom: 0;
+						opacity: 0;
+						z-index: 100;
+						
+						&:checked + label {
+							color: white;
+							background-color: $lighter-blue-color;
+						}
+					}
 					
 					label {
-						width: 100%;
+						position: absolute;
+						display: block;
+						top: 0;
+						left: 0;
+						right: 0;
+						bottom: 0;
+						padding: 5px;
+						background-color: white;
+						cursor: pointer;
+						z-index: 50;
+						
+						&:hover {
+							background: $light-grey-color;
+						}
 					}
 				}
 			}

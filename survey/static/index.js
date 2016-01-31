@@ -253,9 +253,9 @@ $(document).ready(function() {
         choices = _.shuffle(choices);
         
         choices.forEach(function(choice) {
-          $section.find('.question-choices').append('<div class="radio"><label>' + '<input type="radio" ' +
-            'class="question-choice" name="question-' + question.id + '" value="' + choice.id + '" />' + 
-            choice.context + '</label></div>');
+          $section.find('.question-choices').append('<div class="radio"><input type="radio" ' +
+            'class="question-choice" id="C' + choice.id  + '" name="question-' + question.id + '" value="' + 
+            choice.id + '" /><label for="C' + choice.id  +'">' + choice.context + '</label></div>');
         });
         
         $('#page-scroll-container .section').last().before($section);
