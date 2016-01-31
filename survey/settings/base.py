@@ -177,3 +177,6 @@ USE_CAPTCHA = False
 
 # Time-to-live for cache
 CACHE_TTL = 60 * 60 * 24 * 7    # 7 days
+
+# CDN URL
+CDN_URL = 'http://dl8hm92vwsxic.cloudfront.net'
