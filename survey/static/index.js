@@ -470,11 +470,15 @@ $(document).ready(function() {
         
         var rows = JSON.parse(data.record.replace(/'/g, '"'));
         drawTwoDimensionalChart(rows);
+        localStorage.setItem('chart_width', $('#two-dimensional-result').width());
         
         // Redraw chart when window resized (Prevent from resize event fires multiple times)
         var redraw = function() {
-          $('#two-dimensional-result, #label-list').empty();
-          drawTwoDimensionalChart(rows);
+          if (localStorage.getItem('chart_width') != $('#two-dimensional-result').width()) {
+            $('#two-dimensional-result, #label-list').empty();
+            drawTwoDimensionalChart(rows);
+            localStorage.setItem('chart_width', $('#two-dimensional-result').width());
+          }
         };
         var debouncedRedraw = _.debounce(redraw, 750);
         $(window).on('resize', debouncedRedraw);
