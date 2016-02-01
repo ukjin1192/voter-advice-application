@@ -23,7 +23,8 @@
     "fullpage.js": "~2.7.6",
     "d3": "~3.5.14",
     "dimple-js": "~2.1.4",
-    "lodash": "~4.0.1"
+    "lodash": "~4.0.1",
+    "fastclick": "~1.0.6"
   },
   "devDependencies": {
     "css-loader": "~0.23.1",

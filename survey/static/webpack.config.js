@@ -17,7 +17,8 @@ module.exports = {
       'lodash',
       'fullpage.js',
       'd3',
-      'dimple-js'
+      'dimple-js',
+      'fastclick'
     ]
   },
   output: {
