@@ -4,7 +4,7 @@
 import math
 import numpy
 from django.conf import settings
-from main.models import User, Party, Question, Choice, Answer, Result 
+from main.models import User, Party, Question, Choice, Answer, Result, VoiceOfCustomer 
 
 
 def get_survey_data_of_user(user_obj):

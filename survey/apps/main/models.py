@@ -260,7 +260,7 @@ class Answer(models.Model):
 
 class Result(models.Model):
     """
-    Result survey
+    Result of survey
     """
     user = models.ForeignKey(
         'User',
@@ -291,6 +291,42 @@ class Result(models.Model):
     class Meta:
         verbose_name = _('Result')
         verbose_name_plural = _('Results')
+        ordering = ['-id']
+
+    def __unicode__(self):
+        return unicode(self.id) or u''
+
+
+class VoiceOfCustomer(models.Model):
+    """
+    Voice of customer
+    """
+    author = models.ForeignKey(
+        'User',
+        related_name = 'vocs',
+        blank = True,
+        null = True
+    )
+    context = models.TextField(
+        verbose_name = _('Context'),
+    ) 
+    checked = models.BooleanField(
+        verbose_name = _('Checked or not'),
+        default = False
+    )
+    created_at = models.DateTimeField(
+        verbose_name = _('Created datetime'),
+        auto_now_add = True,
+        editable = False
+    )
+    updated_at = models.DateTimeField(
+        verbose_name = _('Updated datetime'),
+        auto_now = True
+    )
+
+    class Meta:
+        verbose_name = _('Voice of customer')
+        verbose_name_plural = _('Voice of customers')
         ordering = ['-id']
 
     def __unicode__(self):

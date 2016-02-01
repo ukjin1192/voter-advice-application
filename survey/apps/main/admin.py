@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from main.models import User, Party, Question, Choice, Answer, Result
+from main.models import User, Party, Question, Choice, Answer, Result, VoiceOfCustomer
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -21,6 +21,7 @@ class PartyAdmin(admin.ModelAdmin):
 
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ('id', 'explanation', 'image_url', 'duration_limit')
+    search_fields = ('explanation', )
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'
     ordering = ('-id', )
@@ -28,6 +29,7 @@ class QuestionAdmin(admin.ModelAdmin):
 
 class ChoiceAdmin(admin.ModelAdmin):
     list_display = ('id', 'question', 'context', 'factor')
+    search_fields = ('context', )
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'
     ordering = ('-id', )
@@ -47,9 +49,18 @@ class ResultAdmin(admin.ModelAdmin):
     ordering = ('-id', )
 
 
+class VoiceOfCustomerAdmin(admin.ModelAdmin):
+    list_display = ('id', 'author', 'context', 'checked')
+    search_fields = ('context', )
+    list_filter = ('created_at', )
+    date_hierarchy = 'created_at'
+    ordering = ('-id', )
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Party, PartyAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Choice, ChoiceAdmin)
 admin.site.register(Answer, AnswerAdmin)
 admin.site.register(Result, ResultAdmin)
+admin.site.register(VoiceOfCustomer, VoiceOfCustomerAdmin)

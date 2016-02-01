@@ -14,6 +14,51 @@ var activateSlotMachine = require('./module/activateSlotMachine.js');
 var loadResultPage = require('./module/loadResultPage.js');
 var drawTwoDimensionalChart = require('./module/drawTwoDimensionalChart.js');
 
+// Voice of customer
+$(document).on('click', '#voice-of-customer-submit-btn', function() {
+  // Set CSRF tokens at HTTP header
+  setCSRFToken();
+  if (localStorage.getItem('token') != null && localStorage.getItem('user_id') != null) setAuthToken();
+  
+  if ($('#voice-of-customer textarea').val() == '') return false;
+  else $('#voice-of-customer-submit-btn').button('loading');
+
+  var formData = new FormData();
+  formData.append('context', $('#voice-of-customer textarea').val());
+
+  $.ajax({
+    url: '/api/vocs/',
+    type: 'POST',
+    data: formData,
+    contentType: false,
+    processData: false
+  }).done(function(data) {
+    $('#voice-of-customer textarea').val('');
+    $('#voice-of-customer-alert-message').removeClass('hidden');
+    setTimeout(function() {
+      $('#voice-of-customer-alert-message').addClass('hidden');
+    }, 2500);
+  }).fail(function(data) {
+    console.log('Failed to create voice of customer: ' + data);
+  }).always(function() {
+    $('#voice-of-customer-submit-btn').button('reset');
+  }); 
+});
+ 
+// Toggle off voice of customer when user clicked background
+$(document).on('click', '#voice-of-customer-curtain', function() {
+  $('#voice-of-customer').collapse('hide');
+  $('#voice-of-customer-curtain').addClass('hidden');
+});
+
+// Synchronize voice of customer form with curtain
+$('#voice-of-customer').on('show.bs.collapse', function () {
+  $('#voice-of-customer-curtain').removeClass('hidden');
+});
+$('#voice-of-customer').on('hide.bs.collapse', function () {
+  $('#voice-of-customer-curtain').addClass('hidden');
+});
+
 // Decide to use captcha validation or not
 if ($('#use-captcha').val() == 'True') var useCaptcha = true;
 else var useCaptcha = false;
@@ -34,7 +79,7 @@ $(document).on('submit', '#create-user-form', function(event) {
     formData.append('captcha_value', $('#captcha-value').val());
   }
 
-  // Clear authentication and CSRF tokens at HTTP header
+  // Clear authentication and set CSRF tokens at HTTP header
   clearAuthToken();
   setCSRFToken();
 
@@ -111,6 +156,7 @@ $(document).on('submit', '#update-user-form', function(event) {
     if ($('#year-of-birth').val() != '') formData.append('year_of_birth', $('#year-of-birth').val());
     if ($('#supporting-party').val() != '') formData.append('supporting_party', $('#supporting-party').val());
     
+    // Set authentication and CSRF tokens at HTTP header
     setAuthToken();
     setCSRFToken();
     
@@ -163,6 +209,7 @@ $(document).on('click', '.share-btn', function() {
   var formData = new FormData();
   formData.append('is_public', true);
   
+  // Set authentication and CSRF tokens at HTTP header
   setAuthToken();
   setCSRFToken();
   
@@ -188,6 +235,7 @@ $(document).on('click', '#update-public-field-btn', function() {
   var formData = new FormData();
   formData.append('is_public', false);
   
+  // Set authentication and CSRF tokens at HTTP header
   setAuthToken();
   setCSRFToken();
   
@@ -358,6 +406,7 @@ $(document).ready(function() {
                 var formData = new FormData();
                 formData.append('choice_id', choiceID);
                 
+                // Set authentication and CSRF tokens at HTTP header
                 setAuthToken();
                 setCSRFToken();
                 
@@ -379,6 +428,7 @@ $(document).ready(function() {
                 var formData = new FormData();
                 formData.append('choice_id', choiceID);
                 
+                // Set authentication and CSRF tokens at HTTP header
                 setAuthToken();
                 setCSRFToken();
                 

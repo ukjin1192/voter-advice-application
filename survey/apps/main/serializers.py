@@ -1,7 +1,7 @@
 #!usr/bin/python
 # -*- coding: utf-8 -*-
 
-from main.models import User, Party, Question, Choice, Answer, Result 
+from main.models import User, Party, Question, Choice, Answer, Result, VoiceOfCustomer 
 from rest_framework import serializers
 
 
@@ -66,3 +66,11 @@ class ResultSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Result
         fields = ('id', 'user', 'record', 'category', 'is_public', 'updated_at')
+
+
+class VoiceOfCustomerSerializer(serializers.HyperlinkedModelSerializer):
+    author = serializers.ReadOnlyField(source='author.id')
+
+    class Meta:
+        model = VoiceOfCustomer
+        fields = ('id', 'author', 'context', 'checked', 'created_at')

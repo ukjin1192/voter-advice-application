@@ -5,9 +5,9 @@ from captcha.models import CaptchaStore
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from django.core.cache import cache
-from main.models import User, Party, Question, Choice, Answer, Result 
-from main.permissions import UserPermission, PartyPermission, QuestionPermission, AnswerPermission, ResultPermission 
-from main.serializers import UserSerializer, PartySerializer, QuestionSerializer, AnswerSerializer, ResultSerializer
+from main.models import User, Party, Question, Choice, Answer, Result, VoiceOfCustomer 
+from main.permissions import UserPermission, PartyPermission, QuestionPermission, AnswerPermission, ResultPermission, VoiceOfCustomerPermission
+from main.serializers import UserSerializer, PartySerializer, QuestionSerializer, AnswerSerializer, ResultSerializer, VoiceOfCustomerSerializer
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
@@ -322,3 +322,33 @@ class ResultViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         serializer.save()
+
+
+class VoiceOfCustomerViewSet(viewsets.ModelViewSet):
+    """
+    Provides `create` and `retrieve` actions for voice of customer object
+    """
+    queryset = VoiceOfCustomer.objects.all()
+    serializer_class = VoiceOfCustomerSerializer
+    permission_classes = (VoiceOfCustomerPermission, )
+
+    def create(self, request, *args, **kwargs):
+        """
+        Create voice of customer
+        """
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        
+    def perform_create(self, serializer):
+        if self.request.user.is_authenticated():
+            serializer.save(author=self.request.user)
+        else:
+            serializer.save()
+
+    def retrieve(self, request, pk, *args, **kwargs):
+        instance = VoiceOfCustomer.objects.get(id=pk)
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
