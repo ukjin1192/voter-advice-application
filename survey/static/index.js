@@ -400,6 +400,14 @@ $(document).ready(function() {
             var originalChoiceID = $leavingSection.find('.original-choice-id').val();
             var answerID = $leavingSection.find('.answer-id').val();
             
+            if (choiceID == undefined && direction == 'down') {
+              $('#question-validation-message').html('질문에 답해주세요').removeClass('hidden');
+              setTimeout(function() {
+                $('#question-validation-message').addClass('hidden').html('');
+              }, 1500);
+              return false;
+            }
+            
             if (choiceID != undefined) {
               // Create answer
               if (answerID == '') {
