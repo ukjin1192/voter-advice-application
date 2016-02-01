@@ -516,6 +516,31 @@ $(document).ready(function() {
     }
   });
   */
+
+  var userAgent = window.navigator.userAgent;
+  var msie = userAgent.indexOf('MSIE ');
+
+  // Activate fast-click for iPhone or iPod
+  /*
+  if (userAgent.indexOf('iPhone') != -1 || userAgent.indexOf('iPad') != -1) {
+    FastClick.attach(document.body);
+  }
+  // Warn user who uses Internet Explorer lower than version 10
+  else if (msie > 0 && parseInt(userAgent.substring(msie + 5, userAgent.indexOf(".", msie))) < 10) {
+    $('#browser-support-alert-message').html('Internet Explorer 9 이하는 지원하지 않습니다').removeClass('hidden');
+  }
+  */
+  // Detect in-app browser
+  if (userAgent.indexOf('KAKAOTALK') != -1) {
+    $('#browser-support-alert-message').html('<p><strong>카카오톡 브라우저</strong>에서는 설문 기록이 저장되지 않습니다</p>'
+        + '<p>우측 상단 <strong><span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span></strong> '
+        + '클릭 후 <strong>다른 브라우저에서 열기</strong></p>').removeClass('hidden');
+  }
+  else if (userAgent.indexOf('FBAV') != -1) {
+    $('#browser-support-alert-message').html('<p><strong>페이스북 브라우저</strong>에서는 설문 기록이 저장되지 않습니다</p>'
+        + '<p>우측 상단 <strong><span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span></strong> '
+        + '클릭 후 <strong>다른 브라우저에서 열기</strong></p>').removeClass('hidden');
+  }
 });
 
 $(window).load(function() {

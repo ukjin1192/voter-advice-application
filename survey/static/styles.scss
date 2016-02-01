@@ -141,6 +141,18 @@ pre {
 }
 
 /* ====================
+ * Browser support info
+ * ==================== */
+
+#browser-support-alert-message {
+  position: absolute; 
+	top: 0; 
+	left: 0; 
+	width: 100%; 
+	text-align: center;
+}
+
+/* ====================
  * Main page with survey
  * ===================== */
 
