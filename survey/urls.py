@@ -30,8 +30,12 @@ urlpatterns = [
         TemplateView.as_view(template_name='index.html')
     ),
     url(
+        r'^result/$', 
+        TemplateView.as_view(template_name='result_list.html')
+    ),
+    url(
         r'^result/(?P<pk>[0-9]+)/$', 
-        TemplateView.as_view(template_name='result.html')
+        TemplateView.as_view(template_name='result_detail.html')
     ),
 ]
 

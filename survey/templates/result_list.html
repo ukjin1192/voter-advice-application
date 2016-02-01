@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% load custom_filter %}
+
+{% block container %}
+<div class="text-center" id="result-list-page">
+	<button class="btn btn-primary btn-lg btn-block" id="move-to-one-dimensional-result-page-btn" data-loading-text="잠시만 기다려주세요">
+		1차원 결과 보기
+	</button>
+
+	<button class="btn btn-primary btn-lg btn-block" id="move-to-two-dimensional-result-page-btn" data-loading-text="잠시만 기다려주세요">
+		2차원 결과 보기
+	</button>
+	
+	<a href="/" class="btn btn-primary btn-lg btn-block" id="move-to-main-page-btn">
+		설문 수정하기
+	</a>
+</div>
+{% endblock %}

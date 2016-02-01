@@ -327,11 +327,19 @@ pre {
 	z-index: 220;
 }
 
-/* ===========
- * Result page
- * =========== */
+/* ================
+ * Result list page
+ * ================ */
 
-#result-page {
+#result-list-page {
+	padding-top: 30px;
+}
+
+/* ==================
+ * Result detail page
+ * ================== */
+
+#result-detail-page {
 	padding-bottom: 60px;
 
 	#label-list {
