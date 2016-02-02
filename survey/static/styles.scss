@@ -350,6 +350,10 @@ pre {
 	#chart-container {
 		max-width: $question-image-width;
 		margin: 0 auto;
+		
+		#one-dimensional-result {
+			margin-top: 20px;
+		}
 	}
 
 	#label-list {
