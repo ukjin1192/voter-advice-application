@@ -116,6 +116,7 @@ MIDDLEWARE_CLASSES = (
 # 3rd-party applications
 INSTALLED_APPS += (
     'captcha',
+    'compressor',
     'djcelery',
     'django_extensions',
     'redisboard',
@@ -157,6 +158,14 @@ BROKER_URL = 'amqp://guest:guest@localhost:5672/'       # Use RabbitMQ as broker
 # Celery beat settings for cron tasks
 CELERY_IMPORTS = ('utils.cron',)
 CELERYBEAT_SCHEDULER = "djcelery.schedulers.DatabaseScheduler"
+
+# Compressor settings
+COMPRESS_URL = STATIC_URL
+COMPRESS_ROOT = STATIC_ROOT
+COMPRESS_OUTPUT_DIR = 'CACHE'
+STATICFILES_FINDERS += (
+    'compressor.finders.CompressorFinder',
+)
 
 # Variables in `models.py`
 MIN_YEAR_OF_BIRTH = 1910

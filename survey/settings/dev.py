@@ -53,3 +53,6 @@ if RUN_SILK:
     SILKY_PERMISSIONS = lambda user: user.is_staff
     SILKY_MAX_REQUEST_BODY_SIZE = -1        # Silk takes anything <0 as no limit
     SILKY_MAX_RESPONSE_BODY_SIZE = 1024     # If response body>1024kb, ignore
+
+# Compressor settings
+COMPRESS_ENABLED = not DEBUG

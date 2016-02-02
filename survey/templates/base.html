@@ -1,5 +1,6 @@
-{% load custom_filter %}
 {% load staticfiles %}
+{% load compress %}
+{% load custom_filter %}
 
 <!DOCTYPE html>
 <html>
@@ -128,8 +129,12 @@
     </div>
   </div>
 
+  {% compress js %}
   <script type="text/javascript" src="{% static 'dist/vendor.bundle.js' %}"></script>
+  {% endcompress %}
+  {% compress js %}
   <script type="text/javascript" src="{% static 'dist/bundle.js' %}"></script>
+  {% endcompress %}
 
   {# Support Placehoder for IE below version 10 #}
   <!--[if lte IE 9]>
