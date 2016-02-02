@@ -75,7 +75,7 @@ a, a:focus, a:hover, a:active, a:visited {
 	color: inherit;
 	outline: 0;
 
-	&.btn {
+	&.btn-primary, &.btn-success, &.btn-info, &.btn-warning, &.btn-danger  {
 		color: white;
 	}
 }
@@ -173,6 +173,7 @@ pre {
 	z-index: 200;
 
 	#toggle-voice-of-customer-btn {
+		height: 40px;
 		border-radius: 5px 5px 0 0;
 	}
 
@@ -207,15 +208,15 @@ pre {
 		
 		.back-to-top {
 			position: absolute;
-			left: 5px;
-			bottom: 10px;
+			bottom: 5px;
+			left: 0;
 			color: $grey-color;
 		}
 		
 		.go-to-bottom {
 			position: absolute;
-			right: 5px;
-			bottom: 10px;
+			bottom: 5px;
+			right: 0;
 			color: $grey-color;
 		}
 		
@@ -341,6 +342,15 @@ pre {
 
 #result-detail-page {
 	padding-bottom: 60px;
+
+	#result-explanation {
+		margin-bottom: 0;
+	}
+
+	#chart-container {
+		max-width: $question-image-width;
+		margin: 0 auto;
+	}
 
 	#label-list {
 		

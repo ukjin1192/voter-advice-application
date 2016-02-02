@@ -6,17 +6,19 @@
 <div class="text-center" id="result-detail-page">
 	<h3>정당유사도 <span class="label label-info" id="result-category"></span></h3>
 	<h6 id="record-updated-at"></h6> 
-	<div id="one-dimensional-result"></div>
-	<div id="two-dimensional-result"></div>
+
+	<div class="alert alert-warning" id="result-explanation" role="alert">
+		추후에 이곳에는 "결과 해설"이 추가될 예정입니다
+	</div>
+
+	<div id="chart-container">
+		<div id="one-dimensional-result"></div>
+		<div id="two-dimensional-result"></div>
+	</div>
+
 	<div id="label-list"></div>
 
 	<div class="space"></div>
-
-	<div class="alert alert-warning" role="alert">
-		현재 정당 데이터는 랜덤으로 입력되어 있으므로, 결과값은 정확하지 않습니다
-		<br/>
-		추후에 이곳에는 "결과에 대한 해설" 및 "1차원과 2차원 분석 결과가 다른 이유"가 추가될 예정입니다
-	</div>
 
 	<div class="hidden" id="share-btn-group">
 		{# Facebook #}
@@ -51,7 +53,7 @@
 		2차원 결과 보기
 	</button>
 	
-	<a href="/" class="btn btn-primary btn-lg btn-block" id="move-to-main-page-btn"></a>
+	<a href="/" class="btn btn-default btn-lg btn-block" id="move-to-main-page-btn"></a>
 	
 	<button class="btn btn-primary btn-lg btn-block hidden" id="update-public-field-btn" data-loading-text="업데이트 중입니다">
 		비공개로 전환하기
