@@ -38,8 +38,6 @@ $(document).on('click', '#voice-of-customer-submit-btn', function() {
     setTimeout(function() {
       $('#voice-of-customer-alert-message').addClass('hidden');
     }, 2500);
-  }).fail(function(data) {
-    console.log('Failed to create voice of customer: ' + data);
   }).always(function() {
     $('#voice-of-customer-submit-btn').button('reset');
   }); 
@@ -114,8 +112,6 @@ $(document).on('submit', '#create-user-form', function(event) {
       // Move to 1st question page
       $.fn.fullpage.moveSectionDown();
     }
-  }).fail(function(data) {
-    console.log('Failed to create user: ' + data);
   }).always(function() {
     $('#create-user-submit-btn').button('reset');
   }); 
@@ -166,11 +162,6 @@ $(document).on('submit', '#update-user-form', function(event) {
       data: formData,
       contentType: false,
       processData: false
-    }).done(function(data) {
-      console.log('Succeed to update user: ' + data);
-    }).fail(function(data) {
-      console.log('Failed to update user: ' + data);
-    }).always(function() {
     });
   }
 
@@ -222,8 +213,6 @@ $(document).on('click', '.share-btn', function() {
   }).done(function(data) {
     $('#update-public-field-btn').removeClass('hidden');
     $('#update-public-field-alert-message').addClass('hidden');
-  }).fail(function(data) {
-    console.log('Failed to update result to public: ' + data);
   }); 
 });
 
@@ -248,8 +237,6 @@ $(document).on('click', '#update-public-field-btn', function() {
   }).done(function(data) {
     $('#update-public-field-btn').addClass('hidden');
     $('#update-public-field-alert-message').removeClass('hidden');
-  }).fail(function(data) {
-    console.log('Failed to update result to public: ' + data);
   }); 
 
   $('#update-public-field-btn').button('reset');
@@ -358,12 +345,10 @@ $(document).ready(function() {
             }
             $('#create-user-submit-btn').html('새로 시작하기 (기존 데이터 삭제)');
           }).fail(function(data) {
-            console.log('Failed to get user answers: ' + data);
             clearAuthToken();
             localStorage.clear();
           }); 
         }).fail(function(data) {
-          console.log('Failed to get user profile: ' + data);
           clearAuthToken();
           localStorage.clear();
         }).always(function() {
@@ -428,7 +413,7 @@ $(document).ready(function() {
                   $leavingSection.find('.answer-id').val(data.id);
                   $leavingSection.find('.original-choice-id').val(choiceID);
                 }).fail(function(data) {
-                  console.log('Failed to create answer: ' + data);
+                  $leavingSection.find('.question-choice[type="radio"]:checked').attr('checked', false);
                 }); 
               }
               // Update answer
@@ -449,7 +434,8 @@ $(document).ready(function() {
                 }).done(function(data) {
                   $leavingSection.find('.original-choice-id').val(choiceID);
                 }).fail(function(data) {
-                  console.log('Failed to update answer: ' + data);
+                  $leavingSection.find('.question-choice[type="radio"]:checked').attr('checked', false);
+                  $leavingSection.find('.question-choice[value="' + originalChoiceID + '"]').attr('checked', true);
                 }); 
               }
             }
@@ -460,8 +446,6 @@ $(document).ready(function() {
           }
         }
       });
-    }).fail(function(data) {
-      console.log('Failed to get questions: ' + data);
     }); 
     
     // Get parties
@@ -480,8 +464,6 @@ $(document).ready(function() {
       // Activate slot machine with shuffled party name list
       wordList = _.shuffle(wordList);
       activateSlotMachine(wordList);
-    }).fail(function(data) {
-      console.log('Failed to get parties: ' + data);
     }); 
   } 
   // Result page
@@ -559,7 +541,6 @@ $(document).ready(function() {
       // When result is not exist or not public
       $('#forbidden-alert-message').removeClass('hidden');
       $('#move-to-main-page-btn').html('설문 참여하기');
-      console.log('Failed to get result: ' + data);
     }); 
   }
 
