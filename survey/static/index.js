@@ -288,7 +288,7 @@ $(document).ready(function() {
         $section.find('.question-explanation').html(question.explanation);
         
         var choices = question.choices;
-        choices = _.shuffle(choices);
+        if (Math.random() < 0.5) choices = _.reverse(choices);
         
         choices.forEach(function(choice) {
           $section.find('.question-choices').append('<div class="radio"><input type="radio" ' +
