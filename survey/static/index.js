@@ -46,7 +46,6 @@ $(document).on('click', '#voice-of-customer-submit-btn', function() {
 // Toggle off voice of customer when user clicked background
 $(document).on('click', '#voice-of-customer-curtain', function() {
   $('#voice-of-customer').collapse('hide');
-  $('#voice-of-customer-curtain').addClass('hidden');
 });
 
 // Synchronize voice of customer form with curtain
@@ -376,6 +375,12 @@ $(document).ready(function() {
         
         onLeave: function(index, nextIndex, direction){
           var $leavingSection = $(this);
+          
+          // Prevent to leave section when user tries to fold voice of customer form by clicking back button on mobile browser
+          if ($('#voice-of-customer').hasClass('in')) {
+            $('#voice-of-customer').collapse('hide');
+            return false;
+          }
           
           if (index > 1 && index < totalSections) {
             // Reset duration
