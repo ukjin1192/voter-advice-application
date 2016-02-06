@@ -4,7 +4,7 @@
 import math
 import numpy
 from django.conf import settings
-from main.models import User, Party, Question, Choice, Answer, Result, VoiceOfCustomer 
+from main.models import User, Party, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer 
 
 
 def get_survey_data_of_user(user_obj):
@@ -74,13 +74,23 @@ def get_rotation_matrix():
     """
     Get rotation matrix with whole data
     Rotation matrix will be used for PCA method
-    [Output example for 3 questions]
-        numpy.array([
-            [-0.01098383,  0.91666209],
-            [-0.07372826,  0.39770633],
-            [ 0.99721788,  0.03950055]])
+    [Example of output with 3 questions]
+        (
+            array([[ 0.10296105,  0.95214155],
+                [-0.97476398,  0.03896742],
+                [ 0.19807624, -0.30316335]]),
+            
+            [
+                (4.1271417411787281, array([ 0.10296105, -0.97476398,  0.19807624]), u'Q1'), 
+                (2.229787899675975, array([ 0.95214155,  0.03896742, -0.30316335]), u'Q2'),
+                (1.4077762414982362, array([ 0.28779419,  0.21981064,  0.93212541]), u'Q3')
+            ],
+            
+            array([53.15258303, 81.8695484, 100.])
+        )
     """
     all_list = []
+    questions = Question.objects.all().order_by('id')
     completed_users = User.objects.filter(completed_survey=True)
 
     for completed_user in completed_users:
@@ -96,22 +106,27 @@ def get_rotation_matrix():
     for ev in eig_vecs:
         numpy.testing.assert_array_almost_equal(1.0, numpy.linalg.norm(ev))
     
-    # make a list of (eigenvalue, eigenvector) tuples
-    eig_pairs = [(numpy.abs(eig_vals[i]), eig_vecs[:,i]) for i in range(len(eig_vals))]
+    # Make a list of (eigenvalue, eigenvector, relevant question) tuples
+    eig_pairs = [(numpy.abs(eig_vals[i]), eig_vecs[:,i], str(questions[i].explanation)) for i in range(len(eig_vals))]
     
-    # sort the tuples from high to low 
+    # Sort the tuples as descending order 
     eig_pairs.sort()
     eig_pairs.reverse()
     tot = sum(eig_vals)
     sorted(eig_vals, reverse=True)
     
-    # SCREE PLOT (Examine Heuristically)
-    # var_exp = [(i/tot)*100 for i in sorted(eig_vals, reverse=True)]
+    # SCREE PLOT (Examine Heuristically) - cumulated accuracy value
+    var_exp = [(i/tot)*100 for i in sorted(eig_vals, reverse=True)]
+    cum_var_exp = numpy.cumsum(var_exp).tolist()
     
     # Changes with Desired Dimensions (d = 2 for the moment)
-    rotation_matrix = numpy.hstack((eig_pairs[0][1].reshape(qnum,1), eig_pairs[1][1].reshape(qnum,1)))
+    rotation_matrix = numpy.hstack((eig_pairs[0][1].reshape(qnum,1), eig_pairs[1][1].reshape(qnum,1))).tolist()
 
-    return rotation_matrix
+    refined_eig_pairs = []
+    for eig_pair in eig_pairs:
+        refined_eig_pairs.append((eig_pair[0], eig_pair[1].tolist(), eig_pair[2]))
+
+    return rotation_matrix, refined_eig_pairs, cum_var_exp
 
 
 def get_two_dimensional_result(rotation_matrix, *target_data):

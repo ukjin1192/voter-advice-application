@@ -258,6 +258,54 @@ class Answer(models.Model):
         return unicode(self.id) or u''
 
 
+class RotationMatrix(models.Model):
+    """
+    Rotation matrix to calculate result
+    """
+    matrix = models.TextField(
+        verbose_name = _('Matrix'),
+    ) 
+    eigen_pairs = models.TextField(
+        verbose_name = _('Eigen pairs'),
+    ) 
+    cumulated_accuracy_value = models.TextField(
+        verbose_name = _('Cumulated_accuracy_value'),
+    ) 
+    x_axis_name = models.CharField(
+        verbose_name = _('X axis name'),
+        max_length = 255,
+        blank = True,
+        null = True
+    )
+    y_axis_name = models.CharField(
+        verbose_name = _('Y axis name'),
+        max_length = 255,
+        blank = True,
+        null = True
+    )
+    is_deployed = models.BooleanField(
+        verbose_name = _('Is deployed'),
+        default = False
+    )
+    created_at = models.DateTimeField(
+        verbose_name = _('Created datetime'),
+        auto_now_add = True,
+        editable = False
+    )
+    updated_at = models.DateTimeField(
+        verbose_name = _('Updated datetime'),
+        auto_now = True
+    )
+
+    class Meta:
+        verbose_name = _('Rotation matrix')
+        verbose_name_plural = _('Rotation matrixs')
+        ordering = ['-id']
+
+    def __unicode__(self):
+        return unicode(self.id) or u''
+
+
 class Result(models.Model):
     """
     Result of survey
@@ -273,6 +321,18 @@ class Result(models.Model):
         verbose_name = _('Category'),
         choices = getattr(settings, 'RESULT_CATEGORY_CHOICES'),
         max_length = 255
+    )
+    x_axis_name = models.CharField(
+        verbose_name = _('X axis name'),
+        max_length = 255,
+        blank = True,
+        null = True
+    )
+    y_axis_name = models.CharField(
+        verbose_name = _('Y axis name'),
+        max_length = 255,
+        blank = True,
+        null = True
     )
     is_public = models.BooleanField(
         verbose_name = _('Public'),
@@ -331,3 +391,7 @@ class VoiceOfCustomer(models.Model):
 
     def __unicode__(self):
         return unicode(self.id) or u''
+
+
+# Place at the end to prevent circular import errors
+import main.signals

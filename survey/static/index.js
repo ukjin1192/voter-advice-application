@@ -513,15 +513,18 @@ $(document).ready(function() {
         $('#record-updated-at').html('최종 업데이트 : ' + updatedAt.getFullYear() + '-' +
           updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
         
+        var xAxisName = data.x_axis_name;
+        var yAxisName = data.y_axis_name;
+        
         var rows = JSON.parse(data.record.replace(/'/g, '"'));
-        drawTwoDimensionalChart(rows);
+        drawTwoDimensionalChart(rows, xAxisName, yAxisName);
         localStorage.setItem('chart_width', $('#two-dimensional-result').width());
         
         // Redraw chart when window resized (Prevent from resize event fires multiple times)
         var redraw = function() {
           if (localStorage.getItem('chart_width') != $('#two-dimensional-result').width()) {
             $('#two-dimensional-result, #label-list').empty();
-            drawTwoDimensionalChart(rows);
+            drawTwoDimensionalChart(rows, xAxisName, yAxisName);
             localStorage.setItem('chart_width', $('#two-dimensional-result').width());
           }
         };

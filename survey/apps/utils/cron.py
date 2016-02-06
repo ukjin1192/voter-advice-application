@@ -3,8 +3,8 @@
 
 from captcha.models import CaptchaStore
 from celery import task
-from django.utils import timezone
-from utils import redis
+from main.models import User, Party, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer 
+from utils import utilities
 
 
 @task()
@@ -17,9 +17,12 @@ def clear_expired_captcha():
 
 
 @task()
-def update_rotation_matrix():
+def create_rotation_matrix():
     """
-    Update rotation matrix
+    Create rotation matrix
     """
-    redis.set_rotation_matrix_cache()
+    rotation_matrix = utilities.get_rotation_matrix()
+    RotationMatrix(matrix=rotation_matrix[0], 
+            eigen_pairs=rotation_matrix[1],
+            cumulated_accuracy_value=rotation_matrix[2]).save()
     return None

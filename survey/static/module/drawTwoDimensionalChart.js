@@ -3,7 +3,7 @@
 var $ = require('jquery');
 var dimple = require('dimple-js');
 
-module.exports = function drawTwoDimensionalChart(rows) {
+module.exports = function drawTwoDimensionalChart(rows, xAxisName, yAxisName) {
   var chartWidth = $('#two-dimensional-result').width();
   var svgBlock = dimple.newSvg('#two-dimensional-result', chartWidth, chartWidth);
   var chart = new dimple.chart(svgBlock, rows);
@@ -12,10 +12,10 @@ module.exports = function drawTwoDimensionalChart(rows) {
   var yAxis = chart.addMeasureAxis('y', 'y_coordinate');
   var zAxis = chart.addMeasureAxis('z', 'radius');
   
-  xAxis.title = '가로축: 경제';
+  xAxis.title = xAxisName;
   xAxis.fontSize = 12;
   
-  yAxis.title = '세로축: 사회';
+  yAxis.title = yAxisName;
   yAxis.fontSize = 12;
   
   var chartSeries = chart.addSeries('name', dimple.plot.bubble);

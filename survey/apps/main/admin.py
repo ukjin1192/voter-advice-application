@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from main.models import User, Party, Question, Choice, Answer, Result, VoiceOfCustomer
+from main.models import User, Party, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -36,21 +36,28 @@ class ChoiceAdmin(admin.ModelAdmin):
 
 
 class AnswerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'choice')
+    list_display = ('id', 'user', 'choice', 'created_at')
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'
     ordering = ('-id', )
 
 
 class ResultAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'record', 'category', 'is_public')
+    list_display = ('id', 'user', 'record', 'category', 'x_axis_name', 'y_axis_name', 'is_public', 'created_at')
+    list_filter = ('created_at', )
+    date_hierarchy = 'created_at'
+    ordering = ('-id', )
+
+
+class RotationMatrixAdmin(admin.ModelAdmin):
+    list_display = ('id', 'x_axis_name', 'y_axis_name', 'is_deployed', 'created_at')
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'
     ordering = ('-id', )
 
 
 class VoiceOfCustomerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'author', 'context', 'checked')
+    list_display = ('id', 'author', 'context', 'checked', 'created_at')
     search_fields = ('context', )
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'
@@ -63,4 +70,5 @@ admin.site.register(Question, QuestionAdmin)
 admin.site.register(Choice, ChoiceAdmin)
 admin.site.register(Answer, AnswerAdmin)
 admin.site.register(Result, ResultAdmin)
+admin.site.register(RotationMatrix, RotationMatrixAdmin)
 admin.site.register(VoiceOfCustomer, VoiceOfCustomerAdmin)

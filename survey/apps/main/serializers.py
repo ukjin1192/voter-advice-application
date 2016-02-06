@@ -65,7 +65,7 @@ class ResultSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Result
-        fields = ('id', 'user', 'record', 'category', 'is_public', 'updated_at')
+        fields = ('id', 'user', 'record', 'category', 'x_axis_name', 'y_axis_name', 'is_public', 'updated_at')
 
 
 class VoiceOfCustomerSerializer(serializers.HyperlinkedModelSerializer):

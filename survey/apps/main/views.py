@@ -5,7 +5,7 @@ from captcha.models import CaptchaStore
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 from django.core.cache import cache
-from main.models import User, Party, Question, Choice, Answer, Result, VoiceOfCustomer 
+from main.models import User, Party, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer 
 from main.permissions import UserPermission, PartyPermission, QuestionPermission, AnswerPermission, ResultPermission, VoiceOfCustomerPermission
 from main.serializers import UserSerializer, PartySerializer, QuestionSerializer, AnswerSerializer, ResultSerializer, VoiceOfCustomerSerializer
 from rest_framework import status, viewsets
@@ -169,6 +169,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
         questions_count = cache.get('questions:count')
         if questions_count is None:
             questions_count = redis.set_questions_count_cache()
+        
         if Answer.objects.filter(user=request.user).count() == questions_count:
             user = request.user
             user.completed_survey = True
@@ -260,7 +261,10 @@ class ResultViewSet(viewsets.ModelViewSet):
         else:
             rotation_matrix = cache.get('rotation_matrix')
             if rotation_matrix is None:
-                rotation_matrix = redis.set_rotation_matrix_cache()
+                try:
+                    rotation_matrix = redis.set_rotation_matrix_cache()
+                except:
+                    return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
             # Get ID of result object(=DO NOT CREATE NEW ONE) only if 
             #   (1) Result is exsit
@@ -284,6 +288,9 @@ class ResultViewSet(viewsets.ModelViewSet):
         
         data = request.data
         data['record'] = record
+        if category == 'party_2d':
+            data['x_axis_name'] = rotation_matrix['x_axis_name']
+            data['y_axis_name'] = rotation_matrix['y_axis_name']
         
         serializer = self.get_serializer(data=data)
         serializer.is_valid(raise_exception=True)
