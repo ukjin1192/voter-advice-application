@@ -299,7 +299,7 @@ class RotationMatrix(models.Model):
 
     class Meta:
         verbose_name = _('Rotation matrix')
-        verbose_name_plural = _('Rotation matrixs')
+        verbose_name_plural = _('Rotation matrices')
         ordering = ['-id']
 
     def __unicode__(self):

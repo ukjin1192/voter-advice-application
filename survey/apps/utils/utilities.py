@@ -106,8 +106,8 @@ def get_rotation_matrix():
     for ev in eig_vecs:
         numpy.testing.assert_array_almost_equal(1.0, numpy.linalg.norm(ev))
     
-    # Make a list of (eigenvalue, eigenvector, relevant question) tuples
-    eig_pairs = [(numpy.abs(eig_vals[i]), eig_vecs[:,i], str(questions[i].explanation)) for i in range(len(eig_vals))]
+    # Make a list of (eigenvalue, eigenvector, relevant question ID) tuples
+    eig_pairs = [(numpy.abs(eig_vals[i]), eig_vecs[:,i], questions[i].id) for i in range(len(eig_vals))]
     
     # Sort the tuples as descending order 
     eig_pairs.sort()
