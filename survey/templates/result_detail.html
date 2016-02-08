@@ -2,13 +2,24 @@
 
 {% load custom_filter %}
 
+{% block header %}
+<div class="container" id="result-navbar">
+	<div class="btn-group btn-group-justified" id="result-category" role="group">
+		<div class="btn-group" role="group">
+			<button type="button" class="btn btn-lg btn-default" id="move-to-one-dimensional-result-page-btn" data-loading-text="잠시만 기다려주세요">1차원 비교</button>
+		</div>
+		<div class="btn-group" role="group">
+			<button type="button" class="btn btn-lg btn-default" id="move-to-two-dimensional-result-page-btn" data-loading-text="잠시만 기다려주세요">2차원 비교</button>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
 {% block container %}
 <div class="text-center" id="result-detail-page">
-	<h3>정당유사도 <span class="label label-info" id="result-category"></span></h3>
-	<h6 id="record-updated-at"></h6> 
 
-	<div class="alert alert-warning" id="result-explanation" role="alert">
-		추후에 이곳에는 "결과 해설"이 추가될 예정입니다
+	<div class="alert alert-info" id="result-explanation" role="alert">
+		이곳에는 "결과 해설"이 추가될 예정입니다
 	</div>
 
 	<div id="chart-container">
@@ -17,6 +28,8 @@
 	</div>
 
 	<div id="label-list"></div>
+
+	<h6 id="record-updated-at"></h6> 
 
 	<div class="hidden" id="share-btn-group">
 		{# Facebook #}
@@ -42,14 +55,6 @@
 		<h6>공유하면 이 결과를 누구나 볼 수 있습니다.</h6>
 		<h6>언제든 비공개로 전환할 수 있습니다.</h6>
 	</div>
-	
-	<button class="btn btn-primary btn-lg btn-block hidden" id="move-to-one-dimensional-result-page-btn" data-loading-text="잠시만 기다려주세요">
-		1차원 결과 보기
-	</button>
-
-	<button class="btn btn-primary btn-lg btn-block hidden" id="move-to-two-dimensional-result-page-btn" data-loading-text="잠시만 기다려주세요">
-		2차원 결과 보기
-	</button>
 	
 	<a href="/" class="btn btn-default btn-lg btn-block" id="move-to-main-page-btn"></a>
 	

@@ -340,10 +340,22 @@ pre {
  * Result detail page
  * ================== */
 
+#result-navbar {
+	padding: 0;
+
+	#result-category {
+
+		button {
+			border-radius: 0;
+		}
+	}
+}
+
 #result-detail-page {
 	padding-bottom: 60px;
 
 	#result-explanation {
+		margin-top: 20px;
 		margin-bottom: 0;
 	}
 

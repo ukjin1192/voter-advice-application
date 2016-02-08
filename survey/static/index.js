@@ -485,12 +485,11 @@ $(document).ready(function() {
     }).done(function(data) {
       // One dimensional analysis
       if (data.category == 'party_1d') {
-        $('#result-category').html('1차원');
-        
         var updatedAt = new Date(data.updated_at);
         $('#record-updated-at').html('최종 업데이트 : ' + updatedAt.getFullYear() + '-' +
           updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
         
+        $('#move-to-one-dimensional-result-page-btn').removeClass('btn-default').addClass('btn-primary');
         $('#one-dimensional-result').removeClass('hidden');
         
         var rows = JSON.parse(data.record.replace(/'/g, '"'));
@@ -504,17 +503,14 @@ $(document).ready(function() {
               row.similarity + '%; background-color: ' + row.color + ';">' + row.similarity + '%' + '</div></div>');
           $('#label-list').append('<span class="label" style="background-color: ' + row.color + ';">' + row.name + '</span>');
         });
-        
-        $('#move-to-two-dimensional-result-page-btn').removeClass('hidden');
       }
       // Two dimensional analysis
       else {
-        $('#result-category').html('2차원');
-        
         var updatedAt = new Date(data.updated_at);
         $('#record-updated-at').html('최종 업데이트 : ' + updatedAt.getFullYear() + '-' +
           updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
         
+        $('#move-to-two-dimensional-result-page-btn').removeClass('btn-default').addClass('btn-primary');
         $('#two-dimensional-result').removeClass('hidden');
         
         var xAxisName = data.x_axis_name;
@@ -534,8 +530,6 @@ $(document).ready(function() {
         };
         var debouncedRedraw = _.debounce(redraw, 750);
         $(window).on('resize', debouncedRedraw);
-        
-        $('#move-to-one-dimensional-result-page-btn').removeClass('hidden');
       }
       
       // When user is owner of result
@@ -546,7 +540,7 @@ $(document).ready(function() {
       }
       // When user is not authenticated
       else {
-        $('#move-to-one-dimensional-result-page-btn, #move-to-two-dimensional-result-page-btn').addClass('hidden');
+        $('#result-category').addClass('hidden');
         $('#move-to-main-page-btn').html('나도 확인해보기');
       }
     }).fail(function(data) {
