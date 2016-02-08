@@ -17,7 +17,7 @@ module.exports = function drawTwoDimensionalChart(rows, xAxisName, yAxisName) {
   
   yAxis.title = yAxisName;
   yAxis.fontSize = 12;
-  
+
   var chartSeries = chart.addSeries('name', dimple.plot.bubble);
   
   rows.forEach(function(row, index) {
@@ -26,15 +26,20 @@ module.exports = function drawTwoDimensionalChart(rows, xAxisName, yAxisName) {
   });
   
   chartSeries.afterDraw = function (shp, d, i) {
-      var shape = d3.select(shp);
-      svgBlock.append('text')
-          .attr('x', parseFloat(shape.attr('cx')))
-          .attr('y', parseFloat(shape.attr('cy')))
-          .style('text-anchor','middle')
-          .style('font-weight', 'bold')
-          .style('fill', 'white')
-          .text(rows[i].name);
+    var shape = d3.select(shp);
+    svgBlock.append('text')
+      .attr('x', parseFloat(shape.attr('cx')))
+      .attr('y', parseFloat(shape.attr('cy')))
+      .style('text-anchor','middle')
+      .style('font-weight', 'bold')
+      .style('fill', 'white')
+      .text(rows[i].name);
   };
   chart.draw(1000);
+
+  // Debug axis names are cut or not shown
+  if (chartWidth < 480) $('#two-dimensional-result > svg').attr('height', chartWidth + 20);
+  $('#two-dimensional-result > svg').css({'padding-left': '30px', 'margin-left': '-30px'});
+
   return;
 }

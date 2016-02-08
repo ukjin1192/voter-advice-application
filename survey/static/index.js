@@ -491,6 +491,8 @@ $(document).ready(function() {
         $('#record-updated-at').html('최종 업데이트 : ' + updatedAt.getFullYear() + '-' +
           updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
         
+        $('#one-dimensional-result').removeClass('hidden');
+        
         var rows = JSON.parse(data.record.replace(/'/g, '"'));
         
         // Sorting as descending order
@@ -512,6 +514,8 @@ $(document).ready(function() {
         var updatedAt = new Date(data.updated_at);
         $('#record-updated-at').html('최종 업데이트 : ' + updatedAt.getFullYear() + '-' +
           updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
+        
+        $('#two-dimensional-result').removeClass('hidden');
         
         var xAxisName = data.x_axis_name;
         var yAxisName = data.y_axis_name;
