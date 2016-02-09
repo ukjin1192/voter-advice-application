@@ -26,6 +26,7 @@ Survey to recognize where my political tendency positioned
 - <a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> : Framework made by twitter
 - <a href="https://github.com/alvarotrigo/fullPage.js" target="_blank">fullPage.js</a> : Fullscreen scrolling plug-in
 - <a href="https://plot.ly/" target="_blank">plot.ly</a> : Visualize data
+- <a href="https://github.com/andreruffert/rangeslider.js" target="_blank">rangeslider.js</a> : Range slider
 
 #### Django framework libraries
 
@@ -39,7 +40,9 @@ Survey to recognize where my political tendency positioned
 #### Deployment : <a href="https://aws.amazon.com/" target="_blank">Amazon Web Services</a>
 
 - EC2 (OS: ubuntu 14.04 LTS)
-- ELB (Load balancing, Adapt SSL certificate)
+- ELB (Load balancing)
 - Route 53 (DNS)
 - RDS (MySQL)
 - ElastiCache (Redis)
+- S3 (Storage)
+- CloudFront (CDN)
