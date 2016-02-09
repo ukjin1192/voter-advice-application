@@ -13,6 +13,7 @@ var getCaptcha = require('./module/getCaptcha.js');
 var activateSlotMachine = require('./module/activateSlotMachine.js');
 var loadResultPage = require('./module/loadResultPage.js');
 var drawTwoDimensionalChart = require('./module/drawTwoDimensionalChart.js');
+var showQuestionValidationMessage = require('./module/showQuestionValidationMessage.js');
 
 // Voice of customer
 $(document).on('click', '#voice-of-customer-submit-btn', function() {
@@ -129,10 +130,7 @@ $(document).on('click', '.question-choice', function() {
   }
   // Too short duration to choose choice 
   else {
-    $('#question-validation-message').html('조금만 더 생각해주세요').removeClass('hidden');
-    setTimeout(function() {
-      $('#question-validation-message').addClass('hidden').html('');
-    }, 1500);
+    showQuestionValidationMessage('조금만 더 생각해주세요');
     return false;
   }
 });
@@ -296,10 +294,7 @@ $(document).ready(function() {
           else {
             $('#section-slider').val(localStorage.getItem('activatedSectionIndex')).change();
             
-            $('#question-validation-message').html('질문에 답해주세요').removeClass('hidden');
-            setTimeout(function() {
-              $('#question-validation-message').addClass('hidden').html('');
-            }, 1500);
+            showQuestionValidationMessage('질문에 답해주세요');
           } 
         }
       }).on('input', function() {
@@ -433,10 +428,7 @@ $(document).ready(function() {
             var answerID = $leavingSection.find('.answer-id').val();
             
             if (choiceID == undefined && direction == 'down') {
-              $('#question-validation-message').html('질문에 답해주세요').removeClass('hidden');
-              setTimeout(function() {
-                $('#question-validation-message').addClass('hidden').html('');
-              }, 1500);
+              showQuestionValidationMessage('질문에 답해주세요');
               return false;
             }
             
