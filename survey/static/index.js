@@ -246,8 +246,8 @@ $(document).on('click', '#line-share, #kakaotalk-share', function() {
   // Detect desktop browser
   if (!('ontouchstart' in window)) {
     alert("모바일에서만 가능합니다");
+    return false;
   }
-  return false;
 });
 
 // Alert that twitter sharing in IE(<11) is not working properly
@@ -275,11 +275,45 @@ $(document).ready(function() {
       var totalQuestions = data.length;
       var totalSections = totalQuestions + 2;
       
-      data = _.shuffle(data);
+      // Initiate section slider
+      $('#section-slider').attr('max', totalSections);
+      var $sectionSlider = $('#section-slider');
+      var $sectionSliderHandle;
+      
+      $sectionSlider.rangeslider({
+        polyfill: false,
+        onInit: function() {
+          $sectionSliderHandle = $('.rangeslider__handle', this.$range);
+          updateSectionSliderHandle($sectionSliderHandle[0], this.value);
+        },
+        onSlideEnd: function(position, value) {
+          var lastAnsweredSectionIndex = parseInt($('.question-choice[type="radio"]:checked').last().closest('.question').find('.question-order').val()) + 1;
+          if (isNaN(lastAnsweredSectionIndex)) lastAnsweredSectionIndex = 1; 
+          
+          // Sync section width slider value
+          if (value <= lastAnsweredSectionIndex + 1) $.fn.fullpage.moveTo(value);
+          // When user tries to skip unaswered questions
+          else {
+            $('#section-slider').val(localStorage.getItem('activatedSectionIndex')).change();
+            
+            $('#question-validation-message').html('질문에 답해주세요').removeClass('hidden');
+            setTimeout(function() {
+              $('#question-validation-message').addClass('hidden').html('');
+            }, 1500);
+          } 
+        }
+      }).on('input', function() {
+        updateSectionSliderHandle($sectionSliderHandle[0], this.value);
+      });
+      
+      function updateSectionSliderHandle(el, val) {
+        if (val == totalSections) el.textContent = '추가 정보';
+        else if (val == 1) el.textContent = '메인';
+        else el.textContent = 'Q' + parseInt(val - 1);
+      }
       
       data.forEach(function(question, index) {
         var $section = $('#section-virtual-dom').clone().removeClass('hidden').removeAttr('id');
-        $section.find('.progress-bar').css('width', (index + 1) / totalQuestions * 100 + '%');
         $section.find('.question-id').val(question.id);
         $section.find('.question-order').val(index + 1);
         $section.find('.question-duration-limit').val(question.duration_limit);
@@ -335,7 +369,7 @@ $(document).ready(function() {
             // When user completed survey
             if (completedSurvey) {
               $('#edit-survey-btn, #move-to-result-page-btn').removeClass('hidden');
-            } 
+            }
             // When user does not completed survey
             else {
               var firstUnaswerdQuestionOrder = parseInt($('.answer-id[value=""]').closest('.question').
@@ -372,6 +406,14 @@ $(document).ready(function() {
         
         // Disables featutre moving to specific section when loaded
         animateAnchor: false,
+        
+        afterLoad: function(anchorLink, index){
+          var loadedSection = $(this);
+          
+          localStorage.setItem('activatedSectionIndex', index);
+          
+          if (index == 2) $('#section-slider-container').removeClass('hidden');
+        },
         
         onLeave: function(index, nextIndex, direction){
           var $leavingSection = $(this);
@@ -448,6 +490,14 @@ $(document).ready(function() {
           // Start survey when user validated
           else if (index == 1) {
             if (localStorage.getItem('token') == null) return false;
+          }
+          
+          // Sync slider with section index
+          if (nextIndex == 1) $('#section-slider-container').addClass('hidden');
+          else if (index == 1 && nextIndex == 2) $('#section-slider').val(nextIndex).change();
+          else {
+            $('#section-slider-container').removeClass('hidden');
+            $('#section-slider').val(nextIndex).change();
           }
         }
       });

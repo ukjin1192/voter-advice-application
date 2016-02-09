@@ -18,7 +18,8 @@ module.exports = {
       'fullpage.js',
       'd3',
       'dimple-js',
-      'fastclick'
+      'fastclick',
+      'rangeslider.js'
     ]
   },
   output: {
