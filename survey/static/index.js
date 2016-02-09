@@ -371,7 +371,7 @@ $(document).ready(function() {
                 find('.question-order').val());
               $('#continue-survey-btn').attr('href', '#Q' + firstUnaswerdQuestionOrder).removeClass('hidden');
             }
-            $('#create-user-submit-btn').html('새로 시작하기 (기존 데이터 삭제)');
+            $('#create-user-submit-btn').removeClass('btn-xlg').html('새로 시작하기 (기존 데이터 삭제)');
           }).fail(function(data) {
             clearAuthToken();
             localStorage.clear();

@@ -117,6 +117,11 @@ pre {
 	color: $grey-color;
 }
 
+.btn-xlg {
+	height: 70px;
+	font-size: 1.7em !important;
+}
+
 /* ============
  * Slot machine
  * ============ */
@@ -196,7 +201,7 @@ pre {
 #section-slider-container {
 	position: fixed;
 	top: 15px;
-	z-index: 1000;
+	z-index: 150;
 
 	@media screen and (max-width: $screen-xs-max) {
 		width: 94%;
