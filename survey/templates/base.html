@@ -49,7 +49,9 @@
   <meta name="msapplication-TileImage" content="{{ 'CDN_URL'|get_settings_variable }}/favicon/mstile-144x144.png">
   <meta name="theme-color" content="#ffffff">
 
+  {% compress css %}
   <link rel="stylesheet" type="text/css" href="{% static 'dist/bundle.css' %}" />
+  {% endcompress %}
 
   {# Support HTML5 tag and media query for IE below version 9 #}
   <!--[if lte IE 8]>
