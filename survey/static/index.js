@@ -4,8 +4,8 @@
 require('bootstrap-webpack!./bootstrap.config.js');
 
 // Embed CSS files of node modules
-require('../../node_modules/fullpage.js/jquery.fullPage.css');
-require('../../node_modules/rangeslider.js/dist/rangeslider.css');
+require('fullpage.js/jquery.fullPage.css');
+require('rangeslider.js/dist/rangeslider.css');
 
 // Embed stylesheet
 require('./styles.scss');

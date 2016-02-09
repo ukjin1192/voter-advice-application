@@ -65,6 +65,7 @@ module.exports = {
 		})
   ],
   resolve: {
+    root: path.resolve('../../node_modules'),
     extensions: ['', '.js', '.es6']
   },
   module: {
