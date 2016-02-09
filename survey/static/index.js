@@ -302,7 +302,7 @@ $(document).ready(function() {
       });
       
       function updateSectionSliderHandle(el, val) {
-        if (val == totalSections) el.textContent = '추가 정보';
+        if (val == totalSections) el.textContent = '개인';
         else if (val == 1) el.textContent = '메인';
         else el.textContent = 'Q' + parseInt(val - 1);
       }

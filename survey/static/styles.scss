@@ -568,9 +568,10 @@ pre {
 	}
 }
 
-
-
-
+/* ===============================================
+ * Range slider
+ * https://github.com/andreruffert/rangeslider.js/
+ * =============================================== */
 
 .rangeslider,
 .rangeslider__fill {
@@ -584,7 +585,7 @@ pre {
 }
 
 .rangeslider {
-  background: #e6e6e6;
+  background: white;
   position: relative;
 }
 
@@ -605,7 +606,9 @@ pre {
 }
 
 .rangeslider__fill {
-  background: #00ff00;
+  background: #5bc0de;
+	background-image: -webkit-linear-gradient(45deg,hsla(0,0%,100%,.15) 25%,transparent 0,transparent 50%,hsla(0,0%,100%,.15) 0,hsla(0,0%,100%,.15) 75%,transparent 0,transparent);
+	background-image: linear-gradient(45deg,hsla(0,0%,100%,.15) 25%,transparent 0,transparent 50%,hsla(0,0%,100%,.15) 0,hsla(0,0%,100%,.15) 75%,transparent 0,transparent);
   position: absolute;
 }
 .rangeslider--horizontal .rangeslider__fill {
@@ -684,12 +687,12 @@ input[type="range"]:focus + .rangeslider .rangeslider__handle {
   box-shadow: 0 0 8px rgba(255, 0, 255, 0.9);
 }
 
-
 .rangeslider__handle {
   border-radius: 22px;
   min-width: 62px;
   line-height: 42px;
   text-align: center;
+	font-size: 1.2em;
   
   &:after {
     background: 0;
