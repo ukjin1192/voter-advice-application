@@ -7,6 +7,7 @@ require('bootstrap-webpack!./bootstrap.config.js');
 require('../../node_modules/fullpage.js/jquery.fullPage.css');
 require('../../node_modules/rangeslider.js/dist/rangeslider.css');
 
+// Embed stylesheet
 require('./styles.scss');
 
 // Load modules
@@ -297,9 +298,8 @@ $(document).ready(function() {
           if (value <= lastAnsweredSectionIndex + 1) $.fn.fullpage.moveTo(value);
           // When user tries to skip unaswered questions
           else {
-            $('#section-slider').val(localStorage.getItem('activatedSectionIndex')).change();
-            
-            showQuestionValidationMessage('질문에 답해주세요');
+            $('#section-slider').val(lastAnsweredSectionIndex + 1).change();
+            $.fn.fullpage.moveTo(lastAnsweredSectionIndex + 1);
           } 
         }
       }).on('input', function() {
@@ -409,8 +409,6 @@ $(document).ready(function() {
         
         afterLoad: function(anchorLink, index){
           var loadedSection = $(this);
-          
-          localStorage.setItem('activatedSectionIndex', index);
           
           if (index == 2) $('#section-slider-container').removeClass('hidden');
         },
