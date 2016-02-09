@@ -2,6 +2,11 @@
 
 // Load bootstrap with custom configuration
 require('bootstrap-webpack!./bootstrap.config.js');
+
+// Embed CSS files of node modules
+require('../../node_modules/fullpage.js/jquery.fullPage.css');
+require('../../node_modules/rangeslider.js/dist/rangeslider.css');
+
 require('./styles.scss');
 
 // Load modules
