@@ -22,6 +22,9 @@ var drawTwoDimensionalChart = require('./module/drawTwoDimensionalChart.js');
 var showQuestionValidationMessage = require('./module/showQuestionValidationMessage.js');
 var updateGhostVisibility = require('./module/updateGhostVisibility.js');
 
+// Global variables
+var pathname = window.location.pathname;
+
 // Voice of customer
 $(document).on('click', '#voice-of-customer-submit-btn', function() {
   // Set CSRF tokens at HTTP header
@@ -200,7 +203,7 @@ $(document).on('click', '#move-to-two-dimensional-result-page-btn', function() {
 
 // Update result to public 
 $(document).on('click', '.share-btn', function() {
-  var resultID = window.location.pathname.match(/result\/(\d+)/)[1]
+  var resultID = pathname.match(/result\/(\d+)/)[1]
   var formData = new FormData();
   formData.append('is_public', true);
   
@@ -224,7 +227,7 @@ $(document).on('click', '.share-btn', function() {
 $(document).on('click', '#update-public-field-btn', function() {
   $('#update-public-field-btn').button('loading');
 
-  var resultID = window.location.pathname.match(/result\/(\d+)/)[1]
+  var resultID = pathname.match(/result\/(\d+)/)[1]
   var formData = new FormData();
   formData.append('is_public', false);
   
@@ -265,7 +268,6 @@ $(document).on('click', '#twitter-share', function() {
 });
 
 $(document).ready(function() {
-  var pathname = window.location.pathname;
 
   // Main page with survey
   if (pathname == '/') {
@@ -400,6 +402,9 @@ $(document).ready(function() {
           var loadedSection = $(this);
           
           if (index == 2) $('#section-slider-container').removeClass('hidden');
+          
+          // Update visibility of ghosts
+          updateGhostVisibility();
         },
         
         onLeave: function(index, nextIndex, direction){
@@ -485,7 +490,7 @@ $(document).ready(function() {
           }
           
           // Update visibility of ghosts
-          updateGhostVisibility(parseInt(nextIndex / totalSections * 4));
+          updateGhostVisibility();
         }
       });
     }); 
@@ -631,6 +636,11 @@ $(document).ready(function() {
 $(window).load(function() {
   // Prevent from hidden elements blinking before CSS file loaded
   $('#voice-of-customer-curtain, #voice-of-customer-container, #section-slider-container').css('display', '');
+
+  if (pathname == '/') {
+    // Update visibility of ghosts
+    updateGhostVisibility();
+  }
 
   $('#loading-icon').addClass('hidden');
 });
