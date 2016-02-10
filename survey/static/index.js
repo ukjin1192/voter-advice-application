@@ -629,5 +629,8 @@ $(document).ready(function() {
 });
 
 $(window).load(function() {
+  // Prevent from hidden elements blinking before CSS file loaded
+  $('#voice-of-customer-curtain, #voice-of-customer-container, #section-slider-container').css('display', '');
+
   $('#loading-icon').addClass('hidden');
 });
