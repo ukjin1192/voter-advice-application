@@ -20,6 +20,7 @@ var activateSlotMachine = require('./module/activateSlotMachine.js');
 var loadResultPage = require('./module/loadResultPage.js');
 var drawTwoDimensionalChart = require('./module/drawTwoDimensionalChart.js');
 var showQuestionValidationMessage = require('./module/showQuestionValidationMessage.js');
+var updateGhostVisibility = require('./module/updateGhostVisibility.js');
 
 // Voice of customer
 $(document).on('click', '#voice-of-customer-submit-btn', function() {
@@ -286,10 +287,6 @@ $(document).ready(function() {
       
       $sectionSlider.rangeslider({
         polyfill: false,
-        onInit: function() {
-          $sectionSliderHandle = $('.rangeslider__handle', this.$range);
-          updateSectionSliderHandle($sectionSliderHandle[0], this.value);
-        },
         onSlideEnd: function(position, value) {
           var lastAnsweredSectionIndex = parseInt($('.question-choice[type="radio"]:checked').last().closest('.question').find('.question-order').val()) + 1;
           if (isNaN(lastAnsweredSectionIndex)) lastAnsweredSectionIndex = 1; 
@@ -302,15 +299,7 @@ $(document).ready(function() {
             $.fn.fullpage.moveTo(lastAnsweredSectionIndex + 1);
           } 
         }
-      }).on('input', function() {
-        updateSectionSliderHandle($sectionSliderHandle[0], this.value);
       });
-      
-      function updateSectionSliderHandle(el, val) {
-        if (val == totalSections) el.textContent = '개인';
-        else if (val == 1) el.textContent = '메인';
-        else el.textContent = 'Q' + parseInt(val - 1);
-      }
       
       data.forEach(function(question, index) {
         var $section = $('#section-virtual-dom').clone().removeClass('hidden').removeAttr('id');
@@ -494,6 +483,9 @@ $(document).ready(function() {
             $('#section-slider-container').removeClass('hidden');
             $('#section-slider').val(nextIndex).change();
           }
+          
+          // Update visibility of ghosts
+          updateGhostVisibility(parseInt(nextIndex / totalSections * 4));
         }
       });
     }); 
