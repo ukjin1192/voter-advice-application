@@ -401,10 +401,12 @@ $(document).ready(function() {
         afterLoad: function(anchorLink, index){
           var loadedSection = $(this);
           
-          if (index == 2) $('#section-slider-container').removeClass('hidden');
-          
-          // Update visibility of ghosts
-          updateGhostVisibility();
+          if (index == 2) {
+            $('#section-slider-container').removeClass('hidden');
+            
+            // Update visibility of ghosts
+            updateGhostVisibility();
+          }
         },
         
         onLeave: function(index, nextIndex, direction){
