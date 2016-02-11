@@ -514,6 +514,13 @@ $(document).ready(function() {
       wordList = _.shuffle(wordList);
       activateSlotMachine(wordList);
     }); 
+    
+    // Update visibility of ghosts when window resized
+    $(window).on('resize', function() {
+      setTimeout(function() {
+        updateGhostVisibility();
+      }, 1000);
+    });
   } 
   // Result page
   else if (/result\/(\d+)/.test(pathname)) {
