@@ -26,6 +26,13 @@ ADMINS = (
     ('Developer', config.get('gmail:developer', 'email_address')),
 )
 
+# Send email through SMTP
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = config.get('gmail:smtp', 'email_address')
+EMAIL_HOST_PASSWORD = config.get('gmail:smtp', 'password')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
 # Internationalization
 LANGUAGE_CODE = 'ko'
 ugettext = lambda s: s
