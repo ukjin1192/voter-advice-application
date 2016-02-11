@@ -406,6 +406,12 @@ $(document).ready(function() {
             
             // Update visibility of ghosts
             updateGhostVisibility();
+            
+            // Show tooltip message for section slider for a moment
+            $('#section-slider-container').tooltip('show');
+            setTimeout(function() {
+              $('#section-slider-container').tooltip('hide');
+            }, 3000);
           }
         },
         
@@ -646,10 +652,8 @@ $(window).load(function() {
   // Prevent from hidden elements blinking before CSS file loaded
   $('#voice-of-customer-curtain, #voice-of-customer-container, #section-slider-container').css('display', '');
 
-  if (pathname == '/') {
-    // Update visibility of ghosts
-    updateGhostVisibility();
-  }
+  // Update visibility of ghosts
+  if (pathname == '/') updateGhostVisibility();
 
   $('#loading-icon').addClass('hidden');
 });
