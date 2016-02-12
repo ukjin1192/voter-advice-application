@@ -490,7 +490,7 @@ $(document).ready(function() {
           }
           
           // Sync slider with section index
-          if (nextIndex == 1) $('#section-slider-container').addClass('hidden');
+          if (nextIndex == 1) $('#section-slider-container').addClass('hidden').tooltip('hide');
           else if (index == 1 && nextIndex == 2) $('#section-slider').val(nextIndex).change();
           else {
             $('#section-slider-container').removeClass('hidden');

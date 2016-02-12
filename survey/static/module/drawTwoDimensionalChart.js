@@ -27,13 +27,27 @@ module.exports = function drawTwoDimensionalChart(rows, xAxisName, yAxisName) {
   
   chartSeries.afterDraw = function (shp, d, i) {
     var shape = d3.select(shp);
-    svgBlock.append('text')
-      .attr('x', parseFloat(shape.attr('cx')))
-      .attr('y', parseFloat(shape.attr('cy')))
-      .style('text-anchor','middle')
-      .style('font-weight', 'bold')
-      .style('fill', 'white')
-      .text(rows[i].name);
+    if (rows[i].name == '나') {
+      svgBlock.append('text')
+        .attr('x', parseFloat(shape.attr('cx')))
+        .attr('y', parseFloat(shape.attr('cy')))
+        .style('text-anchor', 'middle')         // Horizontally center
+        .style('alignment-baseline', 'middle')  // Vertically center
+        .style('font-size', '2.0em')
+        .style('font-weight', 'bold')
+        .style('fill', 'white')
+        .text(rows[i].name);
+    }
+    else {
+      svgBlock.append('text')
+        .attr('x', parseFloat(shape.attr('cx')))
+        .attr('y', parseFloat(shape.attr('cy')))
+        .style('text-anchor', 'middle')         // Horizontally center
+        .style('alignment-baseline', 'middle')  // Vertically center
+        .style('font-weight', 'bold')
+        .style('fill', 'white')
+        .text(rows[i].name);
+    }
   };
   chart.draw(1000);
 
