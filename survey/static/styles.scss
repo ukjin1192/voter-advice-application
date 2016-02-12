@@ -50,12 +50,10 @@ $pacman-width: 100px;
  * Default tag attribute 
  * ===================== */
 
-@import url(https://cdn.jsdelivr.net/font-nanum/1.0/nanumbarungothic/nanumbarungothic.css);
 
 * {
 	margin: 0;
 	padding: 0;
-	font-family: 'Nanum Barun Gothic';
 
 	// Prevent from blinking when clicked
 	-webkit-tap-highbase-color-light: $full-transparent;
@@ -88,7 +86,6 @@ a, a:focus, a:hover, a:active, a:visited {
 }
 
 pre {
-	font-family: 'Nanum Barun Gothic';
 	background-color: $lighter-grey-color;
 	padding: 15px;
 	border: 0;
