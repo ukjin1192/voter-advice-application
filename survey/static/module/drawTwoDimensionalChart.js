@@ -71,9 +71,5 @@ module.exports = function drawTwoDimensionalChart(rows, xAxisName, yAxisName) {
   };
   chart.draw(1000);
 
-  // Debug axis names are cut or not shown
-  if (chartWidth < 480) $('#two-dimensional-result > svg').attr({'width': chartWidth + 10, 'height': chartWidth + 20});
-  $('#two-dimensional-result > svg').css({'padding-left': '30px', 'margin-left': '-20px'});
-
   return;
 }

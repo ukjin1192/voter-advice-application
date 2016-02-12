@@ -141,6 +141,7 @@ $(document).on('click', '.question-choice', function() {
   // Too short duration to choose choice 
   else {
     showQuestionValidationMessage('조금만 더 생각해주세요');
+    $leavingSection.find('.question-choice:checked').attr('checked', false); 
     return false;
   }
 });

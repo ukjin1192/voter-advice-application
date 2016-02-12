@@ -50,7 +50,6 @@ $pacman-width: 100px;
  * Default tag attribute 
  * ===================== */
 
-
 * {
 	margin: 0;
 	padding: 0;
@@ -390,6 +389,19 @@ pre {
 		#one-dimensional-result {
 			margin-top: 20px;
 		}
+		
+		#two-dimensional-result {
+			
+			// Debug axis names are cut or not shown
+			svg {
+				overflow-x: visible;
+				overflow-y: visible;
+				
+				@media screen and (max-width: $question-image-width) {
+					margin: 0 0 20px 13px;
+				}
+			}
+		}
 	}
 
 	#label-list {
@@ -568,8 +580,8 @@ pre {
 	box-shadow: none;
   
   &:after {
-		position: absolute;
-    top: 50px;
+		position: relative;
+    top: 20px;
     left: 80%;
     transform: translate(-50%,-50%);
     -webkit-transform: translate(-50%,-50%);
