@@ -560,6 +560,10 @@ $(document).ready(function() {
               row.similarity + '%; background-color: ' + row.color + ';">' + row.similarity + '%' + '</div></div>');
           $('#label-list').append('<span class="label" style="background-color: ' + row.color + ';">' + row.name + '</span>');
         });
+        
+        // Fill out result summary
+        $('#most-similar-user').text(rows[0].name);
+        $('#most-dissimilar-user').text(rows[rows.length - 1].name);
       }
       // Two dimensional analysis
       else {
@@ -602,8 +606,9 @@ $(document).ready(function() {
       }
     }).fail(function(data) {
       // When result is not exist or not public
+      $('#result-navbar, #result-summary').addClass('hidden');
       $('#forbidden-alert-message').removeClass('hidden');
-      $('#move-to-main-page-btn').html('설문 참여하기');
+      $('#move-to-main-page-btn').html('나와 안맞는 정당 알아보기');
     }); 
   }
 

@@ -19,12 +19,32 @@ module.exports = function drawTwoDimensionalChart(rows, xAxisName, yAxisName) {
   yAxis.fontSize = 12;
 
   var chartSeries = chart.addSeries('name', dimple.plot.bubble);
-  
+  var myCoordinatesX, myCoordinatesY;
+
   rows.forEach(function(row, index) {
     chart.assignColor(row.name, row.color);
     $('#label-list').append('<span class="label" style="background-color: ' + row.color + ';">' + row.name + '</span>');
+    if (row.name == '나') {
+      myCoordinatesX = row.x_coordinate;
+      myCoordinatesY = row.y_coordinate;
+    }
   });
-  
+
+  var distanceList = [];
+
+  rows.forEach(function(row, index) {
+    if (row.name != '나') {
+      distanceList.push({
+        'distance': Math.sqrt(Math.pow(row.x_coordinate - myCoordinatesX, 2) + Math.pow(row.y_coordinate - myCoordinatesY, 2)),
+        'name': row.name
+      });
+    }
+  });
+
+  // Fill out result summary
+  $('#most-similar-user').text(_.minBy(distanceList, 'distance').name);
+  $('#most-dissimilar-user').text(_.maxBy(distanceList, 'distance').name);
+
   chartSeries.afterDraw = function (shp, d, i) {
     var shape = d3.select(shp);
     if (rows[i].name == '나') {

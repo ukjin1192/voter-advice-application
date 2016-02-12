@@ -370,12 +370,17 @@ pre {
 #result-detail-page {
 	padding-bottom: 60px;
 
-	#similarity-explanation {
+	#result-summary {
 		margin-top: 20px;
-	}
-
-	#difference-explanation {
-		margin-bottom: 0;
+		
+		.alert {
+			margin-bottom: 0;
+			padding: 5px;
+			
+			#most-similar-user, #most-dissimilar-user {
+				margin-top: 20px;
+			}
+		}
 	}
 
 	#chart-container {
