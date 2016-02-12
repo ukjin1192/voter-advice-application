@@ -649,11 +649,18 @@ $(document).ready(function() {
 });
 
 $(window).load(function() {
-  // Prevent from hidden elements blinking before CSS file loaded
-  $('#voice-of-customer-curtain, #voice-of-customer-container, #section-slider-container').css('display', '');
 
-  // Update visibility of ghosts
-  if (pathname == '/') updateGhostVisibility();
+  if (pathname == '/') {
+    // Prevent from hidden elements blinking before CSS file loaded
+    $('#voice-of-customer-curtain, #voice-of-customer-container, #section-slider-container, #page-scroll-container').css('visibility', '');
+    
+    // Update visibility of ghosts
+    updateGhostVisibility();
+  }
+  else if (/result\/(\d+)/.test(pathname)) {
+    // Prevent from hidden elements blinking before CSS file loaded
+    $('#voice-of-customer-curtain, #voice-of-customer-container, #result-navbar, #result-detail-page').css('visibility', '');
+  }
 
   $('#loading-icon').addClass('hidden');
 });
