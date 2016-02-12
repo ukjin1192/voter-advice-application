@@ -543,8 +543,8 @@ $(document).ready(function() {
       // One dimensional analysis
       if (data.category == 'party_1d') {
         var updatedAt = new Date(data.updated_at);
-        $('#record-updated-at').html('최종 업데이트 : ' + updatedAt.getFullYear() + '-' +
-          updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
+        $('#record-updated-at').html(updatedAt.getFullYear() + '년 ' +  parseInt(parseInt(updatedAt.getMonth()) + 1) + 
+          '월 ' + updatedAt.getDate() + '일에 업데이트됐습니다');
         
         $('#move-to-one-dimensional-result-page-btn').removeClass('btn-default').addClass('btn-primary');
         $('#one-dimensional-result').removeClass('hidden');
@@ -568,8 +568,8 @@ $(document).ready(function() {
       // Two dimensional analysis
       else {
         var updatedAt = new Date(data.updated_at);
-        $('#record-updated-at').html('최종 업데이트 : ' + updatedAt.getFullYear() + '-' +
-          updatedAt.getMonth() + 1 + '-' + updatedAt.getDate());
+        $('#record-updated-at').html(updatedAt.getFullYear() + '년 ' +  parseInt(parseInt(updatedAt.getMonth()) + 1) + 
+          '월 ' + updatedAt.getDate() + '일에 업데이트됐습니다');
         
         $('#move-to-two-dimensional-result-page-btn').removeClass('btn-default').addClass('btn-primary');
         $('#two-dimensional-result').removeClass('hidden');
