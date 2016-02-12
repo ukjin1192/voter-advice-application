@@ -186,6 +186,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
         """
         partial = kwargs.pop('partial', False)
         instance = Answer.objects.select_related('choice__question').get(id=pk)
+        self.check_object_permissions(request, instance)
         
         if partial == False:
             return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -306,6 +307,7 @@ class ResultViewSet(viewsets.ModelViewSet):
         Retrieve result
         """
         instance = Result.objects.select_related('user').get(id=pk)
+        self.check_object_permissions(request, instance)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
@@ -315,6 +317,7 @@ class ResultViewSet(viewsets.ModelViewSet):
         """
         partial = kwargs.pop('partial', False)
         instance = Result.objects.select_related('user').get(id=pk)
+        self.check_object_permissions(request, instance)
         
         if partial == False:
             return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
@@ -357,5 +360,6 @@ class VoiceOfCustomerViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, pk, *args, **kwargs):
         instance = VoiceOfCustomer.objects.get(id=pk)
+        self.check_object_permissions(request, instance)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
