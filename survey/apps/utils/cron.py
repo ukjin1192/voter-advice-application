@@ -3,6 +3,7 @@
 
 from captcha.models import CaptchaStore
 from celery import task
+from django.utils import timezone
 from main.models import User, Party, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer 
 from utils import utilities
 
@@ -12,7 +13,7 @@ def clear_expired_captcha():
     """
     Clear expired captcha
     """
-    CaptchaStore.objects.filter(expiration__lt=timezon.now()).delete()
+    CaptchaStore.objects.filter(expiration__lt=timezone.now()).delete()
     return None
 
 
