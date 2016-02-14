@@ -15,6 +15,8 @@ config.read(ROOT_DIR + '/conf/sensitive/configuration.ini')
 PROJECT_NAME = config.get('django', 'project_name')
 
 if __name__ == '__main__':
+    # Run Celery as root
+    os.environ.setdefault('C_FORCE_ROOT', 'true')
 
     if int(config.get('django', 'development_mode')) == 1:
         # Development mode
