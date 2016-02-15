@@ -1,5 +1,6 @@
 #!/bin/bash
 import os
+from boto3.session import Session
 from ConfigParser import ConfigParser
 from fabric.api import *
 
@@ -11,11 +12,23 @@ config.read(ROOT_DIR + '/conf/sensitive/configuration.ini')
 
 PROJECT_NAME = config.get('django', 'project_name')
 
-# Remote Deploy Server Information
-env.hosts = config.get('fabric', 'ip_address')
-env.user = config.get('fabric', 'username')
+# Deploy server information
+AWS_ACCESS_KEY_ID = config.get('aws', 'access_key_id')
+AWS_SECRET_ACCESS_KEY = config.get('aws', 'secret_access_key')
+
+env.hosts = []
+env.user = 'ubuntu'
 env.key_filename = ROOT_DIR + "/conf/sensitive/remote_server.pem"
 env.port = 22
+
+session = Session(aws_access_key_id=AWS_ACCESS_KEY_ID, 
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY, 
+        region_name='ap-northeast-2')   # SEOUL REGION
+
+ec2 = session.resource('ec2')
+
+for instance in ec2.instances.all():
+    env.hosts.append(instance.public_dns_name)
 
 
 def docker_onboot():
@@ -92,15 +105,10 @@ def update_staticfiles():
         local("./manage.py compress --force")
 
 
-def remote_deploy():
+def deploy():
     with cd(ROOT_DIR):
         sudo("git pull origin master")
-        with settings(warn_only=True):
-            sudo("ps auxww | grep 'celery worker' | grep -v grep | awk '{print $2}' | xargs kill -15")
-        with settings(warn_only=True):
-            sudo("ps auxww | grep 'celery beat' | grep -v grep | awk '{print $2}' | xargs kill -15")
-        with settings(warn_only=True):
-            sudo("ps -ef | grep uwsgi | grep -v grep | awk '{print $2}' | xargs kill -15")
-        sudo("./manage.py celeryd_detach --logfile=logs/celery_daemon.log --pidfile=logs/celery_daemon.pid")
-        sudo("./manage.py celery beat --logfile=logs/celery_beat.log --pidfile=logs/celery_beat.pid --detach")
+        sudo("ps -ef | grep uwsgi | grep -v grep | awk '{print $2}' | xargs kill -15")
         sudo("uwsgi --uid www-data --gid www-data --emperor /etc/uwsgi/vassals --master --die-on-term --daemonize=" + ROOT_DIR + "/logs/uwsgi.log")
+    with cd(ROOT_DIR + "/" + PROJECT_NAME + "/static/"):
+        sudo("production_mode=1 webpack")
