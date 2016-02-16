@@ -40,7 +40,8 @@ Survey to recognize where my political tendency positioned
 #### Deployment : <a href="https://aws.amazon.com/" target="_blank">Amazon Web Services</a>
 
 - EC2 (OS: ubuntu 14.04 LTS)
-- ELB (Load balancing)
+	- Elastic Load Balancer (Load balancing)
+	- Auto Scailing Group (Scaling)
 - Route 53 (DNS)
 - RDS (MySQL)
 - ElastiCache (Redis)
