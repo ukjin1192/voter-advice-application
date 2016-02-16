@@ -13,22 +13,23 @@ config.read(ROOT_DIR + '/conf/sensitive/configuration.ini')
 PROJECT_NAME = config.get('django', 'project_name')
 
 # Deploy server information
-AWS_ACCESS_KEY_ID = config.get('aws', 'access_key_id')
-AWS_SECRET_ACCESS_KEY = config.get('aws', 'secret_access_key')
+if int(config.get('django', 'development_mode')) == 1:
+    AWS_ACCESS_KEY_ID = config.get('aws', 'access_key_id')
+    AWS_SECRET_ACCESS_KEY = config.get('aws', 'secret_access_key')
 
-env.hosts = []
-env.user = 'ubuntu'
-env.key_filename = ROOT_DIR + "/conf/sensitive/remote_server.pem"
-env.port = 22
+    env.hosts = []
+    env.user = 'ubuntu'
+    env.key_filename = ROOT_DIR + "/conf/sensitive/remote_server.pem"
+    env.port = 22
 
-session = Session(aws_access_key_id=AWS_ACCESS_KEY_ID, 
-        aws_secret_access_key=AWS_SECRET_ACCESS_KEY, 
-        region_name='ap-northeast-2')   # SEOUL REGION
+    session = Session(aws_access_key_id=AWS_ACCESS_KEY_ID, 
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY, 
+            region_name='ap-northeast-2')   # SEOUL REGION
 
-ec2 = session.resource('ec2')
+    ec2 = session.resource('ec2')
 
-for instance in ec2.instances.all():
-    env.hosts.append(instance.public_dns_name)
+    for instance in ec2.instances.all():
+        env.hosts.append(instance.public_dns_name)
 
 
 def docker_onboot():
@@ -105,10 +106,26 @@ def update_staticfiles():
         local("./manage.py compress --force")
 
 
-def deploy():
+def deploy(SERVER_CODE_UPDATED=False, STATIC_FILES_UPDATED=False, CELERY_RELATED_CODE_UPDATED=False, NGINX_CONFIGURATION_UPDATED=False):
     with cd(ROOT_DIR):
         sudo("git pull origin master")
-        sudo("ps -ef | grep uwsgi | grep -v grep | awk '{print $2}' | xargs kill -15")
-        sudo("uwsgi --uid www-data --gid www-data --emperor /etc/uwsgi/vassals --master --die-on-term --daemonize=" + ROOT_DIR + "/logs/uwsgi.log")
-    with cd(ROOT_DIR + "/" + PROJECT_NAME + "/static/"):
-        sudo("production_mode=1 webpack")
+    
+    if SERVER_CODE_UPDATED:
+        with cd(ROOT_DIR):
+            sudo("ps -ef | grep uwsgi | grep -v grep | awk '{print $2}' | xargs kill -15")
+            sudo("uwsgi --uid www-data --gid www-data --emperor /etc/uwsgi/vassals --master --die-on-term --daemonize=" + ROOT_DIR + "/logs/uwsgi.log")
+    
+    if STATIC_FILES_UPDATED:
+        with cd(ROOT_DIR + "/" + PROJECT_NAME + "/static/"):
+            sudo("production_mode=1 webpack")
+
+    if CELERY_RELATED_CODE_UPDATED:
+        with settings(warn_only=True):
+            sudo("ps auxww | grep 'celery worker' | grep -v grep | awk '{print $2}' | xargs kill -15")
+            sudo("ps auxww | grep 'celery beat' | grep -v grep | awk '{print $2}' | xargs kill -15")
+        with cd(ROOT_DIR):
+            sudo("./manage.py celeryd_detach --logfile=logs/celery_daemon.log --pidfile=logs/celery_daemon.pid")
+            sudo("./manage.py celery beat --logfile=logs/celery_beat.log --pidfile=logs/celery_beat.pid --detach")
+    
+    if NGINX_CONFIGURATION_UPDATED:
+        sudo("service nginx restart")
