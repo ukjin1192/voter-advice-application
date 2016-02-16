@@ -106,7 +106,7 @@ def update_staticfiles():
         local("./manage.py compress --force")
 
 
-def deploy(SERVER_CODE_UPDATED=False, STATIC_FILES_UPDATED=False, CELERY_RELATED_CODE_UPDATED=False, NGINX_CONFIGURATION_UPDATED=False):
+def deploy(SERVER_CODE_UPDATED=False, STATIC_FILES_UPDATED=False, CELERY_RELATED_CODE_UPDATED=False):
     with cd(ROOT_DIR):
         sudo("git pull origin master")
     
@@ -126,6 +126,3 @@ def deploy(SERVER_CODE_UPDATED=False, STATIC_FILES_UPDATED=False, CELERY_RELATED
         with cd(ROOT_DIR):
             sudo("./manage.py celeryd_detach --logfile=logs/celery_daemon.log --pidfile=logs/celery_daemon.pid")
             sudo("./manage.py celery beat --logfile=logs/celery_beat.log --pidfile=logs/celery_beat.pid --detach")
-    
-    if NGINX_CONFIGURATION_UPDATED:
-        sudo("service nginx restart")
