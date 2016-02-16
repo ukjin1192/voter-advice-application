@@ -29,7 +29,8 @@ if int(config.get('django', 'development_mode')) == 1:
     ec2 = session.resource('ec2')
 
     for instance in ec2.instances.all():
-        env.hosts.append(instance.public_dns_name)
+        if instance.key_name == 'ping-korea': 
+            env.hosts.append(instance.public_dns_name)
 
 
 def docker_onboot():
