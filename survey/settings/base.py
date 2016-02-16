@@ -195,4 +195,4 @@ USE_CAPTCHA = False
 CACHE_TTL = 60 * 60 * 24 * 7    # 7 days
 
 # CDN URL
-CDN_URL = 'http://dl8hm92vwsxic.cloudfront.net'
+CDN_URL = config.get('aws', 'cloudfront_url')
