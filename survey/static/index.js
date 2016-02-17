@@ -544,7 +544,7 @@ $(document).ready(function() {
       // One dimensional analysis
       if (data.category == 'party_1d') {
         var updatedAt = new Date(data.updated_at);
-        $('#record-updated-at').html(updatedAt.getFullYear() + '년 ' +  parseInt(parseInt(updatedAt.getMonth()) + 1) + 
+        $('#record-additional-info').html(updatedAt.getFullYear() + '년 ' +  parseInt(parseInt(updatedAt.getMonth()) + 1) + 
           '월 ' + updatedAt.getDate() + '일에 업데이트됐습니다');
         
         $('#move-to-one-dimensional-result-page-btn').removeClass('btn-default').addClass('btn-primary');
@@ -569,8 +569,9 @@ $(document).ready(function() {
       // Two dimensional analysis
       else {
         var updatedAt = new Date(data.updated_at);
-        $('#record-updated-at').html(updatedAt.getFullYear() + '년 ' +  parseInt(parseInt(updatedAt.getMonth()) + 1) + 
-          '월 ' + updatedAt.getDate() + '일에 업데이트됐습니다');
+        $('#record-additional-info').html('X,Y축의 눈금 간격이 달라, 보이는 거리와 실제 거리가 다를 수 있습니다. ' + 
+            updatedAt.getFullYear() + '년 ' +  parseInt(parseInt(updatedAt.getMonth()) + 1) + '월 ' + 
+            updatedAt.getDate() + '일에 업데이트됐습니다');
         
         $('#move-to-two-dimensional-result-page-btn').removeClass('btn-default').addClass('btn-primary');
         $('#two-dimensional-result').removeClass('hidden');
