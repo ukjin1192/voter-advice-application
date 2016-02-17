@@ -107,20 +107,20 @@ def update_staticfiles():
         local("./manage.py compress --force")
 
 
-def deploy(SERVER_CODE_UPDATED=False, STATIC_FILES_UPDATED=False, CELERY_RELATED_CODE_UPDATED=False, NGINX_CONFIGURATION_UPDATED=False):
+def deploy(*command):
     with cd(ROOT_DIR):
         sudo("git pull origin master")
     
-    if SERVER_CODE_UPDATED:
+    if 'SERVER_CODE_UPDATED' in command:
         with cd(ROOT_DIR):
             sudo("ps -ef | grep uwsgi | grep -v grep | awk '{print $2}' | xargs kill -15")
             sudo("uwsgi --uid www-data --gid www-data --emperor /etc/uwsgi/vassals --master --die-on-term --daemonize=" + ROOT_DIR + "/logs/uwsgi.log")
     
-    if STATIC_FILES_UPDATED:
+    if 'STATIC_FILES_UPDATED' in command:
         with cd(ROOT_DIR + "/" + PROJECT_NAME + "/static/"):
             sudo("production_mode=1 webpack")
 
-    if CELERY_RELATED_CODE_UPDATED:
+    if 'CELERY_RELATED_CODE_UPDATED' in command:
         with settings(warn_only=True):
             sudo("ps auxww | grep 'celery worker' | grep -v grep | awk '{print $2}' | xargs kill -15")
             sudo("ps auxww | grep 'celery beat' | grep -v grep | awk '{print $2}' | xargs kill -15")
@@ -128,5 +128,5 @@ def deploy(SERVER_CODE_UPDATED=False, STATIC_FILES_UPDATED=False, CELERY_RELATED
             sudo("./manage.py celeryd_detach --logfile=logs/celery_daemon.log --pidfile=logs/celery_daemon.pid")
             sudo("./manage.py celery beat --logfile=logs/celery_beat.log --pidfile=logs/celery_beat.pid --detach")
 
-    if NGINX_CONFIGURATION_UPDATED:
+    if 'NGINX_CONFIGURATION_UPDATED' in command:
         sudo("service nginx restart")
