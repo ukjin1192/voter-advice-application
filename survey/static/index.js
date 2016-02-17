@@ -391,7 +391,7 @@ $(document).ready(function() {
       anchorsList.push('additional');
       
       // Inititate fullpage.js with options
-      $('#page-scroll-container').removeClass('hidden').fullpage({
+      $('#page-scroll-container').fullpage({
         
         // Enable anchor and history feature
         anchors: anchorsList,
@@ -400,7 +400,7 @@ $(document).ready(function() {
         animateAnchor: false,
         
         afterLoad: function(anchorLink, index){
-          var loadedSection = $(this);
+          var $loadedSection = $(this);
           
           if (index == 2) {
             $('#section-slider-container').removeClass('hidden');
