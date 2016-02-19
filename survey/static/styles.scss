@@ -370,7 +370,7 @@ pre {
 }
 
 #result-detail-page {
-	padding-bottom: 60px;
+	padding-bottom: 20px;
 
 	#result-summary {
 		margin-top: 20px;
@@ -422,6 +422,7 @@ pre {
 		font-style: italic;
 		font-weight: 500;
 		font-size: 0.9em;
+		color: $dark-grey-color;
 	}
 
 	#share-btn-group {
@@ -450,6 +451,36 @@ pre {
 	#forbidden-alert-message {
 		margin-top: 20px;
 	}
+}
+
+/* ======
+ * Footer 
+ * ====== */
+
+#footer {
+	position: relative;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	padding: 15px;
+	background-color: $light-grey-color;
+	text-align: center;
+	z-index: 250;
+	
+		#footer-menu {
+			margin-bottom: 15px;
+			font-size: 1.2em;
+			
+			a {
+				display: inline-block;
+				margin: 0 10px;
+			}
+		}
+		
+		#footer-license {
+			color: $lighter-blue-color;
+			font-size: 0.8em;
+		}
 }
 
 /* ===============================

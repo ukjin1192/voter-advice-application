@@ -667,6 +667,13 @@ $(window).load(function() {
   else if (/result\/(\d+)/.test(pathname)) {
     // Prevent from hidden elements blinking before CSS file loaded
     $('#voice-of-customer-curtain, #voice-of-customer-container, #result-navbar, #result-detail-page').css('visibility', '');
+    
+    // Show footer
+    $('#footer').removeClass('hidden');
+  }
+  else {
+    // Show footer
+    $('#footer').removeClass('hidden');
   }
 
   $('#loading-icon').addClass('hidden');
