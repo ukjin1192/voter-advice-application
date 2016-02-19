@@ -1,0 +1,222 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div class="text-center">
+  <h3>1차원 비교 분석</h3>
+</div>
+
+<div class="space"></div>
+
+<p>
+	1차원 결과는 정당이 고른 답변과 내가 고른 답변간의 “거리”를 각 문항마다 측정해서 더합니다. 아래의 문항을 예로 들어봅시다.
+</p>
+
+<div class="space"></div>
+
+<div class="panel panel-default">
+
+	<div class="panel-heading text-center">
+		<strong>탕수육은 찍먹보다는 부먹이다</strong>
+	</div>
+
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>아니다</th>
+				<th>중립</th>
+				<th>그렇다</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th>-1</th>
+				<th>0</th>
+				<th>+1</th>
+			</tr>
+			<tr>
+				<th>유재석</th>
+				<th></th>
+				<th></th>
+			</tr>
+			<tr>
+				<th></th>
+				<th></th>
+				<th>나</th>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<div class="text-center">
+	<p>
+		이 문항에서 유재석과 나는
+	</p>
+	<p>
+		\( \left| {1} - \left( {-1} \right) \right| = 2 \)
+	</p>
+	<p>
+		만큼의 거리를 두고 있습니다.
+	</p>
+</div>
+
+<div class="space"></div>
+
+<div class="panel panel-default">
+
+	<div class="panel-heading text-center">
+		<strong>코카콜라보다는 펩시다</strong>
+	</div>
+
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>아니다</th>
+				<th>중립</th>
+				<th>그렇다</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<th>-1</th>
+				<th>0</th>
+				<th>+1</th>
+			</tr>
+			<tr>
+				<th>유재석</th>
+				<th></th>
+				<th></th>
+			</tr>
+			<tr>
+				<th></th>
+				<th></th>
+				<th>나</th>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+<p>
+	두 번째 문항에 대해 위와 같이 대답했다면 유재석과 나의 총 거리는 4가 되는 것입니다.
+</p>
+
+<div class="space"></div>
+
+<p>
+	이런 식으로 모든 문항에 대하여 거리를 더해서 나와 A 정당 사이의 전체 거리를 잽니다.
+</p>
+
+<div class="space"></div>
+
+<div class="text-center">
+	<p>
+		최대거리 = \( \sum_{i=1}^{24} \left( \left| {p}_{길동} \right| + 2 \right) \)
+	</p>
+	<p>
+		<small>* \( {p}_{길동} \): 길동이의 선택값</small>
+	</p>
+</div>
+
+<div class="space"></div>
+
+<p>
+	A 정당과 내가 모든 질문에 대해서 정반대의 입장을 표명했다면, 가능한 가장 멀리 떨어지게 되겠죠? 이때 유사도는 다음과 같이 계산합니다.
+</p>
+
+<div class="text-center">
+	유사도 = \( {1} - \frac{거리}{최대거리} \)<br/>
+</div>
+
+<div class="space"></div>
+
+<p>
+	즉, 모든 설문에 똑같이 대답한다면 유사도는 1, 모든 설문에 반대로 대답한다면 유사도는 0이 됩니다.
+</p>
+
+<div class="space"></div>
+
+<div class="text-center">
+	맨하탄 정책거리 = \( \sum_{i=1}^{24} \left( \left| {p}_{길동} - {p}_{정당} \right| \right) \)
+</div>
+
+<div class="space"></div>
+
+<p>
+이 거리 측정 방법을 맨하탄 거리 (Manhattan Distance, City Block Distance) 계산법 이라고 합니다. 맨하탄 거리를 심리학, 사회학, 정치학 등 설문을 사용하는 다양한 사회과학 분야에서 널리 쓰이고 있는데요, 1989년부터 종이 시험 형태로 제공되어 이제 전국민의 20%가 사용하는 네덜란드의 <a href="http://www.stemwijzer.nl/" blank="_blank">Stemwijzer</a>와  2013년 독일 연방 의회선거에서 1,3000만 회 사용된 <a href="http://www.bpb.de/politik/wahlen/wahl-o-mat/" blank="_target">Wahl-O-Mat</a>에서도 적용된 바 있습니다.
+</p>
+
+<div class="space"></div>
+
+<blockquote>
+	<p>
+		<small>맨하탄 거리는 제곱의 합을 취하는 유클리드 거리 대비 각 항목의 합을 정확하게 보여준다는 장점이 있습니다.</small>
+	</p>
+	<footer>
+		Regarding the Manhattan distance 
+		<cite title="Finding groups in data">
+			<a href="http://amzn.to/1SVZJvM" target="_blank">Kaufman, Leonard, and Peter J. Rousseeuw. "Finding groups in data: An introduction to cluster analysis." (2005)</a>
+		</cite>
+	</footer>
+	<p>
+		<small>City block distance는 200X년부터 X여명이 참가한 독일 내무부 산하의 <a href="http://bit.ly/1Q58rVA">독일 연방정치교육원</a>에서 사용하고 있는 Wahl-O-Mat에서 채택하고 있는 방식입니다.</small>
+	</p>
+</blockquote>
+
+<hr/>
+
+<div class="text-center">
+  <h3>2차원 비교 분석</h3>
+</div>
+
+<div class="space"></div>
+
+<p>
+	여러 문항(차원)의 정보를 2~3개의 낮은 차원으로 줄이기 위해 주성분 분석(Principal Components Analysis: PCA)이라는 차원 축소 알고리즘을 사용했습니다. 주성분 분석은 두 가지 역할을 합니다.
+</p>
+
+<div class="space"></div>
+
+<p>
+	<strong>첫째, 강한 상관관계를 가진 문항들을 묶어줍니다.</strong><br/>
+	<strong>둘째, 가장 많은 답변을 설명할 수 있는 문항들을 묶습니다.</strong>
+</p>
+
+<div class="space"></div>
+
+<p>
+	예를 들어, 지하철에 앉은 10명의 사람에게 좋아하는 과일을 물었을 때 딸기, 포도, 바나나, 사과 중 유독 바나나에 대한 호불호가 많이 갈린다고 한다면, 바나나가 하나의 축이 되는 것입니다.
+각 축에 대한 문항의 적재는 다음과 같습니다:
+
+		FACTOR LOADING 필요
+
+
+
+
+		PCA 역시 정치학계에서 보편적으로 사용하고 있는 알고리즘입니다 (Benoit & Laver). PCA와 같은 차원 축소 알고리즘을 사용하는 VAA는 네덜란드의 ~~ 가 있습니다.
+
+
+</p>
+
+<div class="space"></div>
+
+<blockquote>
+	<p>
+		<small>맨하탄 거리는 제곱의 합을 취하는 유클리드 거리 대비 각 항목의 합을 정확하게 보여준다는 장점이 있습니다.</small>
+	</p>
+	<footer>
+		Regarding the Manhattan distance 
+		<cite title="Finding groups in data">
+			<a href="http://amzn.to/1SVZJvM" target="_blank">Kaufman, Leonard, and Peter J. Rousseeuw. "Finding groups in data: An introduction to cluster analysis." (2005)</a>
+		</cite>
+	</footer>
+	<p>
+		<small>City block distance는 200X년부터 X여명이 참가한 독일 내무부 산하의 <a href="http://bit.ly/1Q58rVA">독일 연방정치교육원</a>에서 사용하고 있는 Wahl-O-Mat에서 채택하고 있는 방식입니다.</small>
+	</p>
+</blockquote>
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.6.1/MathJax.js?config=TeX-AMS_CHTML"></script>
+{% endblock %}

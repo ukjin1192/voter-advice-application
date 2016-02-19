@@ -137,6 +137,9 @@
   <script type="text/javascript" src="{% static 'dist/bundle.js' %}"></script>
   {% endcompress %}
 
+  {% block custom_js %}
+  {% endblock %}
+
   {# Support Placehoder for IE below version 10 #}
   <!--[if lte IE 9]>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-placeholder/2.0.8/jquery.placeholder.min.js"></script>

@@ -37,6 +37,18 @@ urlpatterns = [
         r'^result/(?P<pk>[0-9]+)/$', 
         TemplateView.as_view(template_name='result_detail.html')
     ),
+    url(
+        r'^commentary/$', 
+        TemplateView.as_view(template_name='commentary.html')
+    ),
+    url(
+        r'^faq/$', 
+        TemplateView.as_view(template_name='faq.html')
+    ),
+    url(
+        r'^story/$', 
+        TemplateView.as_view(template_name='story.html')
+    ),
 ]
 
 if settings.RUN_SILK:
