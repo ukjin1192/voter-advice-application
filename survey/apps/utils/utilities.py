@@ -61,7 +61,8 @@ def get_one_dimensional_result(user_data, *target_data):
         target_factor_list = single_target_data['factor_list']
         disagreement = sum(numpy.absolute(numpy.subtract(user_data, target_factor_list)))
         factor_max_distance = getattr(settings, 'MAX_FACTOR_VALUE') - getattr(settings, 'MIN_FACTOR_VALUE')
-        max_disagreement = float(question_count * factor_max_distance)
+        # max_disagreement = float(question_count * factor_max_distance)
+        max_disagreement = float(sum(numpy.absolute(user_data) + 2))
         agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
         record.append("{'name': '" + single_target_data['name'] + "'," \
                 + "'similarity': " + str(agreement_score) + "," \
