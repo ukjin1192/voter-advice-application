@@ -621,12 +621,14 @@ $(document).ready(function() {
             type: 'GET'
           }).done(function(data) {
             data.forEach(function(party, index) {
-              var choices = party.choices;
-              choices.forEach(function(choice, index) {
-                // Append label of party if choice of party in single question is same with user's
-                $('.answer-to-question[value="' + choice + '"]').
-                  after('<span class="label" style="background-color: ' + party.color + ';">' + party.name + '</span>');
-              });
+              if (party.completed_survey) {
+                var choices = party.choices;
+                choices.forEach(function(choice, index) {
+                  // Append label of party if choice of party in single question is same with user's
+                  $('.answer-to-question[value="' + choice + '"]').
+                    after('<span class="label" style="background-color: ' + party.color + ';">' + party.name + '</span>');
+                });
+              }
             }); 
           }); 
         });
