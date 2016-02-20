@@ -9,6 +9,32 @@ from main.models import User, Party, Question, Choice, Answer, Result, RotationM
 from utils import redis, utilities
 
 
+@receiver(post_save, sender=Question)
+def update_cache_when_question_updated(sender, instance, created, **kwargs):
+    """
+    Update cache when question updated
+    """
+    redis.set_questions_cache()
+
+
+@receiver(post_save, sender=Choice)
+def update_cache_when_choice_updated(sender, instance, created, **kwargs):
+    """
+    Update cache when choice updated
+    """
+    redis.set_questions_cache()
+
+
+@receiver(post_save, sender=Party)
+def update_cache_when_party_updated(sender, instance, created, **kwargs):
+    """
+    Update cache when party updated
+    """
+    redis.set_party_list_cache()
+    if created == False and instance.user.completed_survey == True:
+        redis.set_survey_data_of_parties_cache()
+
+
 @receiver(post_save, sender=RotationMatrix)
 def update_cache_when_rotation_matrix_deployed(sender, instance, created, **kwargs):
     """
