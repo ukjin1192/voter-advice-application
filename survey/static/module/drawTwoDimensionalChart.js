@@ -4,8 +4,8 @@ var $ = require('jquery');
 var dimple = require('dimple-js');
 
 module.exports = function drawTwoDimensionalChart(rows, xAxisName, yAxisName) {
-  var chartWidth = $('#two-dimensional-result').width();
-  var svgBlock = dimple.newSvg('#two-dimensional-result', chartWidth, chartWidth);
+  var chartWidth = $('#result-2d-chart').width();
+  var svgBlock = dimple.newSvg('#result-2d-chart', chartWidth, chartWidth);
   var chart = new dimple.chart(svgBlock, rows);
   
   var xAxis = chart.addMeasureAxis('x', 'x_coordinate');
@@ -23,7 +23,6 @@ module.exports = function drawTwoDimensionalChart(rows, xAxisName, yAxisName) {
 
   rows.forEach(function(row, index) {
     chart.assignColor(row.name, row.color);
-    $('#label-list').append('<span class="label" style="background-color: ' + row.color + ';">' + row.name + '</span>');
     if (row.name == '나') {
       myCoordinatesX = row.x_coordinate;
       myCoordinatesY = row.y_coordinate;
@@ -42,8 +41,9 @@ module.exports = function drawTwoDimensionalChart(rows, xAxisName, yAxisName) {
   });
 
   // Fill out result summary
-  $('#most-similar-user').text(_.minBy(distanceList, 'distance').name);
-  $('#most-dissimilar-user').text(_.maxBy(distanceList, 'distance').name);
+  $('.most-similar-party').text(_.minBy(distanceList, 'distance').name);
+  $('.most-dissimilar-party').text(_.maxBy(distanceList, 'distance').name);
+  $('#result-2d-summary').removeClass('hidden');
 
   chartSeries.afterDraw = function (shp, d, i) {
     var shape = d3.select(shp);

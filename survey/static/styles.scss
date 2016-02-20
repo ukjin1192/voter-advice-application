@@ -363,7 +363,7 @@ pre {
 	padding: 0;
 
 	#result-category {
-
+		
 		button {
 			border-radius: 0;
 		}
@@ -371,16 +371,15 @@ pre {
 }
 
 #result-detail-page {
-	padding-bottom: 20px;
+	padding: 20px 0;
 
-	#result-summary {
-		margin-top: 20px;
+	#result-2d-summary {
 		
 		.alert {
 			margin-bottom: 0;
 			padding: 5px;
 			
-			#most-similar-user, #most-dissimilar-user {
+			.most-similar-party, .most-disimilar-party {
 				margin-top: 20px;
 			}
 		}
@@ -390,11 +389,15 @@ pre {
 		max-width: $question-image-width;
 		margin: 0 auto;
 		
-		#one-dimensional-result {
+		#result-1d-chart {
 			margin-top: 20px;
+			
+			.progress-bar {
+				min-width: 25%;
+			}
 		}
 		
-		#two-dimensional-result {
+		#result-2d-chart {
 			
 			// Debug axis names are cut or not shown
 			svg {
@@ -405,16 +408,6 @@ pre {
 					margin: 0 0 20px 13px;
 				}
 			}
-		}
-	}
-
-	#label-list {
-		margin-bottom: 20px;
-		
-		.label {
-			display: inline-block;
-			margin: 3px;
-			font-size: 1em;
 		}
 	}
 

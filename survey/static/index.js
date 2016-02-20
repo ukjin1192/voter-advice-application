@@ -183,22 +183,22 @@ $(document).on('submit', '#update-user-form', function(event) {
   }
   // Move to result page when user completed survey
   else {
-    loadResultPage('party_2d');
+    loadResultPage('party_1d');
   }
 });
 
 $(document).on('click', '#move-to-result-page-btn', function() {
   $('#move-to-result-page-btn').button('loading');
-  loadResultPage('party_2d');
-});
-
-$(document).on('click', '#move-to-one-dimensional-result-page-btn', function() {
-  $('#move-to-one-dimensional-result-page-btn').button('loading');
   loadResultPage('party_1d');
 });
 
-$(document).on('click', '#move-to-two-dimensional-result-page-btn', function() {
-  $('#move-to-two-dimensional-result-page-btn').button('loading');
+$(document).on('click', '#move-to-1d-result-page-btn', function() {
+  $('#move-to-1d-result-page-btn').button('loading');
+  loadResultPage('party_1d');
+});
+
+$(document).on('click', '#move-to-2d-result-page-btn', function() {
+  $('#move-to-2d-result-page-btn').button('loading');
   loadResultPage('party_2d');
 });
 
@@ -547,8 +547,8 @@ $(document).ready(function() {
         $('#record-additional-info').html(updatedAt.getFullYear() + '년 ' +  parseInt(parseInt(updatedAt.getMonth()) + 1) + 
           '월 ' + updatedAt.getDate() + '일에 업데이트됐습니다');
         
-        $('#move-to-one-dimensional-result-page-btn').removeClass('btn-default').addClass('btn-primary');
-        $('#one-dimensional-result').removeClass('hidden');
+        $('#move-to-1d-result-page-btn').removeClass('btn-default').addClass('btn-primary');
+        $('#result-1d-chart').removeClass('hidden');
         
         var rows = JSON.parse(data.record.replace(/'/g, '"'));
         
@@ -556,15 +556,15 @@ $(document).ready(function() {
         rows = _.orderBy(rows, 'similarity', 'desc');
         
         rows.forEach(function(row, index) {
-          $('#one-dimensional-result').append('<div class="progress">' +
+          $('#result-1d-chart').append('<div class="progress">' +
             '<div class="progress-bar progress-bar-striped" role="progressbar" style="width: ' +
-              row.similarity + '%; background-color: ' + row.color + ';">' + row.similarity + '%' + '</div></div>');
-          $('#label-list').append('<span class="label" style="background-color: ' + row.color + ';">' + row.name + '</span>');
+              row.similarity + '%; background-color: ' + row.color + ';"><strong>' + row.name + 
+              '</strong> <small>(' + row.similarity + '%' + ')</small></div></div>');
         });
         
         // Fill out result summary
-        $('#most-similar-user').text(rows[0].name);
-        $('#most-dissimilar-user').text(rows[rows.length - 1].name);
+        $('.most-similar-party').text(rows[0].name).css('background-color', rows[0].color);
+        $('#result-1d-summary').removeClass('hidden');
       }
       // Two dimensional analysis
       else {
@@ -573,22 +573,22 @@ $(document).ready(function() {
             updatedAt.getFullYear() + '년 ' +  parseInt(parseInt(updatedAt.getMonth()) + 1) + '월 ' + 
             updatedAt.getDate() + '일에 업데이트됐습니다');
         
-        $('#move-to-two-dimensional-result-page-btn').removeClass('btn-default').addClass('btn-primary');
-        $('#two-dimensional-result').removeClass('hidden');
+        $('#move-to-2d-result-page-btn').removeClass('btn-default').addClass('btn-primary');
+        $('#result-2d-chart').removeClass('hidden');
         
         var xAxisName = data.x_axis_name;
         var yAxisName = data.y_axis_name;
         
         var rows = JSON.parse(data.record.replace(/'/g, '"'));
         drawTwoDimensionalChart(rows, xAxisName, yAxisName);
-        localStorage.setItem('chart_width', $('#two-dimensional-result').width());
+        localStorage.setItem('chart_width', $('#result-2d-chart').width());
         
         // Redraw chart when window resized (Prevent from resize event fires multiple times)
         var redraw = function() {
-          if (localStorage.getItem('chart_width') != $('#two-dimensional-result').width()) {
-            $('#two-dimensional-result, #label-list').empty();
+          if (localStorage.getItem('chart_width') != $('#result-2d-chart').width()) {
+            $('#result-2d-chart').empty();
             drawTwoDimensionalChart(rows, xAxisName, yAxisName);
-            localStorage.setItem('chart_width', $('#two-dimensional-result').width());
+            localStorage.setItem('chart_width', $('#result-2d-chart').width());
           }
         };
         var debouncedRedraw = _.debounce(redraw, 750);
@@ -640,7 +640,7 @@ $(document).ready(function() {
       }
     }).fail(function(data) {
       // When result is not exist or not public
-      $('#result-navbar, #result-summary').addClass('hidden');
+      $('#result-navbar, #result-2d-summary').addClass('hidden');
       $('#forbidden-alert-message').removeClass('hidden');
       $('#move-to-main-page-btn').html('나와 안맞는 정당 알아보기');
     }); 
