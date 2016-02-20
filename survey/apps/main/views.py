@@ -140,7 +140,7 @@ class AnswerViewSet(viewsets.ModelViewSet):
         """
         List all answers of user
         """
-        queryset = Answer.objects.select_related('choice').select_related('user').filter(user=request.user)
+        queryset = Answer.objects.select_related('choice').select_related('user').filter(user=request.user).order_by('choice')
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 

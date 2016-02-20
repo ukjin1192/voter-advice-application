@@ -14,16 +14,23 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 class PartySerializer(serializers.HyperlinkedModelSerializer):
     completed_survey = serializers.SerializerMethodField()
+    choices = serializers.SerializerMethodField()
 
     class Meta:
         model = Party
-        fields = ('id', 'name', 'color', 'completed_survey')
+        fields = ('id', 'name', 'color', 'completed_survey', 'choices')
 
     def get_completed_survey(self, obj):
         """
         Check whether party completed survey or not
         """
         return obj.user.completed_survey
+
+    def get_choices(self, obj):
+        """
+        Get choices of party
+        """
+        return Answer.objects.select_related('choice').filter(user=obj.user).values_list('choice', flat=True).order_by('choice')
 
 
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):

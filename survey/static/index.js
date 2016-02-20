@@ -600,6 +600,36 @@ $(document).ready(function() {
         $('#move-to-main-page-btn').html('설문 수정하기');
         $('#share-btn-group').removeClass('hidden');
         if (data.is_public) $('#update-public-field-btn').removeClass('hidden');
+        
+        // Set authentication token at HTTP header
+        setAuthToken();
+        
+        // Make report card which compares party records with user records
+        $.ajax({
+          url: '/api/answers/',
+          type: 'GET'
+        }).done(function(data) {
+          data.forEach(function(answer, index) {
+            $('#report-card').append('<tr><th scope="row">' + parseInt(index + 1) + '</th>' + 
+              '<th><input type="hidden" class="answer-to-question" id="answer-to-question' + 
+              parseInt(index + 1 ) + '" value="' +  answer.choice + '" /></th></tr>');
+          });
+        
+          // Get choices of party and fill out report card
+          $.ajax({
+            url: '/api/parties/',
+            type: 'GET'
+          }).done(function(data) {
+            data.forEach(function(party, index) {
+              var choices = party.choices;
+              choices.forEach(function(choice, index) {
+                // Append label of party if choice of party in single question is same with user's
+                $('.answer-to-question[value="' + choice + '"]').
+                  after('<span class="label" style="background-color: ' + party.color + ';">' + party.name + '</span>');
+              });
+            }); 
+          }); 
+        });
       }
       // When user is not authenticated
       else {
