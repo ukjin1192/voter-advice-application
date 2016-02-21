@@ -424,8 +424,15 @@ pre {
 		padding-top: 10px;
 		
 		.panel-heading {
-			font-weight: 500;
+			font-weight: 700;
 			cursor: pointer;
+		}
+		
+		.choice-voters {
+			
+			.label {
+				margin: 0 3px;
+			}
 		}
 	}
 

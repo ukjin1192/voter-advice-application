@@ -213,7 +213,6 @@ $(document).on('click', '#report-card-toggle-btn', function() {
 });
 
 // Fill out report card row
-// TODO Refactoring required
 $(document).on('show.bs.collapse', '#report-card .panel-collapse', function() {
   var $reportCardRow = $(this);
   $reportCardRow.find('.choice-voters').html('');
@@ -226,7 +225,8 @@ $(document).on('show.bs.collapse', '#report-card .panel-collapse', function() {
     type: 'GET',
   }).done(function(data) {
     data.forEach(function(record, index) {
-      $('.choice-voters[data-choice-id="' + record.choice_id + '"]').append('<span class="label" style="background-color: ' + record.color + '; margin: 0 3px;">' + record.name + '</span>');
+      $('.choice-voters[data-choice-id="' + record.choice_id + '"]').append('<span class="label" ' +
+        'style="background-color: ' + record.color + ';">' + record.name + '</span>');
     });
   });
 });
@@ -320,7 +320,8 @@ $(document).ready(function() {
       $sectionSlider.rangeslider({
         polyfill: false,
         onSlideEnd: function(position, value) {
-          var lastAnsweredSectionIndex = parseInt($('.question-choice[type="radio"]:checked').last().closest('.question').find('.question-order').val()) + 1;
+          var lastAnsweredSectionIndex = parseInt($('.question-choice[type="radio"]:checked').
+            last().closest('.question').find('.question-order').val()) + 1;
           if (isNaN(lastAnsweredSectionIndex)) lastAnsweredSectionIndex = 1; 
           
           // Sync section width slider value
@@ -448,7 +449,7 @@ $(document).ready(function() {
         onLeave: function(index, nextIndex, direction){
           var $leavingSection = $(this);
           
-          // Prevent to leave section when user tries to fold voice of customer form by clicking back button on mobile browser
+          // Prevent to leave section when user tries to fold voice of customer form by clicking back button on mobile
           if ($('#voice-of-customer').hasClass('in')) {
             $('#voice-of-customer').collapse('hide');
             return false;
@@ -542,7 +543,9 @@ $(document).ready(function() {
       
       data.forEach(function(party, index) {
         // Fill out supporting party list
-        if (party.completed_survey) $('#supporting-party').append('<option value="' + party.name + '">' + party.name + '</option>');
+        if (party.completed_survey) {
+          $('#supporting-party').append('<option value="' + party.name + '">' + party.name + '</option>');
+        }
         wordList.push(party.name);
       }); 
       
@@ -638,14 +641,15 @@ $(document).ready(function() {
           data.forEach(function(question, index) {
             var questionIndex = index + 1;
             var $reportCardRow = $('#report-card-row-virtual-dom').clone().removeClass('hidden').removeAttr('id');
-            $reportCardRow.find('.panel-heading').attr('href', '#Q' + questionIndex).html('#' + questionIndex + ' ' +  question.explanation);
+            $reportCardRow.find('.panel-heading').attr('href', '#Q' + questionIndex).
+              html('#' + questionIndex + ' ' +  question.explanation);
             $reportCardRow.find('.panel-collapse').attr({'id': 'Q' + questionIndex, 'data-question-id': question.id});
             
             // Fill out name list of voters for each choice
-            // TODO Refactoring required
             var choices = question.choices;
             choices.forEach(function(choice, index) {
-              $reportCardRow.find('.panel-body').append('<p>' + choice.context + ' : <span class="choice-voters" data-choice-id="' + choice.id + '"></span></p>');
+              $reportCardRow.find('.panel-body').append('<p>' + choice.context + 
+                ' : <span class="choice-voters" data-choice-id="' + choice.id + '"></span></p>');
             });
             
             $('#report-card-accordion').append($reportCardRow); 
