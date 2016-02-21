@@ -671,7 +671,7 @@ $(document).ready(function() {
     }); 
   }
 
-  /* TODO Kakao talk sharing
+  /* TODO Kakaotalk sharing
   Kakao.init('');
   Kakao.Link.createTalkLinkButton({
     container: '#kakaotalk-share',
@@ -698,6 +698,7 @@ $(document).ready(function() {
   if (msie > 0 && parseInt(userAgent.substring(msie + 5, userAgent.indexOf(".", msie))) < 10) {
     $('#browser-support-alert-message').html('Internet Explorer 9 이하는 지원하지 않습니다').removeClass('hidden');
   }
+  /* TODO Enable in-app browser check
   // Kakaotalk in-app browser
   else if (userAgent.indexOf('KAKAOTALK') != -1) {
     $('#browser-support-alert-message').html('<p><strong>카카오톡 브라우저</strong>에서는 설문 기록이 저장되지 않습니다</p>'
@@ -710,6 +711,7 @@ $(document).ready(function() {
         + '<p>우측 상단 <strong><span class="glyphicon glyphicon-option-vertical" aria-hidden="true"></span></strong> '
         + '클릭 후 <strong>다른 브라우저에서 열기</strong></p>').removeClass('hidden');
   }
+  */
 });
 
 $(window).load(function() {
