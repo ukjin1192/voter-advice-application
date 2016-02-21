@@ -62,7 +62,7 @@ def set_questions_count_cache():
     Set questions count cache
     """
     cache_value = Question.objects.all().count()
-    cache.set('questions:cache_value', cache_value, timeout=getattr(settings, 'CACHE_TTL'))
+    cache.set('questions:count', cache_value, timeout=getattr(settings, 'CACHE_TTL'))
     return cache_value
 
 
