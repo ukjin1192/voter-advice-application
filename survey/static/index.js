@@ -202,6 +202,35 @@ $(document).on('click', '#move-to-2d-result-page-btn', function() {
   loadResultPage('party_2d');
 });
 
+// Update chevron direction when collapsing state of record card is changed
+$(document).on('click', '#report-card-toggle-btn', function() {
+  var $toggleBtn = $('#report-card-toggle-btn').find('.glyphicon'); 
+  if ($toggleBtn.hasClass('glyphicon-chevron-down')) {
+    $toggleBtn.removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+  } else {
+    $toggleBtn.removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+  }
+});
+
+// Fill out report card row
+// TODO Refactoring required
+$(document).on('show.bs.collapse', '#report-card .panel-collapse', function() {
+  var $reportCardRow = $(this);
+  $reportCardRow.find('.choice-voters').html('');
+
+  // Set authentication token at HTTP header
+  setAuthToken();
+
+  $.ajax({
+    url: '/api/records/' + parseInt($reportCardRow.attr('data-question-id'))  + '/',
+    type: 'GET',
+  }).done(function(data) {
+    data.forEach(function(record, index) {
+      $('.choice-voters[data-choice-id="' + record.choice_id + '"]').append('<span class="label" style="background-color: ' + record.color + '; margin: 0 3px;">' + record.name + '</span>');
+    });
+  });
+});
+
 // Update result to public 
 $(document).on('click', '.share-btn', function() {
   var resultID = pathname.match(/result\/(\d+)/)[1]
@@ -601,36 +630,28 @@ $(document).ready(function() {
         $('#share-btn-group').removeClass('hidden');
         if (data.is_public) $('#update-public-field-btn').removeClass('hidden');
         
-        // Set authentication token at HTTP header
-        setAuthToken();
-        
         // Make report card which compares party records with user records
         $.ajax({
-          url: '/api/answers/',
+          url: '/api/questions/',
           type: 'GET'
         }).done(function(data) {
-          data.forEach(function(answer, index) {
-            $('#report-card').append('<tr><th scope="row">' + parseInt(index + 1) + '</th>' + 
-              '<th><input type="hidden" class="answer-to-question" id="answer-to-question' + 
-              parseInt(index + 1 ) + '" value="' +  answer.choice + '" /></th></tr>');
+          data.forEach(function(question, index) {
+            var questionIndex = index + 1;
+            var $reportCardRow = $('#report-card-row-virtual-dom').clone().removeClass('hidden').removeAttr('id');
+            $reportCardRow.find('.panel-heading').attr('href', '#Q' + questionIndex).html('#' + questionIndex + ' ' +  question.explanation);
+            $reportCardRow.find('.panel-collapse').attr({'id': 'Q' + questionIndex, 'data-question-id': question.id});
+            
+            // Fill out name list of voters for each choice
+            // TODO Refactoring required
+            var choices = question.choices;
+            choices.forEach(function(choice, index) {
+              $reportCardRow.find('.panel-body').append('<p>' + choice.context + ' : <span class="choice-voters" data-choice-id="' + choice.id + '"></span></p>');
+            });
+            
+            $('#report-card-accordion').append($reportCardRow); 
           });
-        
-          // Get choices of party and fill out report card
-          $.ajax({
-            url: '/api/parties/',
-            type: 'GET'
-          }).done(function(data) {
-            data.forEach(function(party, index) {
-              if (party.completed_survey) {
-                var choices = party.choices;
-                choices.forEach(function(choice, index) {
-                  // Append label of party if choice of party in single question is same with user's
-                  $('.answer-to-question[value="' + choice + '"]').
-                    after('<span class="label" style="background-color: ' + party.color + ';">' + party.name + '</span>');
-                });
-              }
-            }); 
-          }); 
+          
+          $('#report-card-row-virtual-dom').remove();
         });
       }
       // When user is not authenticated
@@ -700,12 +721,12 @@ $(window).load(function() {
     // Prevent from hidden elements blinking before CSS file loaded
     $('#voice-of-customer-curtain, #voice-of-customer-container, #result-navbar, #result-detail-page').css('visibility', '');
     
-    // Show footer
-    $('#footer').removeClass('hidden');
+    // TODO Show footer
+    // $('#footer').removeClass('hidden');
   }
   else {
-    // Show footer
-    $('#footer').removeClass('hidden');
+    // TODO Show footer
+    // $('#footer').removeClass('hidden');
   }
 
   $('#loading-icon').addClass('hidden');

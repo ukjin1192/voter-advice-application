@@ -371,7 +371,8 @@ pre {
 }
 
 #result-detail-page {
-	padding: 20px 0;
+	// TODO padding: 20px 0;
+	padding: 20px 0 50px 0;
 
 	#result-2d-summary {
 		
@@ -419,8 +420,17 @@ pre {
 		color: $dark-grey-color;
 	}
 
+	#report-card {
+		padding-top: 10px;
+		
+		.panel-heading {
+			font-weight: 500;
+			cursor: pointer;
+		}
+	}
+
 	#share-btn-group {
-		margin-bottom: 20px;
+		margin: 20px 0;
 		padding: 20px 0 10px 0;
 		text-align: center;
 		background-color: white;
@@ -435,13 +445,6 @@ pre {
 				width: 12%;
 				max-width: 50px;
 			}
-		}
-	}
-
-	#report-card {
-		
-		.label {
-			margin: 0 3px;	
 		}
 	}
 

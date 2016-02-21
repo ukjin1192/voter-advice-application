@@ -47,22 +47,27 @@
 
 	<div id="record-additional-info"></div>
 
-	<div class="panel panel-default">
-		
-		<div class="panel-heading text-center">
-			<strong>정당 시험 성적표</strong>
+	<button class="btn btn-default btn-block" id="report-card-toggle-btn" type="button" data-toggle="collapse" data-target="#report-card" aria-expanded="false" aria-controls="report-card">
+		<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+		<strong>정당 시험 성적표 보기</strong>
+	</button>
+
+	<div class="collapse" id="report-card">
+		<div class="panel-group" id="report-card-accordion" role="tablist" aria-multiselectable="true">
 		</div>
-		
-		<table class="table table-bordered table-hover">
-			<thead>
-				<tr>
-					<th>#</th>
-					<th>나와 같은 답을 한 정당</th>
-				</tr>
-			</thead>
-			<tbody id="report-card"></tbody>
-		</table>
-	</div>
+	</div>	
+
+	{% comment %}
+	<table class="table table-bordered table-hover">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>나와 같은 답을 한 정당</th>
+			</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+	{% endcomment %}
 
 	<div class="hidden" id="share-btn-group">
 		{# Facebook #}
@@ -101,6 +106,13 @@
 	
 	<div class="alert alert-danger hidden" id="forbidden-alert-message" role="alert">
 		존재하지 않거나 비공개입니다
+	</div>
+</div>
+
+<div class="panel panel-default" id="report-card-row-virtual-dom">
+	<div class="panel-heading" role="tab" data-toggle="collapse" data-parent="#report-card-accordion" href=""></div>
+  <div class="panel-collapse collapse" id="" role="tabpanel" data-question-id="">
+		<div class="panel-body"></div>
 	</div>
 </div>
 {% endblock %}

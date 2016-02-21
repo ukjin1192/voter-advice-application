@@ -9,6 +9,7 @@ from main.models import User, Party, Question, Choice, Answer, Result, RotationM
 from main.permissions import UserPermission, PartyPermission, QuestionPermission, AnswerPermission, ResultPermission, VoiceOfCustomerPermission
 from main.serializers import UserSerializer, PartySerializer, QuestionSerializer, AnswerSerializer, ResultSerializer, VoiceOfCustomerSerializer
 from rest_framework import status, viewsets
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_jwt.settings import api_settings
 from utils import redis, utilities
@@ -363,3 +364,31 @@ class VoiceOfCustomerViewSet(viewsets.ModelViewSet):
         self.check_object_permissions(request, instance)
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+
+
+@api_view(['GET', 'POST'])
+def get_records(request, question_id):
+    """
+    Get records or users and parties
+    """
+    try:
+        question = Question.objects.get(id=question_id)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    data = []
+
+    parties = Party.objects.select_related('user').filter(user__completed_survey=True)
+
+    for party in parties:
+        # answer = Answer.objects.select_related('choice').filter(choice)
+        answer = party.user.user_chosen_answers.filter(choice__question=question)
+        if answer.count() > 0:
+            data.append({'name': party.name, 'color': party.color, 'choice_id': answer[0].choice.id})
+
+    if request.user.is_authenticated():
+        answer = request.user.user_chosen_answers.filter(choice__question=question)
+        if answer.count() > 0:
+            data.append({'name': '나', 'color': '#9b59b6', 'choice_id': answer[0].choice.id})
+
+    return Response(data)

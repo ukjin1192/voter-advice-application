@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import url
-from main.views import UserViewSet, PartyViewSet, QuestionViewSet, AnswerViewSet, ResultViewSet, VoiceOfCustomerViewSet
+from main.views import UserViewSet, PartyViewSet, QuestionViewSet, AnswerViewSet, ResultViewSet, VoiceOfCustomerViewSet, get_records
 
 
 user_list = UserViewSet.as_view({
@@ -66,6 +66,7 @@ voc_detail = VoiceOfCustomerViewSet.as_view({
 })
 
 urlpatterns = [
+    # REST API
     url(
         r'^users/$',
         user_list,
@@ -125,5 +126,10 @@ urlpatterns = [
         r'^vocs/(?P<pk>[0-9]+)/$',
         voc_detail,
         name='voc-detail'
+    ),
+    # Ad-hoc API 
+    url(
+        r'^records/(?P<question_id>[0-9]+)/$',
+        get_records,
     ),
 ]
