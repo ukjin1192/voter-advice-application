@@ -214,6 +214,8 @@ $(document).on('click', '#report-card-toggle-btn', function() {
 
 // Fill out report card row
 $(document).on('show.bs.collapse', '#report-card .panel-collapse', function() {
+  $('#loading-icon').removeClass('hidden');
+
   var $reportCardRow = $(this);
   $reportCardRow.find('.choice-voters').html('');
 
@@ -228,6 +230,8 @@ $(document).on('show.bs.collapse', '#report-card .panel-collapse', function() {
       $('.choice-voters[data-choice-id="' + record.choice_id + '"]').append('<span class="label" ' +
         'style="background-color: ' + record.color + ';">' + record.name + '</span>');
     });
+  }).always(function() {
+    $('#loading-icon').addClass('hidden');
   });
 });
 
@@ -629,7 +633,7 @@ $(document).ready(function() {
       
       // When user is owner of result
       if (data.user == localStorage.getItem('user_id')) {
-        $('#move-to-main-page-btn').html('설문 수정하기');
+        $('#move-to-main-page-btn').html('홈화면으로 이동하기');
         $('#share-btn-group').removeClass('hidden');
         if (data.is_public) $('#update-public-field-btn').removeClass('hidden');
         
@@ -667,7 +671,7 @@ $(document).ready(function() {
       // When result is not exist or not public
       $('#result-navbar, #result-2d-summary').addClass('hidden');
       $('#forbidden-alert-message').removeClass('hidden');
-      $('#move-to-main-page-btn').html('나와 안맞는 정당 알아보기');
+      $('#move-to-main-page-btn').html('나와 어울리는 정당 찾기');
     }); 
   }
 

@@ -50,14 +50,13 @@
 
 	<div class="section">
 		
-		<h4>나는</h4>
+		<h4>나는 비례대표로</h4>
 		<div class="slot-machine">
 			<div class="slot-machine__items_container" id="wordbox"></div>
 		</div>	
-		<h4>이 싫어요</h4>
+		<h4>을 뽑을 거에요</h4>
 		
-		<h2>정치성향 테스트</h2>
-		<h5 class="help-block">예상 소요시간 : 1분 30초</h5>
+		<h2>비례대표 추천용 설문</h2>
 		
 		<div class="space"></div>
 		
@@ -83,10 +82,13 @@
 			{% endif %}
 			
 			<button type="submit" class="btn btn-primary btn-lg btn-xlg btn-block" id="create-user-submit-btn" data-loading-text="잠시만 기다려주세요">
-				나와 안맞는 정당 알아보기
+				나와 어울리는 정당 찾기
 			</button>
 		</form>
 		{% endwith %}
+		
+		<h5 class="help-block">위 버튼을 클릭해서 시작해보세요</h5>
+		<h5 class="help-block">변기에 앉아있는 1분 30초면 충분합니다</h5>
 		
 		<div class="short-width-group">
 			<div class="alert alert-info hidden" id="check-data-existence-message" role="alert">
@@ -94,15 +96,15 @@
 			</div>
 			
 			<a href="#" class="btn btn-primary btn-lg btn-block hidden" id="continue-survey-btn">
-				이어하기
+				하던 것 이어하기
 			</a>
 			
 			<a href="#Q1" class="btn btn-primary btn-lg btn-block hidden" id="edit-survey-btn">
-				수정하기
+				나의 선택 수정하기
 			</a>
 			
 			<button class="btn btn-primary btn-lg btn-block hidden" id="move-to-result-page-btn" data-loading-text="잠시만 기다려주세요">
-				결과 보기
+				지난 결과 보기
 			</button>
 		</div>
 	</div>
