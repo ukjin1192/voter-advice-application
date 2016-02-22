@@ -366,7 +366,7 @@ class VoiceOfCustomerViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 def get_records(request, question_id):
     """
     Get records or users and parties
@@ -376,19 +376,21 @@ def get_records(request, question_id):
     except:
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
+    parties = cache.get('parties:records')
+    if parties is None:
+        parties = redis.set_records_of_parties_cache()
+
     data = []
 
-    parties = Party.objects.select_related('user').filter(user__completed_survey=True)
-
     for party in parties:
-        # answer = Answer.objects.select_related('choice').filter(choice)
-        answer = party.user.user_chosen_answers.filter(choice__question=question)
-        if answer.count() > 0:
-            data.append({'name': party.name, 'color': party.color, 'choice_id': answer[0].choice.id})
+        data.append({'name': party['name'], 'color': party['color'], 'choice_id': party['records'][question_id]})
 
     if request.user.is_authenticated():
-        answer = request.user.user_chosen_answers.filter(choice__question=question)
-        if answer.count() > 0:
+        answer = request.user.user_chosen_answers.select_related('choice').filter(choice__question=question)
+        try:
             data.append({'name': '나', 'color': '#9b59b6', 'choice_id': answer[0].choice.id})
+        # When user does not complete this question
+        except:
+            pass
 
     return Response(data)

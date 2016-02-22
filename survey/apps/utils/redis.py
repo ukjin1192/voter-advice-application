@@ -46,6 +46,26 @@ def set_survey_data_of_parties_cache():
     return cache_value
 
 
+def set_records_of_parties_cache():
+    """
+    Set records of parties cache
+    """
+    cache_value = []
+    parties = Party.objects.select_related('user').filter(user__completed_survey=True)
+
+    for party in parties:
+        choice_list = {}
+        answers = party.user.user_chosen_answers.select_related('choice__question').all().order_by('choice__question')
+        
+        for answer in answers:
+            choice_list[str(answer.choice.question.id)] = answer.choice.id
+        
+        cache_value.append({'name': party.name, 'color': party.color, 'records': choice_list})
+
+    cache.set('parties:records', cache_value, timeout=getattr(settings, 'CACHE_TTL'))
+    return cache_value
+
+
 def set_questions_cache():
     """
     Set questions cache
