@@ -35,14 +35,19 @@ module.exports = function drawTwoDimensionalChart(rows, xAxisName, yAxisName) {
     if (row.name != '나') {
       distanceList.push({
         'distance': Math.sqrt(Math.pow(row.x_coordinate - myCoordinatesX, 2) + Math.pow(row.y_coordinate - myCoordinatesY, 2)),
-        'name': row.name
+        'name': row.name,
+        'color': row.color
       });
     }
   });
 
   // Fill out result summary
-  $('.most-similar-party').text(_.minBy(distanceList, 'distance').name);
-  $('.most-dissimilar-party').text(_.maxBy(distanceList, 'distance').name);
+  var mostSimilarParty = _.minBy(distanceList, 'distance');
+  var mostDissimilarParty = _.maxBy(distanceList, 'distance');
+  $('.most-similar-party').html('<span class="label" style="background-color: ' + mostSimilarParty.color 
+      + ';">' + mostSimilarParty.name + '</span>');
+  $('.most-dissimilar-party').html('<span class="label" style="background-color: ' + mostDissimilarParty.color 
+      + ';">' + mostDissimilarParty.name + '</span>');
   $('#result-2d-summary').removeClass('hidden');
 
   chartSeries.afterDraw = function (shp, d, i) {

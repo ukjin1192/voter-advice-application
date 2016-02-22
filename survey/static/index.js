@@ -305,7 +305,7 @@ $(document).ready(function() {
 
   // Main page with survey
   if (pathname == '/') {
-    // Fill out captcha form
+    // Fill out captcha form if captcha validation is activated
     if (useCaptcha) getCaptcha();
     
     // Get all questions without user answers
@@ -402,8 +402,10 @@ $(document).ready(function() {
                 find('.question-order').val());
               $('#continue-survey-btn').attr('href', '#Q' + firstUnaswerdQuestionOrder).removeClass('hidden');
             }
-            $('#create-user-submit-btn').removeClass('btn-xlg').html('새로 시작하기 (기존 데이터 삭제)');
+            $('#create-user-submit-btn').removeClass('btn-xlg').html('기존 데이터 지우고 새로 시작하기');
           }).fail(function(data) {
+            // When user first visited site
+            $('#landing-page-help-messages').removeClass('hidden');
             clearAuthToken();
             localStorage.clear();
           }); 
@@ -414,6 +416,8 @@ $(document).ready(function() {
           $('#check-data-existence-message').addClass('hidden');
         }); 
       } else{
+        // When user first visited site
+        $('#landing-page-help-messages').removeClass('hidden');
         clearAuthToken();
         localStorage.clear();
       }
