@@ -130,3 +130,6 @@ def deploy(*command):
         with cd(ROOT_DIR):
             sudo("./manage.py celeryd_detach --logfile=logs/celery_daemon.log --pidfile=logs/celery_daemon.pid")
             sudo("./manage.py celery beat --logfile=logs/celery_beat.log --pidfile=logs/celery_beat.pid --detach")
+
+    if 'NGINX_CONFIGURATION_UPDATED' in command:
+        sudo("service nginx restart")
