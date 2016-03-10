@@ -25,6 +25,9 @@ var updateGhostVisibility = require('./module/updateGhostVisibility.js');
 // Global variables
 var pathname = window.location.pathname;
 
+// Support for optimizely editor
+if (RegExp('pingkorea.com').test(pathname)) pathname = pathname.split('pingkorea.com')[1];
+
 // Voice of customer
 $(document).on('click', '#voice-of-customer-submit-btn', function() {
   // Set CSRF tokens at HTTP header
