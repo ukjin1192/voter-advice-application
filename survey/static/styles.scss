@@ -64,8 +64,6 @@ html, body {
 }
 
 body {
-	// Ease effect when body DOM loads
-	opacity: 0;
 	overflow-x: hidden;
 
 	// Disable double-tap-to-zoom in IE 10, 11 for fast-click
@@ -155,6 +153,11 @@ pre {
 /* ===============
  * Common elements
  * =============== */
+
+#main-container {
+	// Ease effect when body DOM loads
+	opacity: 0;
+}
 
 #browser-support-alert-message {
   position: fixed; 
