@@ -66,6 +66,9 @@
   <script type="text/javascript" src="{% static '3rd-party/googleAnalytics.js' %}"></script>
   <script type="text/javascript" src="{% static '3rd-party/heapAnalytics.js' %}"></script>
   {% endif %}
+
+  {% block optimizely_js %}
+  {% endblock %}
 </head>
 <body>
   {# Loading icon #}

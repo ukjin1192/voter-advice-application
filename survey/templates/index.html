@@ -2,6 +2,10 @@
 
 {% load custom_filter %}
 
+{% block optimizely_js %}
+<script src="https://cdn.optimizely.com/js/5100070208.js"></script>
+{% endblock %}
+
 {% block container %}
 <div class="hidden" id="section-slider-container" data-toggle="tooltip" data-placement="bottom" title="완료한 질문들을 이동할 수 있어요">
 	<input type="range" id="section-slider" min="1" max="" step="1" value="2" />
