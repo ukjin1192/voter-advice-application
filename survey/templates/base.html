@@ -101,45 +101,47 @@
     </div>
   </noscript>
 
-  <div class="alert alert-warning hidden" id="browser-support-alert-message" role="alert"></div>
-
-  <header>
-    {% block header %}{% endblock %}
-  </header>
-  
-  <section class="container-fit" id="main-container">
-    <div class="container">
-      {% block container %}{% endblock %}
-    </div>
-  </section>
-
-  <footer class="hidden" id="footer">
-    <div class="container">
-      <div id="footer-menu">
-        <a href="/faq/">자주 묻는 질문</a>
-        <a href="/commentary/">어떻게 계산했나요</a>
-        <a href="/story/">왜 만들었나요</a>
+  <div id="main-container">
+    <div class="alert alert-warning hidden" id="browser-support-alert-message" role="alert"></div>
+    
+    <header>
+      {% block header %}{% endblock %}
+    </header>
+    
+    <section class="container-fit">
+      <div class="container">
+        {% block container %}{% endblock %}
       </div>
-      <div id="footer-license">
-        이 웹사이트는 <a href="http://creativecommons.org/licenses/by/2.0/kr/" target="_blank">크리에이티브 커먼즈 저작자표시 2.0 대한민국 라이선스</a>에 따라 이용할 수 있습니다.
+    </section>
+    
+    <footer class="hidden" id="footer">
+      <div class="container">
+        <div id="footer-menu">
+          <a href="/faq/">자주 묻는 질문</a>
+          <a href="/commentary/">어떻게 계산했나요</a>
+          <a href="/story/">왜 만들었나요</a>
+        </div>
+        <div id="footer-license">
+          이 웹사이트는 <a href="http://creativecommons.org/licenses/by/2.0/kr/" target="_blank">크리에이티브 커먼즈 저작자표시 2.0 대한민국 라이선스</a>에 따라 이용할 수 있습니다.
+        </div>
       </div>
-    </div>
-  </footer>
-
-  <div class="hidden" id="voice-of-customer-curtain" style="visibility: hidden;"></div>
-
-  <div id="voice-of-customer-container" style="visibility: hidden;">
-    <button class="btn btn-default" id="toggle-voice-of-customer-btn" type="button" data-toggle="collapse" data-target="#voice-of-customer" aria-expanded="false" aria-controls="voice-of-customer">
-      <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span>
-    </button>
-    <div class="collapse" id="voice-of-customer">
-      <textarea class="form-control" placeholder="수정해야 하거나, 추가됐으면 하는 것들을 알려주시면 적극 반영하겠습니다 :)"></textarea>
-      <div class="alert alert-info hidden" id="voice-of-customer-alert-message" role="alert">
-        감사합니다! 빠른 시일내에 반영하도록 하겠습니다
-      </div>
-      <button class="btn btn-primary btn-block" id="voice-of-customer-submit-btn" data-loading-text="잠시만 기다려주세요">
-        사용자 의견 전송하기
+    </footer>
+    
+    <div class="hidden" id="voice-of-customer-curtain" style="visibility: hidden;"></div>
+    
+    <div id="voice-of-customer-container" style="visibility: hidden;">
+      <button class="btn btn-default" id="toggle-voice-of-customer-btn" type="button" data-toggle="collapse" data-target="#voice-of-customer" aria-expanded="false" aria-controls="voice-of-customer">
+        <span class="glyphicon glyphicon-bullhorn" aria-hidden="true"></span>
       </button>
+      <div class="collapse" id="voice-of-customer">
+        <textarea class="form-control" placeholder="수정해야 하거나, 추가됐으면 하는 것들을 알려주시면 적극 반영하겠습니다 :)"></textarea>
+        <div class="alert alert-info hidden" id="voice-of-customer-alert-message" role="alert">
+          감사합니다! 빠른 시일내에 반영하도록 하겠습니다
+        </div>
+        <button class="btn btn-primary btn-block" id="voice-of-customer-submit-btn" data-loading-text="잠시만 기다려주세요">
+          사용자 의견 전송하기
+        </button>
+      </div>
     </div>
   </div>
 
