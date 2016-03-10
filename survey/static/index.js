@@ -725,20 +725,9 @@ $(document).ready(function() {
 $(window).load(function() {
 
   if (pathname == '/') {
-    // Prevent from hidden elements blinking before CSS file loaded
-    $('#voice-of-customer-curtain, #voice-of-customer-container, #section-slider-container, #page-scroll-container').css('visibility', '');
-    
     // Update visibility of ghosts
     updateGhostVisibility();
-  }
-  else if (/result\/(\d+)/.test(pathname)) {
-    // Prevent from hidden elements blinking before CSS file loaded
-    $('#voice-of-customer-curtain, #voice-of-customer-container, #result-navbar, #result-detail-page').css('visibility', '');
-    
-    // TODO Show footer
-    // $('#footer').removeClass('hidden');
-  }
-  else {
+  } else {
     // TODO Show footer
     // $('#footer').removeClass('hidden');
   }
