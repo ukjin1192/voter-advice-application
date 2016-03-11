@@ -682,9 +682,9 @@ $(document).ready(function() {
     }); 
   }
 
-  /* TODO Kakaotalk sharing
+  // Kakaotalk sharing
   if ($('#kakaotalk-share').length > 0) {
-    Kakao.init('');
+    Kakao.init('65f84ff7df81228e95f0924b27986935');
     Kakao.Link.createTalkLinkButton({
       container: '#kakaotalk-share',
       label: $('#kakaotalk-share__label').val(),
@@ -699,7 +699,6 @@ $(document).ready(function() {
       }
     });
   }
-  */
 
   // Attach fast-click to boost up touch reaction
   attachFastClick.attach(document.body);
