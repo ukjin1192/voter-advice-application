@@ -61,26 +61,8 @@
 	</div>	
 
 	<div class="hidden" id="share-btn-group">
-		{# Facebook #}
-		<a href="https://www.facebook.com/sharer/sharer.php?u=https://pingkorea.com{{ request.path }}" target="_blank" class="share-btn">
-			<img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icon/facebook.svg"/>
-		</a>
-		{# Twitter #}
-		<a href="https://twitter.com/intent/tweet?text=[핑] 당신의 위치를 확인하세요&url=https://pingkorea.com{{ request.path }}" target="_blank" class="share-btn" id="twitter-share">
-			<img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icon/twitter.svg" />
-		</a>
-		{# Google+ #}
-		<a href="https://plus.google.com/share?url=https://pingkorea.com{{ request.path }}" target="_blank" class="share-btn">
-			<img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icon/google_plus.svg" />
-		</a>
-		{# LINE #}
-		<a href="line://msg/text/[핑] 당신의 위치를 확인하세요 https://pingkorea.com{{ request.path }}" class="share-btn" id="line-share">
-			<img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icon/line.svg" />
-		</a>
-		{# Kakao talk #}
-		<a href="javascript:;" class="share-btn" id="kakaotalk-share">
-			<img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icon/kakaotalk.svg" />
-		</a>
+		{% include 'social_media_share_group.html' %}
+		
 		<h6>공유하면 이 결과를 누구나 볼 수 있습니다.</h6>
 		<h6>언제든 비공개로 전환할 수 있습니다.</h6>
 	</div>
