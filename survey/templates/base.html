@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Ping Korea</title>
+  <title>핑! 정치성향 테스트</title>
 
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -15,19 +15,12 @@
 
   {# Search option #}
   <meta name="google" value="notranslate" />
-  <meta name="author" content="Ping Korea" />
+  <meta name="author" content="" />
   <meta name="description" content="정치성향 테스트 (A Korean Voter Advice Application)" />
   <meta name="keywords" content="핑, 핑코리아, ping, ping korea" />
 
-  {# Facebook Open Graph Tag #}
-  {% comment %}
-  <meta property="og:title" content="핑" />
-  <meta property="og:site_name" content="Ping Korea" />
-  <meta property="og:url" content="https://pingkorea.com/" />
-  <meta property="og:description" content="정치성향 테스트" />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="" />
-  {% endcomment %}
+  {# Social media meta tags #}
+  {% include "social_media_meta_tags.html" %}
 
   {# Favicon #}
   <link rel="apple-touch-icon" sizes="57x57" href="{{ 'CDN_URL'|get_settings_variable }}/favicon/apple-touch-icon-57x57.png">
@@ -67,8 +60,10 @@
   <script type="text/javascript" src="{% static '3rd-party/heapAnalytics.js' %}"></script>
   {% endif %}
 
-  {% block optimizely_js %}
-  {% endblock %}
+  {# Optimzely for A/B testing #}
+  {% if 'DEBUG'|get_settings_variable == False %}
+  {% block optimizely_js %}{% endblock %}
+  {% endif %}
 </head>
 <body>
   {# Loading icon #}
@@ -155,8 +150,7 @@
   <script type="text/javascript" src="{% static 'dist/bundle.js' %}"></script>
   {% endcompress %}
 
-  {% block custom_js %}
-  {% endblock %}
+  {% block custom_js %}{% endblock %}
 
   {# Support Placehoder for IE below version 10 #}
   <!--[if lte IE 9]>

@@ -286,7 +286,7 @@ $(document).on('click', '#update-public-field-btn', function() {
   $('#update-public-field-btn').button('reset');
 });
 
-// Alert that kakaotalk and line messenger sharing is only available at mobile
+// Alert that line and kakaotalk messenger sharing is only available at mobile
 $(document).on('click', '#line-share, #kakaotalk-share', function() {
   // Detect desktop browser
   if (!('ontouchstart' in window)) {
@@ -683,20 +683,22 @@ $(document).ready(function() {
   }
 
   /* TODO Kakaotalk sharing
-  Kakao.init('');
-  Kakao.Link.createTalkLinkButton({
-    container: '#kakaotalk-share',
-    label: '[핑] 당신의 위치를 확인하세요',
-    image: {
-      src: '',
-      width: '',
-      height: ''
-    },
-    webButton: {
-      text: '나도 확인해보기',
-      url: window.location.href
-    }
-  });
+  if ($('#kakaotalk-share').length > 0) {
+    Kakao.init('');
+    Kakao.Link.createTalkLinkButton({
+      container: '#kakaotalk-share',
+      label: $('#kakaotalk-share__label').val(),
+      image: {
+        src: $('#kakaotalk-share__image-src').val(),
+        width: $('#kakaotalk-share__image-width').val(),
+        height: $('#kakaotalk-share__image-height').val()
+      },
+      webButton: {
+        text: $('#kakaotalk-share__btn-text').val(),
+        url: $('#kakaotalk-share__url').val()
+      }
+    });
+  }
   */
 
   // Attach fast-click to boost up touch reaction
