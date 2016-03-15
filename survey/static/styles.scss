@@ -404,13 +404,9 @@ pre {
 		#result-2d-chart {
 			
 			// Debug axis names are cut or not shown
-			svg {
+			#result-2d-chart__svg { 
 				overflow-x: visible;
 				overflow-y: visible;
-				
-				@media screen and (max-width: $question-image-width) {
-					margin: 0 0 20px 13px;
-				}
 			}
 		}
 	}

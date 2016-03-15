@@ -6,6 +6,7 @@ var dimple = require('dimple-js');
 module.exports = function drawTwoDimensionalChart(rows, xAxisName, yAxisName) {
   var chartWidth = $('#result-2d-chart').width();
   var svgBlock = dimple.newSvg('#result-2d-chart', chartWidth, chartWidth);
+  svgBlock.attr('id', 'result-2d-chart__svg');
   var chart = new dimple.chart(svgBlock, rows);
   
   var xAxis = chart.addMeasureAxis('x', 'x_coordinate');
@@ -75,6 +76,39 @@ module.exports = function drawTwoDimensionalChart(rows, xAxisName, yAxisName) {
     }
   };
   chart.draw(1000);
+  
+  // Prevent from axis title is not shown on the screen
+  if ($(window).width() < 480) {
+    var dimpleXAxisYCoordinate = parseInt($('#result-2d-chart__svg .dimple-title.dimple-axis-x').attr('y'));
+    $('#result-2d-chart__svg .dimple-title.dimple-axis-x').attr('y', dimpleXAxisYCoordinate - 15);
+    var dimpleYAxisYCoordinate = parseInt($('#result-2d-chart__svg .dimple-title.dimple-axis-y').attr('y'));
+    $('#result-2d-chart__svg .dimple-title.dimple-axis-y').attr('y', dimpleYAxisYCoordinate + 20);
+  }
+
+  // Convert svg to canvas and canvas to png file
+  setTimeout(function(){
+    $('#result-2d-chart__svg').attr({
+      'version': 1.1, 
+      'xmlns': 'http://www.w3.org/2000/svg'
+    });
+    var svgSource = $('#result-2d-chart__svg').parent().html();
+    var imageSource = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgSource)));
+
+    $('#result-2d-chart__canvas').attr({
+      'width': chartWidth, 
+      'height': chartWidth
+    });
+    var canvas = $('#result-2d-chart__canvas')[0];
+    var context = canvas.getContext('2d');
+    
+    var image = new Image;
+    image.src = imageSource;
+    image.onload = function() {
+      context.drawImage(image, 0, 0);
+      
+      $('#result-2d-chart__img').attr('src', canvas.toDataURL('image/png'));
+    };
+  }, 2000);
 
   return;
 }
