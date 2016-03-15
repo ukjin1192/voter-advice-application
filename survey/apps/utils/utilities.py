@@ -1,10 +1,20 @@
 #!usr/bin/python
 # -*- coding:utf-8 -*-
 
+import base64
+import cloudinary
+import cloudinary.uploader
 import math
 import numpy
 from django.conf import settings
 from main.models import User, Party, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer 
+
+# Cloudinary configuration
+cloudinary.config( 
+    cloud_name = getattr(settings, 'CLOUDINARY_CLOUD_NAME'),
+    api_key = getattr(settings, 'CLOUDINARY_API_KEY'),
+    api_secret = getattr(settings, 'CLOUDINARY_API_SECRET')
+)
 
 
 def get_survey_data_of_user(user_obj):
@@ -168,3 +178,16 @@ def get_two_dimensional_result(rotation_matrix, *target_data):
                 +  "'color': '" + single_target_data['color'] + "'}")
 
     return '[' + ', '.join(record) + ']'
+
+
+def upload_base64_encoded_image_to_cloudinary(base64_encoded_image):
+    """
+    Upload base64 encoded image to Cloudinary
+    """
+    # Check maximum image size
+    if len(base64_encoded_image) * 0.75 > getattr(settings, 'MAX_IMAGE_SIZE'):
+        return ''
+
+    cloudinary_obj = cloudinary.uploader.upload(base64_encoded_image)
+
+    return cloudinary_obj['secure_url']

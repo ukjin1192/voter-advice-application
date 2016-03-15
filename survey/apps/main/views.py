@@ -326,6 +326,9 @@ class ResultViewSet(viewsets.ModelViewSet):
         if not all(x in request.data for x in ['is_public']):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
+        if 'base64_encoded_image' in request.data:
+            utilities.upload_base64_encoded_image_to_cloudinary(request.data['base64_encoded_image'])
+        
         serializer = self.get_serializer(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)

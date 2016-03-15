@@ -196,3 +196,9 @@ CACHE_TTL = 60 * 60 * 24 * 7    # 7 days
 
 # CDN URL
 CDN_URL = config.get('aws', 'cloudfront_url')
+
+# Cloudinary to upload and  share images
+CLOUDINARY_API_KEY = config.get('cloudinary', 'api_key')
+CLOUDINARY_API_SECRET = config.get('cloudinary', 'api_secret')
+CLOUDINARY_CLOUD_NAME = config.get('cloudinary', 'cloud_name')
+MAX_IMAGE_SIZE = 10485760           # Maximum size for uploadable image : 10 MB

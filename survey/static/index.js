@@ -242,6 +242,11 @@ $(document).on('show.bs.collapse', '#report-card .panel-collapse', function() {
 $(document).on('click', '.share-btn', function() {
   var resultID = pathname.match(/result\/(\d+)/)[1]
   var formData = new FormData();
+  /* TODO Upload base64 encoded image
+  if ($('#result-2d-chart__img').attr('src') != '') {
+    formData.append('base64_encoded_image', $('#result-2d-chart__img').attr('src'));
+  }
+  */ 
   formData.append('is_public', true);
   
   // Set authentication and CSRF tokens at HTTP header
