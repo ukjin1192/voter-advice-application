@@ -7,7 +7,7 @@ from base import *
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 ALLOWED_HOSTS = [
-    'pingkorea.com',
+    config.get('django', 'domain_name'),
 ]
 INTERNAL_IPS = (
     '127.0.0.1',
