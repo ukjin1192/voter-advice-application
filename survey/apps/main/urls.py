@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from django.conf.urls import url
-from main.views import UserViewSet, PartyViewSet, QuestionViewSet, AnswerViewSet, ResultViewSet, VoiceOfCustomerViewSet, get_records
+from main.views import UserViewSet, ComparisonTargetViewSet, SurveyViewSet, QuestionViewSet, AnswerViewSet, ResultViewSet, VoiceOfCustomerViewSet, get_records
 
 
 user_list = UserViewSet.as_view({
@@ -14,11 +14,21 @@ user_detail = UserViewSet.as_view({
     'patch': 'partial_update',
     'delete': 'destroy'
 })
-party_list = PartyViewSet.as_view({
+comparison_target_list = ComparisonTargetViewSet.as_view({
     'get': 'list',
     'post': 'create'
 })
-party_detail = PartyViewSet.as_view({
+comparison_target_detail = ComparisonTargetViewSet.as_view({
+    'get': 'retrieve',
+    'put': 'update',
+    'patch': 'partial_update',
+    'delete': 'destroy'
+})
+survey_list = SurveyViewSet.as_view({
+    'get': 'list',
+    'post': 'create'
+})
+survey_detail = SurveyViewSet.as_view({
     'get': 'retrieve',
     'put': 'update',
     'patch': 'partial_update',
@@ -54,11 +64,11 @@ result_detail = ResultViewSet.as_view({
     'patch': 'partial_update',
     'delete': 'destroy'
 })
-voc_list = VoiceOfCustomerViewSet.as_view({
+voice_of_customer_list = VoiceOfCustomerViewSet.as_view({
     'get': 'list',
     'post': 'create'
 })
-voc_detail = VoiceOfCustomerViewSet.as_view({
+voice_of_customer_detail = VoiceOfCustomerViewSet.as_view({
     'get': 'retrieve',
     'put': 'update',
     'patch': 'partial_update',
@@ -78,14 +88,24 @@ urlpatterns = [
         name='user-detail'
     ),
     url(
-        r'^parties/$',
-        party_list,
-        name='party-list'
+        r'^comparison_targets/$',
+        comparison_target_list,
+        name='comparison_target-list'
     ),
     url(
-        r'^parties/(?P<pk>[0-9]+)/$',
-        party_detail,
-        name='party-detail'
+        r'^comparison_targets/(?P<pk>[0-9]+)/$',
+        comparison_target_detail,
+        name='comparison_target-detail'
+    ),
+    url(
+        r'^surveys/$',
+        survey_list,
+        name='survey-list'
+    ),
+    url(
+        r'^surveys/(?P<pk>[0-9]+)/$',
+        survey_detail,
+        name='survey-detail'
     ),
     url(
         r'^questions/$',
@@ -118,14 +138,14 @@ urlpatterns = [
         name='result-detail'
     ),
     url(
-        r'^vocs/$',
-        voc_list,
-        name='voc-list'
+        r'^voice_of_customers/$',
+        voice_of_customer_list,
+        name='voice_of_customer-list'
     ),
     url(
-        r'^vocs/(?P<pk>[0-9]+)/$',
-        voc_detail,
-        name='voc-detail'
+        r'^voice_of_customers/(?P<pk>[0-9]+)/$',
+        voice_of_customer_detail,
+        name='voice_of_customer-detail'
     ),
     # Ad-hoc API 
     url(

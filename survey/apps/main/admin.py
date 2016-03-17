@@ -2,20 +2,26 @@
 # -*- coding: utf-8 -*-
 
 from django.contrib import admin
-from main.models import User, Party, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer
+from main.models import User, ComparisonTarget, Survey, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'sex', 'year_of_birth', 'supporting_party', 'completed_survey', 'is_active', 'date_joined')
+    list_display = ('id', 'username', 'sex', 'year_of_birth', 'supporting_party', 'is_active', 'date_joined')
     search_fields = ('username', )
     list_filter = ('date_joined', )
     date_hierarchy = 'date_joined'
     ordering = ('-id', )
 
 
-class PartyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'name', 'color')
+class ComparisonTargetAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'survey', 'name', 'color')
     search_fields = ('name', )
+    ordering = ('-id', )
+
+
+class SurveyAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title')
+    search_fields = ('title', )
     ordering = ('-id', )
 
 
@@ -42,22 +48,22 @@ class AnswerAdmin(admin.ModelAdmin):
     ordering = ('-id', )
 
 
-class ResultAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'record', 'category', 'x_axis_name', 'y_axis_name', 'is_public', 'created_at')
+class RotationMatrixAdmin(admin.ModelAdmin):
+    list_display = ('id', 'survey', 'x_axis_name', 'y_axis_name', 'is_deployed', 'created_at')
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'
     ordering = ('-id', )
 
 
-class RotationMatrixAdmin(admin.ModelAdmin):
-    list_display = ('id', 'x_axis_name', 'y_axis_name', 'is_deployed', 'created_at')
+class ResultAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user', 'survey', 'record', 'category', 'x_axis_name', 'y_axis_name', 'is_public', 'created_at')
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'
     ordering = ('-id', )
 
 
 class VoiceOfCustomerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'author', 'context', 'checked', 'created_at')
+    list_display = ('id', 'author', 'survey', 'context', 'checked', 'created_at')
     search_fields = ('context', )
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'
@@ -65,7 +71,8 @@ class VoiceOfCustomerAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(Party, PartyAdmin)
+admin.site.register(ComparisonTarget, ComparisonTargetAdmin)
+admin.site.register(Survey, SurveyAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Choice, ChoiceAdmin)
 admin.site.register(Answer, AnswerAdmin)

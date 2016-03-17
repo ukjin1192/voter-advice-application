@@ -1,7 +1,7 @@
 #!usr/bin/python
 # -*- coding: utf-8 -*-
 
-from main.models import User, Party, Question, Choice, Answer, Result, VoiceOfCustomer 
+from main.models import User, ComparisonTarget, Survey, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer
 from rest_framework import serializers
 
 
@@ -9,29 +9,38 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'sex', 'year_of_birth', 'supporting_party', 'completed_survey')
+        fields = ('id', 'sex', 'year_of_birth', 'supporting_party')
 
 
-class PartySerializer(serializers.HyperlinkedModelSerializer):
+class ComparisonTargetSerializer(serializers.HyperlinkedModelSerializer):
+    survey = serializers.ReadOnlyField(source='survey.id')
     completed_survey = serializers.SerializerMethodField()
 
     class Meta:
-        model = Party
-        fields = ('id', 'name', 'color', 'completed_survey')
+        model = ComparisonTarget
+        fields = ('id', 'survey', 'name', 'color', 'completed_survey')
 
     def get_completed_survey(self, obj):
         """
-        Check whether party completed survey or not
+        Check whether comparison target completed survey or not
         """
-        return obj.user.completed_survey
+        return obj.user in obj.survey.participants.all()
+
+
+class SurveySerializer(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Survey
+        fields = ('id', 'title')
 
 
 class QuestionSerializer(serializers.HyperlinkedModelSerializer):
+    survey = serializers.ReadOnlyField(source='survey.id')
     choices = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
-        fields = ('id', 'explanation', 'image_url', 'duration_limit', 'choices')
+        fields = ('id', 'survey', 'explanation', 'image_url', 'duration_limit', 'choices')
 
     def get_choices(self, obj):
         """
@@ -62,15 +71,17 @@ class AnswerSerializer(serializers.HyperlinkedModelSerializer):
 
 class ResultSerializer(serializers.HyperlinkedModelSerializer):
     user = serializers.ReadOnlyField(source='user.id')
+    survey = serializers.ReadOnlyField(source='survey.id')
 
     class Meta:
         model = Result
-        fields = ('id', 'user', 'record', 'category', 'x_axis_name', 'y_axis_name', 'is_public', 'updated_at')
+        fields = ('id', 'user', 'survey', 'record', 'category', 'x_axis_name', 'y_axis_name', 'is_public', 'updated_at')
 
 
 class VoiceOfCustomerSerializer(serializers.HyperlinkedModelSerializer):
     author = serializers.ReadOnlyField(source='author.id')
+    survey = serializers.ReadOnlyField(source='survey.id')
 
     class Meta:
         model = VoiceOfCustomer
-        fields = ('id', 'author', 'context', 'checked', 'created_at')
+        fields = ('id', 'author', 'survey', 'context', 'checked', 'created_at')

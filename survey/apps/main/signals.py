@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from main.models import User, Party, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer
+from main.models import User, ComparisonTarget, Survey, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer
 from utils import redis, utilities
 
 
@@ -14,7 +14,7 @@ def update_cache_when_question_updated(sender, instance, created, **kwargs):
     """
     Update cache when question updated
     """
-    redis.set_questions_cache()
+    redis.set_questions_cache(instance.survey)
 
 
 @receiver(post_save, sender=Choice)
@@ -22,17 +22,17 @@ def update_cache_when_choice_updated(sender, instance, created, **kwargs):
     """
     Update cache when choice updated
     """
-    redis.set_questions_cache()
+    redis.set_questions_cache(instance.question.survey)
 
 
-@receiver(post_save, sender=Party)
-def update_cache_when_party_updated(sender, instance, created, **kwargs):
+@receiver(post_save, sender=ComparisonTarget)
+def update_cache_when_comparison_target_updated(sender, instance, created, **kwargs):
     """
-    Update cache when party updated
+    Update cache when comparision target updated
     """
-    redis.set_party_list_cache()
-    if created == False and instance.user.completed_survey == True:
-        redis.set_survey_data_of_parties_cache()
+    redis.set_comparison_target_list_cache(instance.survey)
+    if created == False and instance.user in instance.survey.participants:
+        redis.set_survey_data_of_comparison_targets_cache(instance.survey)
 
 
 @receiver(post_save, sender=RotationMatrix)
@@ -41,7 +41,7 @@ def update_cache_when_rotation_matrix_deployed(sender, instance, created, **kwar
     Update cache when rotation matrix deployed
     """
     if created == False and instance.is_deployed == True:
-        redis.set_rotation_matrix_cache()
+        redis.set_rotation_matrix_cache(instance.survey)
 
 
 @receiver(post_save, sender=VoiceOfCustomer)

@@ -73,10 +73,6 @@ class User(AbstractBaseUser):
         blank = True,
         null = True
     )
-    completed_survey = models.BooleanField(
-        verbose_name = _('Complete survey'),
-        default = False
-    )
     is_active = models.BooleanField(
         verbose_name = _('Active'),
         default = True
@@ -121,12 +117,16 @@ class User(AbstractBaseUser):
         return self.is_admin
 
 
-class Party(models.Model):
+class ComparisonTarget(models.Model):
     """
-    Party information
+    Comparison target information
     """
     user = models.OneToOneField(
         'User'
+    )
+    survey = models.ForeignKey(
+        'Survey',
+        related_name = 'comparison_targets'
     )
     name = models.CharField(
         verbose_name = _('Name'),
@@ -135,6 +135,39 @@ class Party(models.Model):
     color = models.CharField(
         verbose_name = _('Color'),
         help_text = _('HEX value (e.g. #EEEEEE)'),
+        max_length = 255,
+        blank = True,
+        null = True
+    )
+    created_at = models.DateTimeField(
+        verbose_name = _('Created datetime'),
+        auto_now_add = True,
+        editable = False
+    )
+    updated_at = models.DateTimeField(
+        verbose_name = _('Updated datetime'),
+        auto_now = True
+    )
+
+    class Meta:
+        verbose_name = _('Comparison target')
+        verbose_name_plural = _('Comparison targets')
+        ordering = ['id']
+
+    def __unicode__(self):
+        return unicode(self.id) or u''
+
+
+class Survey(models.Model):
+    """
+    Survey information
+    """
+    participants = models.ManyToManyField(
+        'User',
+        blank = True
+    )
+    title = models.CharField(
+        verbose_name = _('Title'),
         max_length = 255
     )
     created_at = models.DateTimeField(
@@ -148,8 +181,8 @@ class Party(models.Model):
     )
 
     class Meta:
-        verbose_name = _('Party')
-        verbose_name_plural = _('Parties')
+        verbose_name = _('Survey')
+        verbose_name_plural = _('Surveys')
         ordering = ['id']
 
     def __unicode__(self):
@@ -160,6 +193,10 @@ class Question(models.Model):
     """
     Question information
     """
+    survey = models.ForeignKey(
+        'Survey',
+        related_name = 'questions'
+    )
     explanation = models.CharField(
         verbose_name = _('Explanation'),
         max_length = 255
@@ -262,6 +299,10 @@ class RotationMatrix(models.Model):
     """
     Rotation matrix to calculate result
     """
+    survey = models.ForeignKey(
+        'Survey',
+        related_name = 'rotation_matrices'
+    )
     matrix = models.TextField(
         verbose_name = _('Matrix'),
     ) 
@@ -312,7 +353,11 @@ class Result(models.Model):
     """
     user = models.ForeignKey(
         'User',
-        related_name = 'results'
+        related_name = 'results_of_user'
+    )
+    survey = models.ForeignKey(
+        'Survey',
+        related_name = 'results_of_survey'
     )
     record = models.TextField(
         verbose_name = _('Record'),
@@ -363,7 +408,13 @@ class VoiceOfCustomer(models.Model):
     """
     author = models.ForeignKey(
         'User',
-        related_name = 'vocs',
+        related_name = 'vocs_of_author',
+        blank = True,
+        null = True
+    )
+    survey = models.ForeignKey(
+        'Survey',
+        related_name = 'vocs_of_survey',
         blank = True,
         null = True
     )

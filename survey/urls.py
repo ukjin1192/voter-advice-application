@@ -9,21 +9,25 @@ from django.views.generic import TemplateView
 admin.autodiscover()
 
 urlpatterns = [
+
     # Admin
     url(
         r'^admin/', 
         include(admin.site.urls)
     ),
+
     # API end points
     url(
         r'^api/', 
         include('main.urls')
     ),
+
     # Captcha for human validation
     url(
         r'^captcha/', 
         include('captcha.urls')
     ),
+
     # Front-end pages
     url(
         r'^$', 

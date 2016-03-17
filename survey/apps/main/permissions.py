@@ -28,42 +28,70 @@ class UserPermission(permissions.BasePermission):
             return False
 
 
-class PartyPermission(permissions.BasePermission):
+class ComparisonTargetPermission(permissions.BasePermission):
     """
     List : anyone
     Create : X
-    Retrieve : X
+    Retrieve : anyone
     Update : X
     Partial update : X
     Destroy : X
     """
     def has_permission(self, request, view):
-        if view.action == 'list':
+        if view.action in ['list', 'retrieve']:
             return True
         else:
             return False
 
     def has_object_permission(self, request, view, obj):
-        return False
+        if view.action == 'retrieve':
+            return True
+        else:
+            return False
+
+
+class SurveyPermission(permissions.BasePermission):
+    """
+    List : anyone
+    Create : X
+    Retrieve : anyone
+    Update : X
+    Partial update : X
+    Destroy : X
+    """
+    def has_permission(self, request, view):
+        if view.action in ['list', 'retrieve']:
+            return True
+        else:
+            return False
+
+    def has_object_permission(self, request, view, obj):
+        if view.action == 'retrieve':
+            return True
+        else:
+            return False
 
 
 class QuestionPermission(permissions.BasePermission):
     """
     List : anyone
     Create : X
-    Retrieve : X
+    Retrieve : anyone
     Update : X
     Partial update : X
     Destroy : X
     """
     def has_permission(self, request, view):
-        if view.action == 'list':
+        if view.action in ['list', 'retrieve']:
             return True
         else:
             return False
 
     def has_object_permission(self, request, view, obj):
-        return False
+        if view.action == 'retrieve':
+            return True
+        else:
+            return False
 
 
 class AnswerPermission(permissions.BasePermission):

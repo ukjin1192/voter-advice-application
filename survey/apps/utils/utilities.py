@@ -7,7 +7,7 @@ import cloudinary.uploader
 import math
 import numpy
 from django.conf import settings
-from main.models import User, Party, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer 
+from main.models import User, ComparisonTarget, Survey, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer
 
 # Cloudinary configuration
 cloudinary.config( 
@@ -17,24 +17,29 @@ cloudinary.config(
 )
 
 
-def get_survey_data_of_user(user_obj):
+def get_survey_data_of_user(user_obj, survey_obj):
     """
     Get factor list and last updated datetime of user's survey data from all answers
     """
     if isinstance(user_obj, User) == False:
         raise ValueError('Invalid variable')
 
-    if user_obj.completed_survey == False:
+    if isinstance(survey_obj, Survey) == False:
+        raise ValueError('Invalid variable')
+
+    if user_obj not in survey_obj.participants.all():
         raise ValueError('User does not completed survey')
 
-    answers = Answer.objects.select_related('choice').filter(user=user_obj).order_by('choice__id')
+    answers = Answer.objects.select_related('choice').\
+        filter(user=user_obj, choice__question__survey=survey_obj).order_by('choice__id')
     factor_list = []
-    updated_at = answers.latest('updated_at').updated_at
+    updated_at_list = []
 
     for answer in answers:
         factor_list.append(answer.choice.factor)
+        updated_at_list.append(answer.updated_at)
 
-    return {'factor_list': factor_list, 'updated_at': updated_at}
+    return {'factor_list': factor_list, 'updated_at': max(updated_at_list)}
 
 
 def get_one_dimensional_result(user_data, *target_data):
@@ -80,7 +85,7 @@ def get_one_dimensional_result(user_data, *target_data):
     return '[' + ', '.join(record) + ']'
 
 
-def get_rotation_matrix():
+def get_rotation_matrix(survey_obj):
     """
     Get rotation matrix with whole data
     Rotation matrix will be used for PCA method
@@ -99,12 +104,15 @@ def get_rotation_matrix():
             array([53.15258303, 81.8695484, 100.])
         )
     """
+    if isinstance(survey_obj, Survey) == False:
+        raise ValueError('Invalid variable')
+
     all_list = []
-    questions = Question.objects.all().order_by('id')
-    completed_users = User.objects.filter(completed_survey=True)
+    questions = Question.objects.filter(survey=survey_obj).order_by('id')
+    completed_users = survey_obj.participants.all()
 
     for completed_user in completed_users:
-        all_list.append(get_survey_data_of_user(completed_user)['factor_list'])
+        all_list.append(get_survey_data_of_user(completed_user, survey_obj)['factor_list'])
 
     all_list = numpy.array(all_list)
     weighted_list = all_list.astype(float)
