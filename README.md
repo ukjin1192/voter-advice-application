@@ -1,9 +1,4 @@
-# Political survey
-
-
-## Project goal
-
-Survey to recognize where my political tendency positioned
+## A Korean Voter Advice Application
 
 
 ## Stack
