@@ -96,12 +96,7 @@ def clear_silk_logs():
 
 def update_staticfiles():
     with lcd(ROOT_DIR + "/" + PROJECT_NAME + "/static/"):
-        if int(config.get('django', 'development_mode')) == 1:
-            # Development mode
-            local("webpack")
-        else:
-            # Production mode
-            local("production_mode=1 webpack")
+        local("webpack")
     with lcd(ROOT_DIR):
         local("./manage.py collectstatic --noinput")
         local("./manage.py compress --force")
