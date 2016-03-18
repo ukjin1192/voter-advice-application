@@ -194,6 +194,9 @@ USE_CAPTCHA = False
 # Time-to-live for cache
 CACHE_TTL = 60 * 60 * 24 * 7    # 7 days
 
+# Domain name
+DOMAIN_NAME = config.get('django', 'domain_name')
+
 # CDN URL
 CDN_URL = config.get('aws', 'cloudfront_url')
 
