@@ -1,7 +1,7 @@
 'use strict';
 
 // Load modules
-require('bootstrap-webpack!../bootstrap.config.js');
+require('bootstrap-webpack');
 var fullpage = require('fullpage.js');
 var rangeslider = require('rangeslider.js');
 

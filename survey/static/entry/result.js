@@ -1,7 +1,7 @@
 'use strict';
 
 // Load modules
-require('bootstrap-webpack!../bootstrap.config.js');
+require('bootstrap-webpack');
 
 // Load custom modules
 var setCSRFToken = require('../module/setCSRFToken.js');

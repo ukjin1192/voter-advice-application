@@ -101,12 +101,16 @@
 
   <input type="hidden" id="domain-name" value="{{ 'DOMAIN_NAME'|get_settings_variable }}" />
 
+  <header class="container-fit" style="background-color: white;">
+    <div class="container">
+      P!ng
+    </div>
+  </header>
+  
   <div id="main-container">
     <div class="alert alert-warning hidden" id="browser-support-alert-message" role="alert"></div>
     
-    <header>
-      {% block header %}{% endblock %}
-    </header>
+    {% block header %}{% endblock %}
     
     <section class="container-fit">
       <div class="container">
@@ -146,7 +150,6 @@
   </div>
 
   {# Javascript #}
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   {% compress js %}
   <script type="text/javascript" src="{% static 'dist/vendor.js' %}"></script>
   {% endcompress %}
