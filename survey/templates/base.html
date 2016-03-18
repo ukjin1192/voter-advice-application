@@ -43,7 +43,7 @@
   <meta name="theme-color" content="#ffffff">
 
   {% compress css %}
-  <link rel="stylesheet" type="text/css" href="{% static 'dist/bundle.css' %}" />
+  <link rel="stylesheet" type="text/css" href="{% static 'dist/base.css' %}" />
   {% endcompress %}
 
   {# Support HTML5 tag and media query for IE below version 9 #}
@@ -99,6 +99,8 @@
     </div>
   </noscript>
 
+  <input type="hidden" id="domain-name" value="{{ 'DOMAIN_NAME'|get_settings_variable }}" />
+
   <div id="main-container">
     <div class="alert alert-warning hidden" id="browser-support-alert-message" role="alert"></div>
     
@@ -143,13 +145,14 @@
     </div>
   </div>
 
+  {# Javascript #}
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   {% compress js %}
-  <script type="text/javascript" src="{% static 'dist/vendor.bundle.js' %}"></script>
+  <script type="text/javascript" src="{% static 'dist/vendor.js' %}"></script>
   {% endcompress %}
-  {# CDN JS #}
   <script type="text/javascript" src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
   {% compress js %}
-  <script type="text/javascript" src="{% static 'dist/bundle.js' %}"></script>
+  <script type="text/javascript" src="{% static 'dist/base.js' %}"></script>
   {% endcompress %}
 
   {% block custom_js %}{% endblock %}

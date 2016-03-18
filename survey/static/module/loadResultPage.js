@@ -1,11 +1,13 @@
 'use strict';
 
+// Load modules
 var $ = require('jquery');
 var setCSRFToken = require('./setCSRFToken.js');
 var setAuthToken = require('./setAuthToken.js');
 
-module.exports = function loadResultPage(category) {
+module.exports = function loadResultPage(survey_id, category) {
   var formData = new FormData();
+  formData.append('survey_id', survey_id);
   formData.append('category', category);
   
   // Set authentication and CSRF tokens at HTTP header

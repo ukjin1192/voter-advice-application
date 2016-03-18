@@ -1,5 +1,6 @@
 'use strict';
 
+// Load modules
 var $ = require('jquery');
 var dimple = require('dimple-js');
 
@@ -45,9 +46,9 @@ module.exports = function drawTwoDimensionalChart(rows, xAxisName, yAxisName) {
   // Fill out result summary
   var mostSimilarParty = _.minBy(distanceList, 'distance');
   var mostDissimilarParty = _.maxBy(distanceList, 'distance');
-  $('.most-similar-party').html('<span class="label" style="background-color: ' + mostSimilarParty.color 
+  $('.most-similar-target').html('<span class="label" style="background-color: ' + mostSimilarParty.color 
       + ';">' + mostSimilarParty.name + '</span>');
-  $('.most-dissimilar-party').html('<span class="label" style="background-color: ' + mostDissimilarParty.color 
+  $('.most-dissimilar-target').html('<span class="label" style="background-color: ' + mostDissimilarParty.color 
       + ';">' + mostDissimilarParty.name + '</span>');
   $('#result-2d-summary').removeClass('hidden');
 

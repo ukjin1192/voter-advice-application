@@ -64,6 +64,7 @@ html, body {
 }
 
 body {
+	background-color: #e6e6e6 !important;
 	overflow-x: hidden;
 
 	// Disable double-tap-to-zoom in IE 10, 11 for fast-click
@@ -92,9 +93,17 @@ pre {
 	border: 0;
 }
 
+th, td {
+	text-align: center !important;
+}
+
 /* ===============
  * Basic attribute
  * =============== */
+
+.container {
+	max-width: 800px;
+}
 
 .position-relative {
 	position: relative;
@@ -350,14 +359,6 @@ pre {
 	z-index: 220;
 }
 
-/* ================
- * Result list page
- * ================ */
-
-#result-list-page {
-	padding-top: 30px;
-}
-
 /* ==================
  * Result detail page
  * ================== */
@@ -383,7 +384,7 @@ pre {
 			margin-bottom: 0;
 			padding: 5px;
 			
-			.most-similar-party, .most-disimilar-party {
+			.most-similar-target, .most-disimilar-target {
 				margin-top: 20px;
 			}
 		}

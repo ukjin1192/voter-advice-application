@@ -5,11 +5,12 @@ var path = require('path');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 require('es6-promise').polyfill();
 
-var productionMode = JSON.parse(process.env.production_mode || '0');
-
 module.exports = {
   entry: {
-    bundle: './index.js',
+    base: './entry/base',
+    index: './entry/index',
+    survey: './entry/survey',
+    result: './entry/result',
     vendor: [
       'jquery', 
       'jquery.cookie', 
@@ -27,7 +28,7 @@ module.exports = {
     filename: '[name].js',
     publicPath: '/static/dist/'
   },
-  plugins: productionMode ? [
+  plugins: [
     // Use jquery variable globally
     new webpack.ProvidePlugin({
       $: 'jquery',
@@ -35,30 +36,12 @@ module.exports = {
       'window.jQuery': 'jquery'
     }),
     // Separate main file with vendors
-    new webpack.optimize.CommonsChunkPlugin(
-      'vendor',
-      'vendor.bundle.js'
-    ),
-		// Extract CSS text from bundle into a file
-    new ExtractTextPlugin('[name].css', {
-			allChunks: true
-		}),
-    // Minify JS files
-    new webpack.optimize.UglifyJsPlugin({
-      minimize: true
-    })
-  ] : [
-    // Use jquery variable globally
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      'gindow.jQuery': 'jquery'
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      chunks: ['base, index, survey, result'],
+      filename: 'vendor.js',
+      minChunks: Infinity
     }),
-    // Separate main file with vendors
-    new webpack.optimize.CommonsChunkPlugin(
-      'vendor',
-      'vendor.bundle.js'
-    ),
 		// Extract CSS text from bundle into a file
     new ExtractTextPlugin('[name].css', {
 			allChunks: true
@@ -73,6 +56,10 @@ module.exports = {
       {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
+      },
+      {
+        test: /\.less$/,
+        loader: ExtractTextPlugin.extract('style-loader', 'css-loader!less-loader')
       },
       {
         test: /\.scss$/,

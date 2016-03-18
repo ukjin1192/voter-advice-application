@@ -1,181 +1,19 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+{% load compress %}
 {% load custom_filter %}
 
-{% block optimizely_js %}
-<script src="https://cdn.optimizely.com/js/5100070208.js"></script>
+{% block container %}
+<div class="container">
+	<a href="/survey/1/" class="btn btn-primary btn-lg btn-block">
+		비례대표 설문
+	</a>
+</div>
 {% endblock %}
 
-{% block container %}
-<div class="hidden" id="section-slider-container" data-toggle="tooltip" data-placement="bottom" title="완료한 질문들을 이동할 수 있어요">
-	<input type="range" id="section-slider" min="1" max="" step="1" value="2" />
-
-	<div class="row">
-		<div class="col-xs-2 col-xs-offset-4 col-sm-2 col-sm-offset-4 col-md-2 col-md-offset-4 col-lg-2 col-lg-offset-4">
-			<div class="ghost ghost-pink">
-				<div class="eye"></div>
-				<div class="eye eye-right"></div>
-				<div class="foot"></div>
-				<div class="foot foot-center"></div>
-				<div class="foot foot-right"></div>
-			</div>
-		</div>
-		<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-			<div class="ghost ghost-blue">
-				<div class="eye"></div>
-				<div class="eye eye-right"></div>
-				<div class="foot"></div>
-				<div class="foot foot-center"></div>
-				<div class="foot foot-right"></div>
-			</div>
-		</div>
-		<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-			<div class="ghost ghost-orange">
-				<div class="eye"></div>
-				<div class="eye eye-right"></div>
-				<div class="foot"></div>
-				<div class="foot foot-center"></div>
-				<div class="foot foot-right"></div>
-			</div>
-		</div>
-		<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-			<div class="ghost ghost-red">
-				<div class="eye"></div>
-				<div class="eye eye-right"></div>
-				<div class="foot"></div>
-				<div class="foot foot-center"></div>
-				<div class="foot foot-right"></div>
-			</div>
-		</div>
-	</div>
-</div>
-
-<div id="page-scroll-container">
-
-	<div class="section">
-		
-		<h2><em>2016년 총선 !</em></h2>
-		
-		<div class="space"></div>
-		
-		<h4>당신의 선택은?</h4>
-		
-		<div class="slot-machine">
-			<div class="slot-machine__items-container" id="wordbox"></div>
-		</div>	
-		
-		<div class="space"></div>
-		
-		{% with captcha='USE_CAPTCHA'|get_settings_variable %}
-		<input type="hidden" id="use-captcha" value="{{ captcha }}" />
-		
-		<form class="form-group short-width-group" id="create-user-form">
-			{% if captcha %} 
-			<input type="hidden" id="captcha-key" value="" />
-			<div class="input-group">
-				<span class="input-group-addon" id="captcha-image-container">
-					<img src="" id="captcha-image" />
-				</span>
-				<span class="input-group-addon cursor-pointer" id="refresh-captcha">
-					<span class="glyphicon glyphicon-refresh"></span>
-				</span>
-				<input type="text" class="form-control" id="captcha-value" placeholder="왼쪽 문자를 입력해주세요" autocomplete="off" required />
-			</div>
-			
-			<div class="space"></div>
-			
-			<div class="alert alert-danger hidden" id="create-user-form-alert-message" role="alert"></div>
-			{% endif %}
-			
-			<button type="submit" class="btn btn-primary btn-lg btn-xlg btn-block" id="create-user-submit-btn" data-loading-text="잠시만 기다려주세요">
-				나와 어울리는 정당 찾기
-			</button>
-		</form>
-		{% endwith %}
-		
-		<div class="hidden" id="landing-page-help-messages">
-			<h5 class="help-block">위 버튼을 클릭해서 시작해보세요</h5>
-			<h5 class="help-block">1분 30초면 충분합니다</h5>
-		</div>
-		
-		<div class="short-width-group">
-			<div class="alert alert-info hidden" id="check-data-existence-message" role="alert">
-				기존 데이터를 가져오는 중입니다
-			</div>
-			
-			<a href="#" class="btn btn-primary btn-lg btn-block hidden" id="continue-survey-btn">
-				하던 것 이어하기
-			</a>
-			
-			<a href="#Q1" class="btn btn-primary btn-lg btn-block hidden" id="edit-survey-btn">
-				나의 선택 수정하기
-			</a>
-			
-			<button class="btn btn-primary btn-lg btn-block hidden" id="move-to-result-page-btn" data-loading-text="잠시만 기다려주세요">
-				지난 결과 보기
-			</button>
-		</div>
-	</div>
-
-	<div class="section">
-		<form id="update-user-form">
-			<h3>성별이 어떻게 되세요?</h3>
-			<div>
-				<label class="radio-inline">
-					<input type="radio" name="sex" value="male" />
-					남자
-				</label>
-				<label class="radio-inline">
-					<input type="radio" name="sex" value="female" />
-					여자
-				</label>
-			</div>
-			
-			<div class="space"></div>
-			
-			<h3>언제 태어나셨나요?</h3>
-			<div class="short-width-group">
-				<input type="number" class="form-control" id="year-of-birth" min="{{ 'MIN_YEAR_OF_BIRTH'|get_settings_variable }}" max="{{ 'MAX_YEAR_OF_BIRTH'|get_settings_variable }}" placeholder="출생년도" autocomplete="off" />
-			</div>
-			
-			<div class="space"></div>
-			
-			<h3>지지정당이 있으세요?</h3>
-			<div class="short-width-group">
-				<select class="form-control" id="supporting-party">
-					<option value="">클릭해서 선택하세요</option>
-				</select>
-			</div>
-			
-			<div class="space"></div>
-			
-			<div class="short-width-group">
-				<a href="#" class="btn btn-warning btn-lg btn-block hidden" id="move-to-unanswered-question-btn">
-					미응답한 질문 채우러가기
-				</a>
-				
-				<button type="submit" class="btn btn-primary btn-lg btn-block" id="submit-survey-btn" data-loading-text="잠시만 기다려주세요">
-					결과 확인하기
-				</button>
-			</div>
-		<form>
-	</div>
-</div>
-
-<div class="alert alert-warning hidden" id="question-validation-message" role="alert"></div>
-
-<div class="section hidden" id="section-virtual-dom">
-	<div class="question">
-		<input type="hidden" class="question-id" value="" />
-		<input type="hidden" class="question-order" value="" />
-		<input type="hidden" class="question-duration-limit" value="" />
-		<div class="question-contents-container">
-			<img class="question-image" data-src="" />
-			<div class="question-explanation"></div>
-		</div>
-		<div class="question-choices"></div>
-		<input type="hidden" class="answer-id" value="" />
-		<input type="hidden" class="original-choice-id" value="" />
-	</div>
-</div>
+{% block custom_js %}
+{% compress js %}
+<script type="text/javascript" src="{% static 'dist/index.js' %}"></script>
+{% endcompress %}
 {% endblock %}

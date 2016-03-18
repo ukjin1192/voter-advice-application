@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load staticfiles %}
+{% load compress %}
 {% load custom_filter %}
 
 {% block header %}
@@ -16,12 +18,14 @@
 {% endblock %}
 
 {% block container %}
+<input type="hidden" id="survey-id" value="" />
+
 <div class="text-center" id="result-detail-page">
 
 	<div class="panel panel-default hidden" id="result-1d-summary">
 		<div class="panel-body">
 			<p>당신과 가장 어울리는 정당은,</p>
-			<h1><span class="label most-similar-party"></span></h1>
+			<h1><span class="label most-similar-target"></span></h1>
 		</div>
 	</div>
 
@@ -29,13 +33,13 @@
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 			<div class="alert alert-info" role="alert">
 				<strong><span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> 최고의 궁합</strong>
-				<h2 class="most-similar-party"></h2>
+				<h2 class="most-similar-target"></h2>
 			</div>
 		</div>
 		<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 			<div class="alert alert-danger" role="alert">
 				<strong><span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> 최악의 궁합</strong>
-				<h2 class="most-dissimilar-party"></h2>
+				<h2 class="most-dissimilar-target"></h2>
 			</div>
 		</div>
 	</div>
@@ -92,4 +96,10 @@
 		<div class="panel-body"></div>
 	</div>
 </div>
+{% endblock %}
+
+{% block custom_js %}
+{% compress js %}
+<script type="text/javascript" src="{% static 'dist/result.js' %}"></script>
+{% endcompress %}
 {% endblock %}

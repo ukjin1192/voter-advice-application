@@ -1,5 +1,6 @@
 'use strict';
 
+// Load modules
 var $ = require('jquery');
 
 module.exports = function activateSlotMachine(wordList) {
