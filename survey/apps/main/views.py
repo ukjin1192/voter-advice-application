@@ -65,7 +65,14 @@ class UserViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = request.user
         serializer = self.get_serializer(instance)
-        return Response(serializer.data)
+        serializer_data = serializer.data
+        
+        if 'survey_id' in request.GET:
+            survey = Survey.objects.get(id=int(request.GET['survey_id']))
+            if request.user in survey.participants.all():
+                serializer_data['completed_survey'] = True
+        
+        return Response(serializer_data)
 
     def update(self, request, *args, **kwargs):
         """
