@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load compress %}
+{% load custom_filter %}
+
+{% block container %}
+<div class="container landing">
+	<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/landing.png" class="landing__image" />
+	
+	<div class="landing__btn-container">
+		<button type="button" class="btn btn-lg landing__btn" data-loading-text="로딩중입니다">
+			시작하기
+		</button>
+	</div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+{% compress js %}
+<script type="text/javascript" src="{% static 'dist/index.js' %}"></script>
+{% endcompress %}
+{% endblock %}

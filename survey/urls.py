@@ -34,32 +34,32 @@ urlpatterns = [
         TemplateView.as_view(template_name='index.html')
     ),
     url(
-        r'^survey/$', 
-        RedirectView.as_view(url='/', permanent=False)
+        r'^assembly/$', 
+        TemplateView.as_view(template_name='assembly/index.html')
     ),
     url(
-        r'^survey/(?P<pk>[0-9]+)/$', 
-        TemplateView.as_view(template_name='survey.html')
+        r'^assembly/survey/$', 
+        TemplateView.as_view(template_name='assembly/survey.html')
     ),
     url(
-        r'^result/$', 
-        RedirectView.as_view(url='/', permanent=False)
+        r'^assembly/result/$', 
+        TemplateView.as_view(template_name='assembly/result.html')
     ),
     url(
-        r'^result/(?P<pk>[0-9]+)/$', 
-        TemplateView.as_view(template_name='result.html')
+        r'^party/$', 
+        TemplateView.as_view(template_name='party/index.html')
     ),
     url(
-        r'^commentary/$', 
-        TemplateView.as_view(template_name='commentary.html')
+        r'^party/survey/$', 
+        TemplateView.as_view(template_name='party/survey.html')
     ),
     url(
-        r'^faq/$', 
-        TemplateView.as_view(template_name='faq.html')
+        r'^party/result/$', 
+        RedirectView.as_view(url='/party/', permanent=False)
     ),
     url(
-        r'^story/$', 
-        TemplateView.as_view(template_name='story.html')
+        r'^party/result/(?P<pk>[0-9]+)/$', 
+        TemplateView.as_view(template_name='party/result.html')
     ),
 ]
 

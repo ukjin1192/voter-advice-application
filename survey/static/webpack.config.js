@@ -14,6 +14,7 @@ module.exports = {
     vendor: [
       'jquery', 
       'jquery.cookie', 
+      'jquery-slimscroll',
       'bootstrap-webpack',
       'lodash',
       'fullpage.js',

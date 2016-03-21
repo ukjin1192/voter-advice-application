@@ -25,7 +25,8 @@
     "dimple-js": "~2.1.4",
     "lodash": "~4.0.1",
     "fastclick": "~1.0.6",
-    "rangeslider.js": "~2.1.1"
+    "rangeslider.js": "~2.1.1",
+    "jquery-slimscroll": "~1.3.6"
   },
   "devDependencies": {
     "css-loader": "~0.23.1",

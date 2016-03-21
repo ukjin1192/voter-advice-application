@@ -7,55 +7,7 @@ require('../styles.scss');
 
 // Load modules
 var attachFastClick = require('fastclick');
-
-// Global variables
-var pathName = window.location.pathname;
-var domainName = $('#domain-name').val();
-// Support for optimizely editor
-if (RegExp(domainName).test(pathName)) pathName = pathName.split(domainName)[1];
-
-// Voice of customer
-$(document).on('click', '#voice-of-customer-submit-btn', function() {
-  // Set CSRF token at HTTP header
-  setCSRFToken();
-  if (localStorage.getItem('token') != null && localStorage.getItem('user_id') != null) setAuthToken();
-  
-  if ($('#voice-of-customer textarea').val() == '') return false;
-  else $('#voice-of-customer-submit-btn').button('loading');
-
-  var formData = new FormData();
-  formData.append('context', $('#voice-of-customer textarea').val());
-  if (/survey\/(\d+)/.test(pathName)) formData.append('survey_id', pathName.match(/survey\/(\d+)/)[1]);
-
-  $.ajax({
-    url: '/api/voice_of_customers/',
-    type: 'POST',
-    data: formData,
-    contentType: false,
-    processData: false
-  }).done(function(data) {
-    $('#voice-of-customer textarea').val('');
-    $('#voice-of-customer-alert-message').removeClass('hidden');
-    setTimeout(function() {
-      $('#voice-of-customer-alert-message').addClass('hidden');
-    }, 2500);
-  }).always(function() {
-    $('#voice-of-customer-submit-btn').button('reset');
-  }); 
-});
- 
-// Toggle off voice of customer when user clicked background
-$(document).on('click', '#voice-of-customer-curtain', function() {
-  $('#voice-of-customer').collapse('hide');
-});
-
-// Synchronize voice of customer form with curtain
-$('#voice-of-customer').on('show.bs.collapse', function () {
-  $('#voice-of-customer-curtain').removeClass('hidden');
-});
-$('#voice-of-customer').on('hide.bs.collapse', function () {
-  $('#voice-of-customer-curtain').addClass('hidden');
-});
+require('bootstrap-webpack');
 
 // Alert that line and kakaotalk messenger sharing is only available at mobile
 $(document).on('click', '#line-share, #kakaotalk-share', function() {
@@ -73,6 +25,20 @@ $(document).on('click', '#twitter-share', function() {
     alert("IE 10 이하에서 트위터 공유는 정상적으로 작동하지 않습니다.");
     return false;
   }
+});
+
+// Vertically center aligning for modal
+function centerModal() {
+  $(this).css('display', 'block');
+  var $dialog = $(this).find('.modal-dialog'),
+      offset = ($(window).height() - $dialog.height()) / 3,
+      bottomMargin = parseInt($dialog.css('marginBottom'), 10);
+  if (offset < bottomMargin) offset = bottomMargin;
+  $dialog.css('margin-top', offset);
+}
+$(document).on('show.bs.modal', '.modal', centerModal);
+$(window).on('resize', function() {
+  $('.modal:visible').each(centerModal);
 });
 
 $(window).load(function() {

@@ -5,15 +5,37 @@
 {% load custom_filter %}
 
 {% block container %}
-<div class="container">
-	<a href="/survey/1/" class="btn btn-primary btn-lg btn-block">
-		비례대표 설문
+<div class="container main-page">
+	<a href="/" class="main-page__logo">
+		<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/common/logo.png" />
 	</a>
-</div>
-{% endblock %}
 
-{% block custom_js %}
-{% compress js %}
-<script type="text/javascript" src="{% static 'dist/index.js' %}"></script>
-{% endcompress %}
+	{% comment %}
+	<a href="/party/">
+		<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/main/party.png" class="full-width" />
+	</a>
+	{% endcomment %}
+	<a href="#">
+		<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/main/party_temp.png" class="full-width" />
+	</a>
+
+	<div class="space"></div>
+
+	<div class="row">
+		<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 main-page__column--left">
+			<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/main/guide.png" class="full-width" />
+		</div>
+		<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 main-page__column--right">
+			<a href="/assembly/">
+				<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/main/assembly.png" class="full-width" />
+			</a>
+		</div>
+	</div>
+
+	<div class="space"></div>
+
+	<div>
+		<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/common/footer.png" class="full-width" />
+	</div>
+</div>
 {% endblock %}
