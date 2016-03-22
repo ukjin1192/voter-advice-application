@@ -197,9 +197,8 @@ class Question(models.Model):
         'Survey',
         related_name = 'questions'
     )
-    explanation = models.CharField(
+    explanation = models.TextField(
         verbose_name = _('Explanation'),
-        max_length = 255
     )
     image_url = models.CharField(
         verbose_name = _('Image URL'),
