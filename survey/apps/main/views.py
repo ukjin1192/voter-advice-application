@@ -84,7 +84,7 @@ class UserViewSet(viewsets.ModelViewSet):
         if partial == False:
             return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
         
-        if not set(request.data).issubset(set(['sex', 'year_of_birth', 'supporting_party'])):
+        if not set(request.data).issubset(set(['sex', 'year_of_birth', 'political_tendency', 'supporting_party'])):
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
         serializer = self.get_serializer(instance, data=request.data, partial=partial)

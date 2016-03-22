@@ -6,7 +6,7 @@ from main.models import User, ComparisonTarget, Survey, Question, Choice, Answer
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'sex', 'year_of_birth', 'supporting_party', 'is_active', 'date_joined')
+    list_display = ('id', 'username', 'sex', 'year_of_birth', 'political_tendency', 'supporting_party', 'is_active', 'date_joined')
     search_fields = ('username', )
     list_filter = ('date_joined', )
     date_hierarchy = 'date_joined'

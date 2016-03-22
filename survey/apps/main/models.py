@@ -67,6 +67,12 @@ class User(AbstractBaseUser):
         blank = True,
         null = True
     )
+    political_tendency = models.CharField(
+        verbose_name = _('Political tendency'),
+        max_length = 255,
+        blank = True,
+        null = True
+    )
     supporting_party = models.CharField(
         verbose_name = _('Supporting party'),
         max_length = 255,

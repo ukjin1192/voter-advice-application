@@ -9,7 +9,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'sex', 'year_of_birth', 'supporting_party')
+        fields = ('id', 'sex', 'year_of_birth', 'political_tendency', 'supporting_party')
 
 
 class ComparisonTargetSerializer(serializers.HyperlinkedModelSerializer):
