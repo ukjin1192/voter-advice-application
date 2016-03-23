@@ -65,6 +65,16 @@ urlpatterns = [
         r'^party/result/(?P<pk>[0-9]+)/$', 
         TemplateView.as_view(template_name='party/result.html')
     ),
+
+    # Redirect legacy pages
+    url(
+        r'^result/$', 
+        RedirectView.as_view(url='/', permanent=False)
+    ),
+    url(
+        r'^result/(?P<pk>[0-9]+)/$', 
+        RedirectView.as_view(url='/', permanent=False)
+    ),
 ]
 
 if settings.RUN_SILK:
