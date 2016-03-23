@@ -119,6 +119,21 @@ a, a:focus, a:hover, a:active, a:visited {
 	z-index: 150;
 }
 
+#share-btn-group {
+	padding: 15px;
+	text-align: center;
+	
+	.share-btn {
+		display: inline;
+		padding: 7px;
+		
+		img {
+			width: 12%;
+			max-width: 50px;
+		}
+	}
+}
+
 .background-logo {
 	position: absolute;
 	top: 50%;
@@ -193,15 +208,18 @@ a, a:focus, a:hover, a:active, a:visited {
 
 	.landing__btn-container {
 		position: absolute; 
-		top: 70%;
+		top: 60%;
 		width: 100%; 
 		
 		.landing__btn {
 			width: 170px; 
-			margin-bottom: 15px;
 			font-size: 1.5em;
 			background-color: #415FCF; 
 			color: white; 
+			
+			&.landing__btn--result {
+				margin-top: 15px;
+			}
 		}
 	}
 }
