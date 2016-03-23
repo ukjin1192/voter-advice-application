@@ -27,9 +27,6 @@ def get_survey_data_of_user(user_obj, survey_obj):
     if isinstance(survey_obj, Survey) == False:
         raise ValueError('Invalid variable')
 
-    if user_obj not in survey_obj.participants.all():
-        raise ValueError('User does not completed survey')
-
     answers = Answer.objects.select_related('choice').\
         filter(user=user_obj, choice__question__survey=survey_obj).order_by('choice__id')
     factor_list = []

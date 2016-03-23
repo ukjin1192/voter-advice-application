@@ -205,9 +205,13 @@ class AnswerViewSet(viewsets.ModelViewSet):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
-        # Check if user already answered this question
+        # Update if user already answered this question
         if Answer.objects.filter(user=request.user, choice__question_id=question.id).exists():
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            answer = Answer.objects.filter(user=request.user, choice__question_id=question.id)[0]
+            answer.choice = choice
+            answer.save()
+            # Note that update() will not call save() method which means it could not update updated_at field automatically
+            return Response(status=status.HTTP_200_OK)
         
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -286,6 +290,28 @@ class ResultViewSet(viewsets.ModelViewSet):
         except:
             result = None
         
+        # Randomly fill out unaswered questions
+        if request.user not in survey.participants.all():
+            all_questions = cache.get('survey:' + str(survey.id) + ':questions')
+            if all_questions is None:
+                all_questions = redis.set_questions_cache(survey)
+            all_questions_id_list = []
+            for i in range(0, len(all_questions)):
+                all_questions_id_list.append(all_questions[i]['id'])
+            
+            answered_questions_id_list = []
+            answers = Answer.objects.select_related('choice').filter(user=request.user, choice__question__survey=survey)
+            for answer in answers:
+                answered_questions_id_list.append(answer.choice.question.id)
+            
+            # Extract id list of unanswered question
+            unanswered_questions_id_list = list(set(all_questions_id_list) - set(answered_questions_id_list))
+            
+            # Random choice for unanswered question
+            for unanswered_question_id in unanswered_questions_id_list:
+                question = Question.objects.prefetch_related('choices').get(id=unanswered_question_id)
+                Answer(user=request.user, choice=question.choices.all().order_by('?')[0]).save()
+            
         comparison_targets = cache.get('survey:'+ str(survey.id) + ':comparison_targets:data')
         if comparison_targets is None:
             comparison_targets = redis.set_survey_data_of_comparison_targets_cache(survey)
@@ -296,9 +322,25 @@ class ResultViewSet(viewsets.ModelViewSet):
         
         user_data = utilities.get_survey_data_of_user(request.user, survey)
             
-        if category == 'comparison_1d':
+        if category == 'factor_list':
             # Get ID of result object(=DO NOT CREATE NEW ONE) only if 
-            #   (1) Result is exsit
+            #   (1) Result is exist
+            #   (2) User's answers are not updated after result object is created 
+            if result is not None and result.updated_at > user_data['updated_at']:
+                return Response(
+                        {'state': True, 'id': result.id, 'message': 'Result already exist.'},
+                        status=status.HTTP_200_OK)
+            
+            factor_list = user_data['factor_list']
+            record = ''
+            
+            for i in range(0, len(factor_list)):
+                record += str(i + 1) + '=' + str(factor_list[i]) + '&'
+            
+            record = record[:-1]
+        elif category == 'comparison_1d':
+            # Get ID of result object(=DO NOT CREATE NEW ONE) only if 
+            #   (1) Result is exist
             #   (2) User's answers are not updated after result object is created 
             #   (3) Answers of comparison targets are not updated after result object is created
             if result is not None and \
@@ -309,7 +351,7 @@ class ResultViewSet(viewsets.ModelViewSet):
                         status=status.HTTP_200_OK)
             
             record = utilities.get_one_dimensional_result(user_data['factor_list'], *target_data)
-        else:
+        elif category == 'comparison_2d':
             rotation_matrix = cache.get('survey:' + str(survey.id) + ':rotation_matrix')
             if rotation_matrix is None:
                 try:
@@ -318,7 +360,7 @@ class ResultViewSet(viewsets.ModelViewSet):
                     return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
             
             # Get ID of result object(=DO NOT CREATE NEW ONE) only if 
-            #   (1) Result is exsit
+            #   (1) Result is exist
             #   (2) User's answers are not updated after result object is created 
             #   (3) Answers of comparison targets are not updated after result object is created
             #   (4) Rotation matrix is not updated after result object is created
@@ -336,6 +378,8 @@ class ResultViewSet(viewsets.ModelViewSet):
             target_data.append(user_dict)
             
             record = utilities.get_two_dimensional_result(rotation_matrix['matrix'], *target_data)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         
         data = request.data
         data['record'] = record
