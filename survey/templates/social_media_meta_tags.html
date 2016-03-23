@@ -4,6 +4,18 @@
 <meta property="fb:app_id" content="" />
 {% endcomment %}
 
+{% if request.path == '/' %}
+{# Main Page #}
+{% elif request.path == '/assembly/' %}
+{# Assembly landing page #}
+{% elif '/assembly/' in request.path %}
+{# Assembly result page #}
+{% elif request.path == '/party/' %}
+{# Party landing page #}
+{% elif '/party/' in request.path %}
+{# Party result page #}
+{% endif %}
+
 {# Index page : 'website' / Result detail page : 'article' #}
 <meta property="og:type" content="website" />
 <meta property="og:title" content="핑! 정치성향 테스트" />
