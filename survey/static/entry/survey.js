@@ -11,15 +11,10 @@ var setAuthToken = require('../module/setAuthToken.js');
 var clearAuthToken = require('../module/clearAuthToken.js');
 
 // Global variables
-var totalSlides = 19;
-var activeSlideIndex; // Starting from 1
+var surveyID = 2;
+var activeSlideIndex;   // Starting from 1
 var answerList = {};
-var questionList = [];
-
-// Initiate answer list
-for (var i=1; i<=totalSlides; i++) {
-  answerList[i] = null;
-}
+var questionList = [];  // Starting from 0
 
 // Show additional information of statement
 $(document).on('show.bs.modal', '#cheating-paper', function() {
@@ -46,6 +41,25 @@ function syncTitle(index) {
 	$('.header__subtitle').text(questionList[index].header_subtitle);
 }
 
+// Save choice
+function saveChoice(choiceID) {
+  // Set authentication and CSRF tokens at HTTP header
+  setAuthToken();
+  setCSRFToken();
+
+  var formData = new FormData();
+  formData.append('choice_id', choiceID);
+
+  $.ajax({
+    url: '/api/answers/',
+    type: 'POST',
+    data: formData,
+    contentType: false,
+    processData: false
+  }).done(function(data) {
+  });
+}
+
 // Toggle slide navigation arrows
 $(document).on('click', '.slide', function() {
   if ($('.fp-controlArrow').hasClass('hidden')) $('.fp-controlArrow').removeClass('hidden');
@@ -56,18 +70,37 @@ $(document).on('click', '.slide', function() {
 $(document).on('click', '.choice', function() {
   var $choice = $(this);
 
-  if ($choice.hasClass('choice--agreement')) answerList[activeSlideIndex] = 1;
-  else if ($choice.hasClass('choice--abtention')) answerList[activeSlideIndex] = 0;
-  else if ($choice.hasClass('choice--disagreement')) answerList[activeSlideIndex] = -1;
+  if ($choice.hasClass('choice--agreement')) {
+    answerList[activeSlideIndex] = 1;
+    saveChoice(questionList[activeSlideIndex - 1].agreement_choice_id);
+  } else if ($choice.hasClass('choice--abtention')) {
+    answerList[activeSlideIndex] = 0;
+    saveChoice(questionList[activeSlideIndex - 1].abtention_choice_id);
+  } else if ($choice.hasClass('choice--disagreement')) {
+    answerList[activeSlideIndex] = -1;
+    saveChoice(questionList[activeSlideIndex - 1].disagreement_choice_id);
+  }
 
-  if (activeSlideIndex == totalSlides) {
-    var queryString = '';
+  // When user completed survey
+  if (activeSlideIndex == questionList.length) {
+    var formData = new FormData();
+    formData.append('survey_id', surveyID);
+    formData.append('category', 'factor_list');
     
-    $.each(answerList, function(key, value) { 
-      queryString += '&' + key + '=' + value;
+    // Set authentication and CSRF tokens at HTTP header
+    setAuthToken();
+    setCSRFToken();
+    
+    $.ajax({
+      url: '/api/results/',
+      type: 'POST',
+      data: formData,
+      contentType: false,
+      processData: false
+    }).done(function(data) {
+      // Move to result page
+      location.href = '/assembly/result/' + data.id + '/';
     });
-    queryString = '?' + queryString.substring(1, queryString.length);
-    location.href = '/assembly/result/' + queryString;
   } else {
     $.fn.fullpage.moveSlideRight();
   }
@@ -75,75 +108,139 @@ $(document).on('click', '.choice', function() {
 
 $(window).load(function() {
 
-  for (var i=0; i<totalSlides; i++) {
-    questionList.push({
-      'header_title': '테러방지법' + i,
-      'header_subtitle': '국민보호와 공공안전을 위한 테러방지법안' + i,
-      'agreement_speaker_image': 'http://placehold.it/100x100',
-      'agreement_speaker_name': '홍길동' + i,
-      'agreement_content': '가나다라 마바사 아자차카 타파하' + i,
-      'disagreement_speaker_image': 'http://placehold.it/100x100',
-      'disagreement_speaker_name': '홍길동' + i,
-      'disagreement_content': '가나다라 마바사 아자차카 타파하' + i,
-      'cheating_paper_content': ' 컨닝페이퍼 내용' + i
+  // Check user is valid
+  if (localStorage.getItem('token') === null || localStorage.getItem('user_id') === null) {
+    localStorage.clear()
+    clearAuthToken();
+    
+    // Redirect to landing page if user is not valid 
+    location.href = '/assembly/';
+  } else {
+    // Set authentication token at HTTP header
+    setAuthToken();
+    
+    $.ajax({
+      url: '/api/users/' + localStorage.getItem('user_id') + '/',
+      type: 'GET'
+    }).fail(function() {
+      // When user is invalid
+      localStorage.clear()
+      clearAuthToken();
+      
+      // Redirect to landing page if user is not valid 
+      location.href = '/assembly/';
     });
   }
-  
-  for (var i=0; i<totalSlides; i++) {
-    var $slide = $('#slide-virtual-dom').clone().removeClass('hidden').removeAttr('id');
-    $slide.find('.statement--agreement .statement__speaker-image').attr('src', questionList[i].agreement_speaker_image);
-    $slide.find('.statement--agreement .statement__speaker-name').text(questionList[i].agreement_speaker_name);
-    $slide.find('.statement--agreement .statement__content').text(questionList[i].agreement_content);
-    $slide.find('.statement--disagreement .statement__speaker-image').attr('src', questionList[i].agreement_speaker_image);
-    $slide.find('.statement--disagreement .statement__speaker-name').text(questionList[i].agreement_speaker_name);
-    $slide.find('.statement--disagreement .statement__content').text(questionList[i].agreement_content);
-    $slide.find('.cheating-paper__content').text(questionList[i].cheating_paper_content);
-    $('.survey__body .section').append($slide);
-  }
 
-  $('#slide-virtual-dom').remove();
-
-  // Inititate fullpage.js with options
-  $('.survey__body').fullpage({
-    fixedElements: '.survey__header, .survey__footer',
-    // Padding top and bottom are required to use slimscroll with fixed elements
-    paddingTop: $('.survey__header').outerHeight(),
-    paddingBottom: $('.survey__footer').outerHeight(),
-    scrollOverflow: true, 
-    loopHorizontal: false,
+  $.ajax({
+    url: '/api/questions/',
+    type: 'GET',
+    data: {
+      'survey_id': surveyID
+    }
+  }).done(function(data) {
     
-    afterRender: function() {
-      // Update active slide index
-      activeSlideIndex = $('.slide').index($('.slide.active')) + 1;
+    data.forEach(function(question, index) {
+      var questionTemporaryExplanation = question.explanation.split('|');
+      var questionTemporaryImage = question.image_url.split('|');
+      var choices = question.choices;
+      var agreementChoiceID, abtentionChoiceID, disagreementChoiceID;
+      choices.forEach(function(choice) {
+        switch (choice.factor) {
+          case 1:
+            agreementChoiceID = choice.id;
+            break;
+          case 0:
+            abtentionChoiceID = choice.id;
+            break;
+          case -1:
+            disagreementChoiceID = choice.id;
+            break;
+          default:
+            break;
+        }
+      });
       
-      syncProgressBar(activeSlideIndex * 100 / totalSlides);
-      syncChoice(answerList[activeSlideIndex]);
-      syncTitle(activeSlideIndex - 1);
+      questionList.push({
+        'header_title': questionTemporaryExplanation[0],
+        'header_subtitle': questionTemporaryExplanation[1],
+        'agreement_speaker_image': questionTemporaryImage[1],
+        'agreement_speaker_name': questionTemporaryImage[0],
+        'agreement_content': questionTemporaryExplanation[2],
+        'disagreement_speaker_image': questionTemporaryImage[3],
+        'disagreement_speaker_name': questionTemporaryImage[2],
+        'disagreement_content': questionTemporaryExplanation[3],
+        'agreement_choice_id': agreementChoiceID,
+        'abtention_choice_id': abtentionChoiceID,
+        'disagreement_choice_id': disagreementChoiceID,
+        'cheating_paper_content': questionTemporaryExplanation[4]
+      });
       
-      // Toggle off slide navigation arrows
-      $('.fp-controlArrow').addClass('hidden');
-    },
+      // Initiate answer list
+      answerList[index + 1] = null;
+    });
+       
+    for (var i=0; i<questionList.length; i++) {
+      var $slide = $('#slide-virtual-dom').clone().removeClass('hidden').removeAttr('id');
+      $slide.find('.statement--agreement .statement__speaker-image').attr('src', questionList[i].agreement_speaker_image);
+      $slide.find('.statement--agreement .statement__speaker-name').text(questionList[i].agreement_speaker_name);
+      $slide.find('.statement--agreement .statement__content').text(questionList[i].agreement_content);
+      $slide.find('.statement--disagreement .statement__speaker-image').attr('src', questionList[i].disagreement_speaker_image);
+      $slide.find('.statement--disagreement .statement__speaker-name').text(questionList[i].disagreement_speaker_name);
+      $slide.find('.statement--disagreement .statement__content').text(questionList[i].disagreement_content);
+      $slide.find('.cheating-paper__content').text(questionList[i].cheating_paper_content);
+      $('.survey__body .section').append($slide);
+    }
     
-    afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex) {
-      var $loadedSlide = $(this);
-      
-      // Update active slide index
-      activeSlideIndex = slideIndex + 1;
-      
-      syncChoice(answerList[activeSlideIndex]);
-      
-      // Toggle off slide navigation arrows
-      $('.fp-controlArrow').addClass('hidden');
-    },
+    $('#slide-virtual-dom').remove();
     
-    onSlideLeave: function(anchorLink, index, slideIndex, direction, nextSlideIndex) {
-      var $leavingSlide = $(this);
+    // Inititate fullpage.js with options
+    $('.survey__body').fullpage({
+      fixedElements: '.survey__header, .survey__footer',
+      // Padding top and bottom are required to use slimscroll with fixed elements
+      paddingTop: $('.survey__header').outerHeight(),
+      paddingBottom: $('.survey__footer').outerHeight(),
+      scrollOverflow: true, 
+      loopHorizontal: false,
       
-      // Choose default choice when user didn't choose anything
-      if (answerList[activeSlideIndex] === null && direction == 'right') answerList[activeSlideIndex] = 0;
+      afterRender: function() {
+        // Update active slide index
+        activeSlideIndex = $('.slide').index($('.slide.active')) + 1;
+        
+        syncProgressBar(activeSlideIndex * 100 / questionList.length);
+        syncChoice(answerList[activeSlideIndex]);
+        syncTitle(activeSlideIndex - 1);
+        
+        // Toggle off slide navigation arrows
+        $('.fp-controlArrow').addClass('hidden');
+      },
       
-      syncProgressBar((nextSlideIndex + 1) * 100 / totalSlides);
-      syncTitle(nextSlideIndex);
-    },
-  }); 
+      afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex) {
+        var $loadedSlide = $(this);
+        
+        // Update active slide index
+        activeSlideIndex = slideIndex + 1;
+        
+        syncChoice(answerList[activeSlideIndex]);
+        
+        // Toggle off slide navigation arrows
+        $('.fp-controlArrow').addClass('hidden');
+      },
+      
+      onSlideLeave: function(anchorLink, index, slideIndex, direction, nextSlideIndex) {
+        var $leavingSlide = $(this);
+        
+        // Choose default choice when user didn't choose anything
+        /*
+        if (answerList[activeSlideIndex] === null && direction == 'right') {
+          answerList[activeSlideIndex] = 0;
+          saveChoice(questionList[activeSlideIndex - 1].abtention_choice_id);
+        }
+        */
+        
+        syncProgressBar((nextSlideIndex + 1) * 100 / questionList.length);
+        syncTitle(nextSlideIndex);
+      },
+    }); 
+  });
 });
