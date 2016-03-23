@@ -184,6 +184,7 @@ SEX_CHOICES = (
     ('female', 'Female')
 )
 RESULT_CATEGORY_CHOICES = (
+    ('factor_list', 'Simple list of choice factor'),
     ('comparison_1d', 'One dimensional comparison'),
     ('comparison_2d', 'Two dimentsional comparison')
 )

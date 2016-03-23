@@ -43,6 +43,10 @@ urlpatterns = [
     ),
     url(
         r'^assembly/result/$', 
+        RedirectView.as_view(url='/assembly/', permanent=False)
+    ),
+    url(
+        r'^assembly/result/(?P<pk>[0-9]+)/$', 
         TemplateView.as_view(template_name='assembly/result.html')
     ),
     url(
