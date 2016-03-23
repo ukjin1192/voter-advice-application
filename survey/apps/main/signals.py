@@ -15,6 +15,7 @@ def update_cache_when_question_updated(sender, instance, created, **kwargs):
     Update cache when question updated
     """
     redis.set_questions_cache(instance.survey)
+    redis.set_questions_count_cache(instance.survey)
 
 
 @receiver(post_save, sender=Choice)

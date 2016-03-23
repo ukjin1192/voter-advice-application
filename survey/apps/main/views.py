@@ -68,7 +68,11 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer_data = serializer.data
         
         if 'survey_id' in request.GET:
-            survey = Survey.objects.get(id=int(request.GET['survey_id']))
+            try:
+                survey = Survey.objects.get(id=int(request.GET['survey_id']))
+            except:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            
             if request.user in survey.participants.all():
                 serializer_data['completed_survey'] = True
         
@@ -205,12 +209,22 @@ class AnswerViewSet(viewsets.ModelViewSet):
         except:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         
+        # Get question count
+        questions_count = cache.get('survey:' + str(survey.id) + 'questions:count')
+        if questions_count is None:
+            questions_count = redis.set_questions_count_cache(survey)
+        
         # Update if user already answered this question
         if Answer.objects.filter(user=request.user, choice__question_id=question.id).exists():
+            # Note that update() will not call save() method which means it could not update updated_at field automatically
             answer = Answer.objects.filter(user=request.user, choice__question_id=question.id)[0]
             answer.choice = choice
             answer.save()
-            # Note that update() will not call save() method which means it could not update updated_at field automatically
+            
+            # When user completed survey
+            if Answer.objects.filter(user=request.user).count() == questions_count:
+                survey.participants.add(request.user)
+            
             return Response(status=status.HTTP_200_OK)
         
         serializer = self.get_serializer(data=request.data)
@@ -219,10 +233,6 @@ class AnswerViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         
         # When user completed survey
-        questions_count = cache.get('survey:' + str(survey.id) + 'questions:count')
-        if questions_count is None:
-            questions_count = redis.set_questions_count_cache(survey)
-        
         if Answer.objects.filter(user=request.user).count() == questions_count:
             survey.participants.add(request.user)
         
@@ -312,6 +322,9 @@ class ResultViewSet(viewsets.ModelViewSet):
                 question = Question.objects.prefetch_related('choices').get(id=unanswered_question_id)
                 Answer(user=request.user, choice=question.choices.all().order_by('?')[0]).save()
             
+            # Add user to participant list of survey
+            survey.participants.add(request.user)
+            
         comparison_targets = cache.get('survey:'+ str(survey.id) + ':comparison_targets:data')
         if comparison_targets is None:
             comparison_targets = redis.set_survey_data_of_comparison_targets_cache(survey)
@@ -334,7 +347,12 @@ class ResultViewSet(viewsets.ModelViewSet):
             factor_list = user_data['factor_list']
             record = ''
             
-            for i in range(0, len(factor_list)):
+            # Get question count
+            questions_count = cache.get('survey:' + str(survey.id) + 'questions:count')
+            if questions_count is None:
+                questions_count = redis.set_questions_count_cache(survey)
+            
+            for i in range(0, min(len(factor_list), questions_count)):
                 record += str(i + 1) + '=' + str(factor_list[i]) + '&'
             
             record = record[:-1]

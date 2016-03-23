@@ -43,6 +43,10 @@ function syncTitle(index) {
 
 // Save choice
 function saveChoice(choiceID) {
+  // When user completed survey
+  if (activeSlideIndex == questionList.length) var completed = true; 
+  else var completed = false;
+
   // Set authentication and CSRF tokens at HTTP header
   setAuthToken();
   setCSRFToken();
@@ -57,6 +61,27 @@ function saveChoice(choiceID) {
     contentType: false,
     processData: false
   }).done(function(data) {
+    // When user completed survey
+    if (completed) {
+      var formData = new FormData();
+      formData.append('survey_id', surveyID);
+      formData.append('category', 'factor_list');
+      
+      // Set authentication and CSRF tokens at HTTP header
+      setAuthToken();
+      setCSRFToken();
+      
+      $.ajax({
+        url: '/api/results/',
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false
+      }).done(function(data) {
+        // Move to result page
+        location.href = '/assembly/result/' + data.id + '/';
+      });
+    }
   });
 }
 
@@ -81,29 +106,8 @@ $(document).on('click', '.choice', function() {
     saveChoice(questionList[activeSlideIndex - 1].disagreement_choice_id);
   }
 
-  // When user completed survey
-  if (activeSlideIndex == questionList.length) {
-    var formData = new FormData();
-    formData.append('survey_id', surveyID);
-    formData.append('category', 'factor_list');
-    
-    // Set authentication and CSRF tokens at HTTP header
-    setAuthToken();
-    setCSRFToken();
-    
-    $.ajax({
-      url: '/api/results/',
-      type: 'POST',
-      data: formData,
-      contentType: false,
-      processData: false
-    }).done(function(data) {
-      // Move to result page
-      location.href = '/assembly/result/' + data.id + '/';
-    });
-  } else {
-    $.fn.fullpage.moveSlideRight();
-  }
+  // Move to next slide
+  $.fn.fullpage.moveSlideRight();
 });
 
 $(window).load(function() {
@@ -229,14 +233,6 @@ $(window).load(function() {
       
       onSlideLeave: function(anchorLink, index, slideIndex, direction, nextSlideIndex) {
         var $leavingSlide = $(this);
-        
-        // Choose default choice when user didn't choose anything
-        /*
-        if (answerList[activeSlideIndex] === null && direction == 'right') {
-          answerList[activeSlideIndex] = 0;
-          saveChoice(questionList[activeSlideIndex - 1].abtention_choice_id);
-        }
-        */
         
         syncProgressBar((nextSlideIndex + 1) * 100 / questionList.length);
         syncTitle(nextSlideIndex);
