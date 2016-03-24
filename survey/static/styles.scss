@@ -450,8 +450,17 @@ a, a:focus, a:hover, a:active, a:visited {
 	background-color: #EBEBEB;
 
 	.result__container {
+		position: relative;
 		max-width: 600px;
+		overflow-y: hidden;
 		padding: 0;
+		
+		.result__iframe--loading {
+			position: absolute; 
+			top: 0; 
+			left: 0; 
+			width: 100%;
+		}
 		
 		.result__iframe {
 			border: none;

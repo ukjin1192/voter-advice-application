@@ -17,6 +17,14 @@ $(window).on('resize', function() {
 
 $(window).load(function() {
 
+  // Vertically center aligning iframe loading image
+  if ($('.result__iframe--loading').height() - ($(window).height() - $('.result__header').height()) > 0) {
+    $('.result__iframe--loading').css(
+      'margin-top', 
+      ($('.result__iframe--loading').height() - ($(window).height() - $('.result__header').height())) / -2
+    );
+  }
+
   // Set authentication token at HTTP header
   setAuthToken();
 
@@ -33,7 +41,15 @@ $(window).load(function() {
     });
   });
   
+  // Hide iframe loading image when iframe loaded
   $('.result__iframe').on('load', function() {
-    console.log('iframe loaded');
+    setTimeout(function() {
+      $('.result__iframe--loading').addClass('hidden');
+    }, 4000);
   });
+
+  // Set maximum time limit to show loading image
+  setTimeout(function() {
+    $('.result__iframe--loading').addClass('hidden');
+  }, 10000);
 });
