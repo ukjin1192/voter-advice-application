@@ -6,7 +6,7 @@
 
 {% block container %}
 <div class="landing">
-	<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/landing.png" class="landing__image" />
+	<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/landing_a.png" class="landing__image" />
 	
 	<div class="landing__btn-container">
 		<div>
@@ -14,20 +14,17 @@
 				새로 시작하기
 			</button>
 		</div>
-		
 		<div>
 			<button type="button" class="btn btn-lg landing__btn landing__btn--result hidden" data-loading-text="로딩중입니다">
 				지난 결과보기
 			</button>
 		</div>
-		
-		{% include 'social_media_share_group.html' %}
 	</div>
 </div>
 {% endblock %}
 
 {% block custom_js %}
 {% compress js %}
-<script type="text/javascript" src="{% static 'dist/index.js' %}"></script>
+<script type="text/javascript" src="{% static 'dist/assembly_index.js' %}"></script>
 {% endcompress %}
 {% endblock %}

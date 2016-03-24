@@ -11,7 +11,7 @@ var setAuthToken = require('../module/setAuthToken.js');
 var clearAuthToken = require('../module/clearAuthToken.js');
 
 // Global variables
-var surveyID = 2;
+var surveyID = 1;
 var activeSlideIndex;   // Starting from 1
 var answerList = {};
 var questionList = [];  // Starting from 0
@@ -146,7 +146,6 @@ $(window).load(function() {
     
     data.forEach(function(question, index) {
       var questionTemporaryExplanation = question.explanation.split('|');
-      var questionTemporaryImage = question.image_url.split('|');
       var choices = question.choices;
       var agreementChoiceID, abtentionChoiceID, disagreementChoiceID;
       choices.forEach(function(choice) {
@@ -168,11 +167,7 @@ $(window).load(function() {
       questionList.push({
         'header_title': questionTemporaryExplanation[0],
         'header_subtitle': questionTemporaryExplanation[1],
-        'agreement_speaker_image': questionTemporaryImage[1],
-        'agreement_speaker_name': questionTemporaryImage[0],
         'agreement_content': questionTemporaryExplanation[2],
-        'disagreement_speaker_image': questionTemporaryImage[3],
-        'disagreement_speaker_name': questionTemporaryImage[2],
         'disagreement_content': questionTemporaryExplanation[3],
         'agreement_choice_id': agreementChoiceID,
         'abtention_choice_id': abtentionChoiceID,
@@ -186,11 +181,7 @@ $(window).load(function() {
        
     for (var i=0; i<questionList.length; i++) {
       var $slide = $('#slide-virtual-dom').clone().removeClass('hidden').removeAttr('id');
-      $slide.find('.statement--agreement .statement__speaker-image').attr('src', questionList[i].agreement_speaker_image);
-      $slide.find('.statement--agreement .statement__speaker-name').text(questionList[i].agreement_speaker_name);
       $slide.find('.statement--agreement .statement__content').text(questionList[i].agreement_content);
-      $slide.find('.statement--disagreement .statement__speaker-image').attr('src', questionList[i].disagreement_speaker_image);
-      $slide.find('.statement--disagreement .statement__speaker-name').text(questionList[i].disagreement_speaker_name);
       $slide.find('.statement--disagreement .statement__content').text(questionList[i].disagreement_content);
       $slide.find('.cheating-paper__content').text(questionList[i].cheating_paper_content);
       $('.survey__body .section').append($slide);

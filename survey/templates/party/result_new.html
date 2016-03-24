@@ -17,11 +17,19 @@
 	<div class="container result__container">
 		<iframe src="" width="" height="" class="result__iframe"></iframe>
 	</div>
+
+	{% include 'social_media_share_group.html' %}
+</div>
+
+<div class="container-fit result__footer">
+	<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/common/footer_light.png" class="footer__image" />
 </div>
 {% endblock %}
 
 {% block custom_js %}
+{% comment %}
 {% compress js %}
-<script type="text/javascript" src="{% static 'dist/assembly_result.js' %}"></script>
+<script type="text/javascript" src="{% static 'dist/result.js' %}"></script>
 {% endcompress %}
+{% endcomment %}
 {% endblock %}

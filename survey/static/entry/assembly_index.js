@@ -9,7 +9,7 @@ var setAuthToken = require('../module/setAuthToken.js');
 var clearAuthToken = require('../module/clearAuthToken.js');
 
 // Global variables
-var surveyID = 2;
+var surveyID = 1;
 
 $(document).on('click', '.landing__btn--survey', function() {
   var btn = $(this);

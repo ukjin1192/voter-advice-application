@@ -213,6 +213,7 @@ a, a:focus, a:hover, a:active, a:visited {
 		
 		.landing__btn {
 			width: 170px; 
+			border-radius: 0;
 			font-size: 1.5em;
 			background-color: #415FCF; 
 			color: white; 
@@ -238,6 +239,8 @@ a, a:focus, a:hover, a:active, a:visited {
 		
 		.header__title {
 			padding: 15px 0 11px 37px; 
+			overflow-x: scroll;
+			white-space: nowrap;
 			font-weight: 700; 
 			font-size: 1.8em;
 			color: white; 
@@ -249,6 +252,8 @@ a, a:focus, a:hover, a:active, a:visited {
 		
 		.header__subtitle {
 			padding: 8px 0 8px 37px; 
+			overflow-x: scroll;
+			white-space: nowrap;
 			font-weight: 300; 
 			color: white;
 		}
@@ -281,43 +286,39 @@ a, a:focus, a:hover, a:active, a:visited {
 		background-color: white; 
 		
 		.statement--left {
-			padding-left: 0; 
-			padding-right: 11px; 
+			padding: 0 12px 0 0;
 			text-align: center;
 		}
-		
+			
 		.statement--right {
-			padding-left: 11px; 
-			padding-right: 0;
+			padding: 0 0 0 12px;
 			text-align: center;
 		}
 		
-		.statement__speaker-image {
+		.statement__content {
+			text-align: left;
+		
+			&.statement__content--left {
+				padding-left: 0; 
+				padding-right: 12px; 
+			}
+			
+			&.statement__content--right {
+				padding-left: 12px; 
+				padding-right: 0;
+			}
+		}
+		
+		.statement__category--image {
 			width: 100%;
 		}
 		
-		.statement__speaker-name {
-			margin: 12px 0 8px 0; 
-			font-size: 0.72em;
-		}
-		
-		.statement__category {
-			width: 24px; 
-			height: 24px; 
-			margin: 0 auto; 
-			padding-top: 3px; 
-			border-radius: 50%; 
-			font-size: 0.92em; 
-			font-weight: 700; 
-			color: white; 
-			text-align: center;
+		.statement__category--text {
+			margin-top: 12px;
+			font-weight: 700;
 			
-			&.statement__category--agreement {
-				background-color: #43C8AD; 
-			}
-			
-			&.statement__category--disagreement {
-				background-color: #FF6521; 
+			@media screen and (max-width: $screen-xxs-max) {
+				font-size: 0.9em;
 			}
 		}
 	}
@@ -421,8 +422,10 @@ a, a:focus, a:hover, a:active, a:visited {
 		background-color: #323234;
 		
 		.header__title {
-			max-width: 500px;
+			max-width: 600px;
 			padding: 15px 0 11px 37px; 
+			overflow-x: scroll;
+			white-space: nowrap;
 			font-weight: 700; 
 			font-size: 1.8em;
 			color: white; 
@@ -433,8 +436,10 @@ a, a:focus, a:hover, a:active, a:visited {
 		background-color: #444444;
 		
 		.header__subtitle {
-			max-width: 500px;
+			max-width: 600px;
 			padding: 8px 0 8px 37px; 
+			overflow-x: scroll;
+			white-space: nowrap;
 			font-weight: 300; 
 			color: white;
 		}
@@ -445,8 +450,12 @@ a, a:focus, a:hover, a:active, a:visited {
 	background-color: #EBEBEB;
 
 	.result__container {
-		max-width: 500px;
-		padding: 15px 0;
+		max-width: 600px;
+		padding: 0;
+		
+		.result__iframe {
+			border: none;
+		}
 	}
 }
 
@@ -456,7 +465,7 @@ a, a:focus, a:hover, a:active, a:visited {
 
 	.footer__image {
 		width: 100%;
-		max-width: 500px;
+		max-width: 600px;
 	}
 }
 

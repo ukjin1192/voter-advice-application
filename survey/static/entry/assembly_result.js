@@ -7,21 +7,15 @@ var setAuthToken = require('../module/setAuthToken.js');
 var pathName = window.location.pathname;
 var resultID = pathName.match(/result\/(\d+)/)[1];
 
+// Fit iframe as full size
 $(window).on('resize', function() {
-
-  var width = $('.result__container').width(),
-      height = $('.result__container').width();
-
   $('.result__iframe').attr({
-    'width': width,
-    'height': height
+    'width': $('.result__container').width(),
+    'height': $(window).height() - $('.result__header').outerHeight()
   });
 });
 
 $(window).load(function() {
-
-  var width = $('.result__container').width(),
-      height = $('.result__container').width();
 
   // Set authentication token at HTTP header
   setAuthToken();
@@ -31,10 +25,15 @@ $(window).load(function() {
     url: '/api/results/' + resultID + '/',
     type: 'GET'
   }).done(function(data) {
+    // Fit iframe as full size
     $('.result__iframe').attr({
       'src': 'https://pingkorea.shinyapps.io/deployment/?' + data.record,
-      'width': width,
-      'height': height
+      'width': $('.result__container').width(),
+      'height': $(window).height() - $('.result__header').outerHeight()
     });
+  });
+  
+  $('.result__iframe').on('load', function() {
+    console.log('iframe loaded');
   });
 });

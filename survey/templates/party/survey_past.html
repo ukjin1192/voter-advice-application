@@ -192,7 +192,9 @@
 {% endblock %}
 
 {% block custom_js %}
+{% comment %}
 {% compress js %}
 <script type="text/javascript" src="{% static 'dist/survey.js' %}"></script>
 {% endcompress %}
+{% endcomment %}
 {% endblock %}

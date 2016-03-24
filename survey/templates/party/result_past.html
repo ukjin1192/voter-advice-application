@@ -99,7 +99,9 @@
 {% endblock %}
 
 {% block custom_js %}
+{% comment %}
 {% compress js %}
 <script type="text/javascript" src="{% static 'dist/result.js' %}"></script>
 {% endcompress %}
+{% endcomment %}
 {% endblock %}
