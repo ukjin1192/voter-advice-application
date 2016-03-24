@@ -10,7 +10,7 @@ var resultID = pathName.match(/result\/(\d+)/)[1];
 // Fit iframe as full size
 $(window).on('resize', function() {
   $('.result__iframe').attr({
-    'width': $('.result__container').width(),
+    'width': $('.result__body').width(),
     'height': $(window).height() - $('.result__header').outerHeight()
   });
 });
@@ -18,10 +18,10 @@ $(window).on('resize', function() {
 $(window).load(function() {
 
   // Vertically center aligning iframe loading image
-  if ($('.result__iframe--loading').height() - ($(window).height() - $('.result__header').height()) > 0) {
+  if ($('.result__iframe--loading').height() > $(window).height()) {
     $('.result__iframe--loading').css(
       'margin-top', 
-      ($('.result__iframe--loading').height() - ($(window).height() - $('.result__header').height())) / -2
+      ($('.result__iframe--loading').height() - $(window).height()) / -2
     );
   }
 
@@ -36,7 +36,7 @@ $(window).load(function() {
     // Fit iframe as full size
     $('.result__iframe').attr({
       'src': 'https://pingkorea.shinyapps.io/deployment/?' + data.record,
-      'width': $('.result__container').width(),
+      'width': $('.result__body').width(),
       'height': $(window).height() - $('.result__header').outerHeight()
     });
   });
@@ -45,11 +45,13 @@ $(window).load(function() {
   $('.result__iframe').on('load', function() {
     setTimeout(function() {
       $('.result__iframe--loading').addClass('hidden');
+      $('.result__header').removeClass('hidden');
     }, 4000);
   });
 
   // Set maximum time limit to show loading image
   setTimeout(function() {
     $('.result__iframe--loading').addClass('hidden');
+    $('.result__header').removeClass('hidden');
   }, 10000);
 });

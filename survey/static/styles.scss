@@ -219,7 +219,7 @@ a, a:focus, a:hover, a:active, a:visited {
 			color: white; 
 			
 			&.landing__btn--result {
-				margin-top: 15px;
+				margin-top: 30px;
 			}
 		}
 	}
@@ -447,24 +447,21 @@ a, a:focus, a:hover, a:active, a:visited {
 }
 
 .result__body {
-	background-color: #EBEBEB;
-
-	.result__container {
-		position: relative;
-		max-width: 600px;
-		overflow-y: hidden;
-		padding: 0;
-		
-		.result__iframe--loading {
-			position: absolute; 
-			top: 0; 
-			left: 0; 
-			width: 100%;
-		}
-		
-		.result__iframe {
-			border: none;
-		}
+	position: relative;
+	max-width: 600px;
+	overflow-y: hidden;
+	margin: 0 auto;
+	background-color: #323234;
+	
+	.result__iframe--loading {
+		position: absolute; 
+		top: 0; 
+		left: 0; 
+		width: 100%;
+	}
+	
+	.result__iframe {
+		border: none;
 	}
 }
 

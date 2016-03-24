@@ -5,19 +5,17 @@
 {% load custom_filter %}
 
 {% block container %}
-<div class="result__header">
+<div class="result__header hidden">
 	<div class="container-fit header__title-container">
 		<div class="container header__title">
-			나와 어울리는 의원 찾기
+			도플갱어 국회의원 찾기
 		</div>
 	</div>
 </div>
 
-<div class="container-fit result__body">
-	<div class="container result__container">
-		<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/iframe_loading_{{ 'abcd'|make_list|random }}.png" class="result__iframe--loading" />
-		<iframe src="" width="" height="" class="result__iframe"></iframe>
-	</div>
+<div class="result__body">
+	<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/iframe_loading_{{ 'abcd'|make_list|random }}.png" class="result__iframe--loading" />
+	<iframe src="" width="" height="" class="result__iframe"></iframe>
 </div>
 {% endblock %}
 
