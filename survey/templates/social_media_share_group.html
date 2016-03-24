@@ -3,22 +3,12 @@
 <div id="share-btn-group">
   {# Facebook #}
   <a href="https://www.facebook.com/sharer/sharer.php?u=http://pingkorea.com{{ request.path }}" class="share-btn" target="_blank">
-    <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icon/facebook.png" />
+    <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/facebook.png" />
   </a>
 
   {# Twitter #}
   <a href="https://twitter.com/intent/tweet?text=[핑! 정치성향 테스트] 나와 가장 어울리는 정당은? &url=http://pingkorea.com{{ request.path }}" class="share-btn" id="twitter-share" target="_blank">
-    <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icon/twitter.png" class="social-media__icon" />
-  </a>
-
-  {# Google+ #}
-  <a href="https://plus.google.com/share?url=http://pingkorea.com{{ request.path }}" class="share-btn" target="_blank">
-    <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icon/google_plus.png" class="social-media__icon" />
-  </a>
-
-  {# Line #}
-  <a href="line://msg/text/[핑! 정치성향 테스트] 나와 가장 어울리는 정당은? http://pingkorea.com{{ request.path }}" class="share-btn" id="line-share">
-    <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icon/line.png" class="social-media__icon" />
+    <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/twitter.png" class="social-media__icon" />
   </a>
 
   {# Kakaotalk #}
@@ -29,6 +19,6 @@
     <input type="hidden" id="kakaotalk-share__image-height" value="200" />
     <input type="hidden" id="kakaotalk-share__btn-text" value="알아보기" />
     <input type="hidden" id="kakaotalk-share__url" value="http://pingkorea.com{{ request.path }}" />
-    <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icon/kakaotalk.png" class="social-media__icon" />
+    <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/kakao.png" class="social-media__icon" />
   </a>
 </div>

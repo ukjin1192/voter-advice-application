@@ -10,7 +10,7 @@ var attachFastClick = require('fastclick');
 require('bootstrap-webpack');
 
 // Alert that line and kakaotalk messenger sharing is only available at mobile
-$(document).on('click', '#line-share, #kakaotalk-share', function() {
+$(document).on('click', '#kakaotalk-share', function() {
   // Detect desktop browser
   if (!('ontouchstart' in window)) {
     alert("모바일에서만 가능합니다");
