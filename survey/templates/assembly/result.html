@@ -9,12 +9,23 @@
 	<div class="container-fit header__title-container">
 		<div class="container header__title">
 			도플갱어 국회의원 찾기
+			<a href="/" class="header__home-link">
+				<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+			</a>
 		</div>
 	</div>
 </div>
 
 <div class="result__body">
-	<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/iframe_loading_{{ 'abcd'|make_list|random }}.png" class="result__iframe--loading" />
+	{% with random_choices='abcd'|get_random_choices %}
+	{% for random_choice in random_choices %}
+		{% if forloop.last %}
+		<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/iframe_loading_{{ random_choice }}.png" class="result__iframe--loading hidden" />
+		{% else %}
+		<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/iframe_loading_{{ random_choice }}.png" class="result__iframe--loading" />
+		{% endif %}
+	{% endfor %}
+	{% endwith %}
 	<iframe src="" width="" height="" class="result__iframe"></iframe>
 </div>
 {% endblock %}

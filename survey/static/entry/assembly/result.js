@@ -40,18 +40,17 @@ $(window).load(function() {
       'height': $(window).height() - $('.result__header').outerHeight()
     });
   });
-  
-  // Hide iframe loading image when iframe loaded
-  $('.result__iframe').on('load', function() {
-    setTimeout(function() {
-      $('.result__iframe--loading').addClass('hidden');
-      $('.result__header').removeClass('hidden');
-    }, 4000);
-  });
 
-  // Set maximum time limit to show loading image
+  // Change loading image
+  setTimeout(function() {
+    $($('.result__iframe--loading')[1]).removeClass('hidden');
+    $($('.result__iframe--loading')[0]).addClass('hidden');
+  }, 4000);
+
+  // Hide iframe loading image when iframe loaded
   setTimeout(function() {
     $('.result__iframe--loading').addClass('hidden');
     $('.result__header').removeClass('hidden');
-  }, 10000);
+    // Set maximum time limit to show loading image
+  }, 8000);
 });
