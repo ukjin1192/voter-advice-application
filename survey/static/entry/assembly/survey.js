@@ -6,9 +6,9 @@ var fullpage = require('fullpage.js');
 require('jquery-slimscroll');
 
 // Load custom modules
-var setCSRFToken = require('../module/setCSRFToken.js');
-var setAuthToken = require('../module/setAuthToken.js');
-var clearAuthToken = require('../module/clearAuthToken.js');
+var setCSRFToken = require('../../module/setCSRFToken.js');
+var setAuthToken = require('../../module/setAuthToken.js');
+var clearAuthToken = require('../../module/clearAuthToken.js');
 
 // Global variables
 var surveyID = 1;

@@ -1,7 +1,7 @@
 'use strict';
 
 // Load custom modules
-var setAuthToken = require('../module/setAuthToken.js');
+var setAuthToken = require('../../module/setAuthToken.js');
 
 // Global variables
 var pathName = window.location.pathname;

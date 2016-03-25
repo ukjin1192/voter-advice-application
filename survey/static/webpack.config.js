@@ -8,9 +8,10 @@ require('es6-promise').polyfill();
 module.exports = {
   entry: {
     base: './entry/base',
-    assembly_index: './entry/assembly_index',
-    assembly_survey: './entry/assembly_survey',
-    assembly_result: './entry/assembly_result',
+    assembly_index: './entry/assembly/index',
+    assembly_survey: './entry/assembly/survey',
+    assembly_result: './entry/assembly/result',
+    party_index: './entry/party/index',
     vendor: [
       'jquery', 
       'jquery.cookie', 
@@ -39,7 +40,7 @@ module.exports = {
     // Separate main file with vendors
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      chunks: ['base, assembly_index, assembly_survey, assembly_result'],
+      chunks: ['base, assembly_index, assembly_survey, assembly_result, party_index'],
       filename: 'vendor.js',
       minChunks: Infinity
     }),

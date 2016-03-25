@@ -4,12 +4,12 @@
 require('bootstrap-webpack');
 
 // Load custom modules
-var setCSRFToken = require('../module/setCSRFToken.js');
-var setAuthToken = require('../module/setAuthToken.js');
-var clearAuthToken = require('../module/clearAuthToken.js');
+var setCSRFToken = require('../../module/setCSRFToken.js');
+var setAuthToken = require('../../module/setAuthToken.js');
+var clearAuthToken = require('../../module/clearAuthToken.js');
 
 // Global variables
-var surveyID = 1;
+var surveyID = 2;
 
 $(document).on('click', '.landing__btn--survey', function() {
   var btn = $(this);
@@ -32,7 +32,7 @@ $(document).on('click', '.landing__btn--survey', function() {
       localStorage.setItem('user_id', data.id);
       
       // Move to survey page
-      location.href = '/assembly/survey/';
+      location.href = '/party/survey/';
     }).always(function() {
       btn.button('reset');
     }); 
@@ -47,14 +47,14 @@ $(document).on('click', '.landing__btn--survey', function() {
       type: 'GET'
     }).done(function(data) {
       // Move to survey page
-      location.href = '/assembly/survey/';
+      location.href = '/party/survey/';
     }).fail(function() {
       // When user is invalid
       localStorage.clear()
       clearAuthToken();
     
       // Redirect to landing page if user is not valid 
-      location.href = '/assembly/';
+      location.href = '/party/';
     }).always(function() {
       btn.button('reset');
     });
@@ -71,7 +71,7 @@ $(document).on('click', '.landing__btn--result', function() {
 
   var formData = new FormData();
   formData.append('survey_id', surveyID);
-  formData.append('category', 'factor_list');
+  formData.append('category', 'comparison_1d');
   
   // Set authentication and CSRF tokens at HTTP header
   setAuthToken();
@@ -85,7 +85,7 @@ $(document).on('click', '.landing__btn--result', function() {
     processData: false
   }).done(function(data) {
     // Move to result page
-    location.href = '/assembly/result/' + data.id + '/';
+    location.href = '/party/result/' + data.id + '/';
   }).always(function() {
     btn.button('reset');
     $('#loading-icon').addClass('hidden');
