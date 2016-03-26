@@ -1,0 +1,20 @@
+{% load custom_filter %}
+
+<div class="recommendation">
+  <div class="recommendation__title">
+    이런건 어떠세요?
+  </div>
+  <div class="row recommendation__row">
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 recommendation__column">
+      <a href="/assembly/">
+        <img src="{{ 'CDN_URL'|get_settings_variable }}/asset/common/footer_assembly.png" class="full-width" />
+      </a>
+    </div>
+    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6 recommendation__column">
+      <a href="/party/">
+        <img src="{{ 'CDN_URL'|get_settings_variable }}/asset/common/footer_party.png" class="full-width"/>
+      </a>
+    </div>
+	</div>
+</div>
+
