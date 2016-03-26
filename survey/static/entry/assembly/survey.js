@@ -181,6 +181,7 @@ $(window).load(function() {
        
     for (var i=0; i<questionList.length; i++) {
       var $slide = $('#slide-virtual-dom').clone().removeClass('hidden').removeAttr('id');
+      $slide.attr('data-anchor', i + 1);
       $slide.find('.statement--agreement .statement__content').text(questionList[i].agreement_content);
       $slide.find('.statement--disagreement .statement__content').text(questionList[i].disagreement_content);
       $slide.find('.cheating-paper__content').text(questionList[i].cheating_paper_content);

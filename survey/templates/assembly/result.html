@@ -5,7 +5,7 @@
 {% load custom_filter %}
 
 {% block container %}
-<div class="result__header hidden">
+<div class="result__header">
 	<div class="container-fit header__title-container">
 		<div class="container header__title">
 			도플갱어 국회의원 찾기
@@ -16,17 +16,142 @@
 	</div>
 </div>
 
-<div class="result__body">
-	{% with random_choices='abcd'|get_random_choices %}
-	{% for random_choice in random_choices %}
-		{% if forloop.last %}
-		<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/iframe_loading_{{ random_choice }}.png" class="result__iframe--loading hidden" />
-		{% else %}
-		<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/iframe_loading_{{ random_choice }}.png" class="result__iframe--loading" />
-		{% endif %}
-	{% endfor %}
-	{% endwith %}
-	<iframe src="" width="" height="" class="result__iframe"></iframe>
+<div class="container-fit result__body">
+	<div class="container result__container">
+		
+		<div class="result__menu">
+			<span class="menu" data-toggle="modal" data-target="#precaution">주의사항</span>
+			<span class="menu" data-toggle="modal" data-target="#faq">FAQ</span>
+		</div>
+		
+		<div class="alert alert-danger result__alert-message hidden" role="alert">
+			존재하지 않거나 비공개 상태입니다
+		</div>
+		
+		<div class="result__summary">
+			<strong>당신</strong>의 표결 성향은<br/>
+			경제적으로 <span class="summary__position">좌파</span>에 속합니다<br/>
+			<span class="summary__best-matching-target">홍종학</span> 의원과 매우 가까우며,<br/>
+			<span class="summary__worst-matching-target">김무성</span> 의원과 가장 멉니다.
+		</div>
+		
+		<div class="result__search">
+			<div>
+				<strong>국회의원 찾아보기</strong>
+			</div>
+			<div>
+				<small>나와의 유사도를 계산합니다.</small>
+			</div>
+			
+			<form class="search__form">
+				<div class="input-group">
+					<input type="text" class="form-control" placeholder="비교하고 싶은 의원!" required />
+					<span class="input-group-btn">
+						<button type="submit" class="btn btn-default">
+							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						</button>
+					</span>
+				</div>
+			</form>
+			
+			<div>
+				<span class="search__target">김무성</span> 의원의 표결 성향은<br/>
+				경제적으로 <span class="search__position">중도 우파</span>에 속하며,<br/>
+				당신과는 <span class="search__summary">매우 가까운 편</span>입니다!
+			</div>
+		</div>
+		
+		<div class="result__social-media">
+			{% include 'include/social_media_share_group.html' %}
+		</div>
+		
+		<div class="result__detail">
+			<button type="button" class="btn btn-lg detail__toggle-btn" data-toggle="collapse" data-target="#detail__collapse">
+				자세히 비교하기
+			</button>
+		
+			<div class="collapse" id="detail__collapse">
+				<div class="collapse__title">
+					쟁점 법안별 비교
+				</div>
+				
+				<div>
+					Chart here
+				</div>
+				
+				<div class="collapse__title">
+					표결 비교
+				</div>
+				
+				<div class="panel-group" id="report-card" role="tablist" aria-multiselectable="true">
+					<div class="alert alert-info" role="alert">
+						각 문항을 클릭해서 확인할 수 있습니다
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading" role="tab" data-toggle="collapse" data-parent="#report-card" href="#foo">YES</div>
+						<div class="panel-collapse collapse" id="foo" role="tabpanel" data-question-id="">
+							<div class="panel-body">Hello</div>
+						</div>
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading" role="tab" data-toggle="collapse" data-parent="#report-card" href="#bar">NO</div>
+						<div class="panel-collapse collapse" id="bar" role="tabpanel" data-question-id="">
+							<div class="panel-body">Hello</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% include 'include/recommendation.html' %}
+
+<div class="result__footer">
+	<div>
+		<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/common/footer_light.png" class="footer__image" />
+	</div>
+</div>
+
+<div class="modal fade" id="precaution" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">주의사항</h4>
+      </div>
+      <div class="modal-body">
+				Hello world
+			</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="faq" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">FAQ</h4>
+      </div>
+      <div class="modal-body">
+				Hello world
+			</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="panel panel-default hidden" id="report-card__virtual-dom">
+  <div class="panel-heading" role="tab" data-toggle="collapse" data-parent="#report-card" href=""></div>
+  <div class="panel-collapse collapse" id="" role="tabpanel" data-question-id="">
+    <div class="panel-body"></div>
+  </div>
 </div>
 {% endblock %}
 
