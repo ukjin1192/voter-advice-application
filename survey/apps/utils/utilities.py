@@ -48,7 +48,7 @@ def get_one_dimensional_result(user_data, *target_data):
             factor_list = [0, -2, 2]
         User A(1st comparison target)'s survey data
             factor_list = [1, 1, 1]
-        User B(2nd comparision target)'s survey data
+        User B(2nd comparison target)'s survey data
             factor_list = [2, 2, 2]
     [Input]
         user_data = [0, -2, 2]

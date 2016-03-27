@@ -185,8 +185,9 @@ SEX_CHOICES = (
 )
 RESULT_CATEGORY_CHOICES = (
     ('factor_list', 'Simple list of choice factor'),
-    ('comparison_1d', 'One dimensional comparison'),
-    ('comparison_2d', 'Two dimentsional comparison')
+    ('agreement_score', 'Agreement score'),
+    ('city_block_distance', 'City block distance'),
+    ('pca', 'PCA')
 )
 
 # Captcha for humanvalidation

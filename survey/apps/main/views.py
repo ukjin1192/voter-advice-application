@@ -356,7 +356,7 @@ class ResultViewSet(viewsets.ModelViewSet):
                 record += str(i + 1) + '=' + str(factor_list[i]) + '&'
             
             record = record[:-1]
-        elif category == 'comparison_1d':
+        elif category == 'city_block_distance':
             # Get ID of result object(=DO NOT CREATE NEW ONE) only if 
             #   (1) Result is exist
             #   (2) User's answers are not updated after result object is created 
@@ -369,7 +369,7 @@ class ResultViewSet(viewsets.ModelViewSet):
                         status=status.HTTP_200_OK)
             
             record = utilities.get_one_dimensional_result(user_data['factor_list'], *target_data)
-        elif category == 'comparison_2d':
+        elif category == 'pca':
             rotation_matrix = cache.get('survey:' + str(survey.id) + ':rotation_matrix')
             if rotation_matrix is None:
                 try:
@@ -401,7 +401,7 @@ class ResultViewSet(viewsets.ModelViewSet):
         
         data = request.data
         data['record'] = record
-        if category == 'comparison_2d':
+        if category == 'pca':
             data['x_axis_name'] = rotation_matrix['x_axis_name']
             data['y_axis_name'] = rotation_matrix['y_axis_name']
         
