@@ -32,7 +32,7 @@ def update_cache_when_comparison_target_updated(sender, instance, created, **kwa
     Update cache when comparision target updated
     """
     redis.set_comparison_target_list_cache(instance.survey)
-    if created == False and instance.user in instance.survey.participants:
+    if created == False and instance.user in instance.survey.participants.all():
         redis.set_survey_data_of_comparison_targets_cache(instance.survey)
 
 
