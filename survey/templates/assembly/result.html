@@ -30,22 +30,28 @@
 		
 		<div class="result__summary">
 			<strong>당신</strong>의 표결 성향은<br/>
-			경제적으로 <span class="summary__position">좌파</span>에 속합니다<br/>
-			<span class="summary__best-matching-target">홍종학</span> 의원과 매우 가까우며,<br/>
-			<span class="summary__worst-matching-target">김무성</span> 의원과 가장 멉니다.
+			경제적으로 <span class="summary__position"></span>에 속합니다<br/>
+			<span class="summary__best-matching-target"></span> 의원과 가장 가까우며,<br/>
+			<span class="summary__worst-matching-target"></span> 의원과 가장 멉니다.
+		</div>
+		
+		<div class="result__chart">
+			Chart here
 		</div>
 		
 		<div class="result__search">
-			<div>
-				<strong>국회의원 찾아보기</strong>
-			</div>
-			<div>
-				<small>나와의 유사도를 계산합니다.</small>
+			<div class="search__title">
+				<div>
+					<strong>국회의원 찾아보기</strong>
+				</div>
+				<div>
+					<small>나와의 유사도를 계산합니다.</small>
+				</div>
 			</div>
 			
 			<form class="search__form">
 				<div class="input-group">
-					<input type="text" class="form-control" placeholder="비교하고 싶은 의원!" required />
+					<input type="text" class="form-control" id="target-name" placeholder="비교하고 싶은 의원!" required />
 					<span class="input-group-btn">
 						<button type="submit" class="btn btn-default">
 							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
@@ -54,53 +60,36 @@
 				</div>
 			</form>
 			
-			<div>
-				<span class="search__target">김무성</span> 의원의 표결 성향은<br/>
-				경제적으로 <span class="search__position">중도 우파</span>에 속하며,<br/>
-				당신과는 <span class="search__summary">매우 가까운 편</span>입니다!
+			<div class="alert alert-warning search__warning-message hidden" role="alert">
+				전체 안건에 대한 의결 기록이 없는 의원입니다. 정확성이 떨어집니다.
+			</div>
+			
+			<div class="alert alert-danger search__danger-message hidden" role="alert">
+				존재하지 않는 의원입니다.
+			</div>
+			
+			<div class="search__summary">
+				<span class="search__target"></span> 의원의 표결 성향은<br/>
+				경제적으로 <span class="search__position"></span>에 속하며,<br/>
+				당신과는 <span class="search__similarity"></span>입니다!
+			</div>
+			
+			<button type="button" class="btn btn-lg search__toggle-btn" data-toggle="collapse" data-target="#answer-table-container">
+				<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+				문항 별로 자세히 비교해보기
+			</button>
+		
+			<div class="collapse" id="answer-table-container">
+				<div class="panel-group" id="answer-table" role="tablist" aria-multiselectable="true">
+					<div class="alert alert-info" role="alert">
+						각 문항을 클릭해서 확인할 수 있습니다
+					</div>
+				</div>
 			</div>
 		</div>
 		
 		<div class="result__social-media">
 			{% include 'include/social_media_share_group.html' %}
-		</div>
-		
-		<div class="result__detail">
-			<button type="button" class="btn btn-lg detail__toggle-btn" data-toggle="collapse" data-target="#detail__collapse">
-				자세히 비교하기
-			</button>
-		
-			<div class="collapse" id="detail__collapse">
-				<div class="collapse__title">
-					쟁점 법안별 비교
-				</div>
-				
-				<div>
-					Chart here
-				</div>
-				
-				<div class="collapse__title">
-					표결 비교
-				</div>
-				
-				<div class="panel-group" id="report-card" role="tablist" aria-multiselectable="true">
-					<div class="alert alert-info" role="alert">
-						각 문항을 클릭해서 확인할 수 있습니다
-					</div>
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" data-toggle="collapse" data-parent="#report-card" href="#foo">YES</div>
-						<div class="panel-collapse collapse" id="foo" role="tabpanel" data-question-id="">
-							<div class="panel-body">Hello</div>
-						</div>
-					</div>
-					<div class="panel panel-default">
-						<div class="panel-heading" role="tab" data-toggle="collapse" data-parent="#report-card" href="#bar">NO</div>
-						<div class="panel-collapse collapse" id="bar" role="tabpanel" data-question-id="">
-							<div class="panel-body">Hello</div>
-						</div>
-					</div>
-				</div>
-			</div>
 		</div>
 		
 		<div class="row result__page-link">
@@ -116,7 +105,7 @@
 				<a href="/assembly/">
 					<button type="button" class="btn btn-default btn-block page-link__btn">
 						<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;
-						다시 해보기
+						<span id="go-to-survey-landding-page-btn">다시 해보기</span>
 					</button>
 				</a>
 			</div>
@@ -174,8 +163,8 @@
   </div>
 </div>
 
-<div class="panel panel-default hidden" id="report-card__virtual-dom">
-  <div class="panel-heading" role="tab" data-toggle="collapse" data-parent="#report-card" href=""></div>
+<div class="panel panel-default hidden" id="answer-table__virtual-dom">
+  <div class="panel-heading" role="tab" data-toggle="collapse" data-parent="#answer-table" href=""></div>
   <div class="panel-collapse collapse" id="" role="tabpanel" data-question-id="">
     <div class="panel-body"></div>
   </div>
