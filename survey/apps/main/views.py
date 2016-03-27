@@ -216,8 +216,23 @@ class AnswerViewSet(viewsets.ModelViewSet):
         
         # Update if user already answered this question
         if Answer.objects.filter(user=request.user, choice__question_id=question.id).exists():
+            
             # Note that update() will not call save() method which means it could not update updated_at field automatically
             answer = Answer.objects.filter(user=request.user, choice__question_id=question.id)[0]
+            
+            # Recover and update economic score of user
+            if question.is_economic_bill:
+                user = request.user
+                if question.factor_reversed:
+                    user.economic_score += answer.choice.factor
+                    user.economic_score -= choice.factor 
+                    user.save()
+                else:
+                    user.economic_score -= answer.choice.factor 
+                    user.economic_score += choice.factor 
+                    user.save()
+            
+            # Update choice
             answer.choice = choice
             answer.save()
             
@@ -231,6 +246,16 @@ class AnswerViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
+        
+        # Update economic score of user
+        if question.is_economic_bill:
+            user = request.user
+            if question.factor_reversed:
+                user.economic_score -= choice.factor 
+                user.save()
+            else:
+                user.economic_score += choice.factor 
+                user.save()
         
         # When user completed survey
         if Answer.objects.filter(user=request.user).count() == questions_count:
@@ -356,6 +381,19 @@ class ResultViewSet(viewsets.ModelViewSet):
                 record += str(i + 1) + '=' + str(factor_list[i]) + '&'
             
             record = record[:-1]
+        
+        elif category == 'agreement_score':
+            # Get ID of result object(=DO NOT CREATE NEW ONE) only if 
+            #   (1) Result is exist
+            #   (2) User's answers are not updated after result object is created 
+            if result is not None and result.updated_at > user_data['updated_at']:
+                return Response(
+                        {'state': True, 'id': result.id, 'message': 'Result already exist.'},
+                        status=status.HTTP_200_OK)
+            
+            user_data['name'] = '나'
+            record = utilities.get_agreement_score_result(user_data, *target_data)
+        
         elif category == 'city_block_distance':
             # Get ID of result object(=DO NOT CREATE NEW ONE) only if 
             #   (1) Result is exist
@@ -368,7 +406,8 @@ class ResultViewSet(viewsets.ModelViewSet):
                         {'state': True, 'id': result.id, 'message': 'Result already exist.'},
                         status=status.HTTP_200_OK)
             
-            record = utilities.get_one_dimensional_result(user_data['factor_list'], *target_data)
+            record = utilities.get_city_block_distance_result(user_data['factor_list'], *target_data)
+        
         elif category == 'pca':
             rotation_matrix = cache.get('survey:' + str(survey.id) + ':rotation_matrix')
             if rotation_matrix is None:
@@ -395,7 +434,7 @@ class ResultViewSet(viewsets.ModelViewSet):
                 'factor_list': user_data['factor_list']}
             target_data.append(user_dict)
             
-            record = utilities.get_two_dimensional_result(rotation_matrix['matrix'], *target_data)
+            record = utilities.get_pca_result(rotation_matrix['matrix'], *target_data)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         

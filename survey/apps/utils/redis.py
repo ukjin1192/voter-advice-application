@@ -39,6 +39,7 @@ def set_survey_data_of_comparison_targets_cache(survey_obj):
     for comparison_target in comparison_targets:
         raw_data = utilities.get_survey_data_of_user(comparison_target.user, survey_obj)
         comparison_target_data = {'name': comparison_target.name, 
+                'economic_score': comparison_target.user.economic_score,
                 'color': comparison_target.color, 
                 'factor_list': raw_data['factor_list']}
         comparison_targets_data.append(comparison_target_data)

@@ -71,7 +71,7 @@ $(document).on('click', '.landing__btn--result', function() {
 
   var formData = new FormData();
   formData.append('survey_id', surveyID);
-  formData.append('category', 'city_block_distance');
+  formData.append('category', 'agreement_score');
   
   // Set authentication and CSRF tokens at HTTP header
   setAuthToken();

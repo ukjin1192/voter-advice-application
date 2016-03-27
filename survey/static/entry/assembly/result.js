@@ -14,6 +14,37 @@ var surveyID = 1;
 var resultID = pathName.match(/result\/(\d+)/)[1];
 var rows;
 
+
+// Translate economic score into word
+function translateEconomicScore(economicScore) {
+  if (economicScore < -7) {
+    return '보수';
+  } else if (economicScore < -2) {
+    return '약간 보수';
+  } else if (economicScore <= 2) {
+    return '중도';
+  } else if (economicScore <= 7 ) {
+    return '약간 진보';
+  } else {
+    return '진보';
+  }
+}
+
+// Translate similarity into word
+function translateSimilarity(similarity) {
+  if (similarity >= 80) {
+    return '매우 가까운 편';
+  } else if (similarity >= 60) {
+    return '가까운 편';
+  } else if (similarity >= 40) {
+    return '가깝지도 멀지도 않은 편';
+  } else if (similarity >= 20) {
+    return '먼 편';
+  } else {
+    return '매우 먼 편';
+  }
+}
+
 // Fill out report card row
 $(document).on('show.bs.collapse', '#answer-table .panel-collapse', function() {
   $('#loading-icon').removeClass('hidden');
@@ -58,6 +89,7 @@ $(document).on('click', '.share-btn', function() {
   });
 });
 
+// Search and compare with specific national assembly member
 $(document).on('submit', '.search__form', function() {
   event.preventDefault();
 
@@ -73,23 +105,8 @@ $(document).on('submit', '.search__form', function() {
   if (matchingRow === undefined) $('.search__danger-message').removeClass('hidden');
   else {
     $('.search__target').text(targetName);
-    $('.search__position').text('중도 우파');
-    
-    var similarity = matchingRow.similarity;
-    
-    if (similarity >= 80) {
-      $('.search__similarity').text('매우 가까운 편');
-    } else if (similarity >= 60) {
-      $('.search__similarity').text('가까운 편');
-    } else if (similarity >= 40) {
-      $('.search__similarity').text('가깝지도 멀지도 않은 편');
-    } else if (similarity >= 20) {
-      $('.search__similarity').text('먼 편');
-    } else {
-      $('.search__similarity').text('매우 먼 편');
-    }
-    
-    if (matchingRow.completed === false) $('.search__warning-message').removeClass('hidden');
+    $('.search__position').text(translateEconomicScore(matchingRow.economic_score));
+    $('.search__similarity').text(translateSimilarity(matchingRow.similarity));
   }
 });
 
@@ -104,7 +121,7 @@ $(window).load(function() {
     type: 'GET'
   }).done(function(data) {
     
-    // / When user is owner of result
+    // / When user is not an owner of result
     if (data.user != localStorage.getItem('user_id')) $('#go-to-survey-landding-page-btn').text('나도 해보기');
     
     // Parse record as JSON format 
@@ -112,12 +129,14 @@ $(window).load(function() {
     
     // Reordering in descending order
     rows = _.orderBy(rows, 'similarity', 'desc');
-    
-    // Get best and worst matching targets except for mine
+
+    // Get mine, best and worst matching targets
+    var mine = rows[0];
     var bestMatchingTarget = rows[1];
     var worstMatchingTarget = rows[rows.length - 1];
     
     // Fill out result summary
+    $('.summary__position').text(translateEconomicScore(mine.economic_score));
     $('.summary__best-matching-target').text(bestMatchingTarget.name);
     $('.summary__worst-matching-target').text(worstMatchingTarget.name);
   }).fail(function() {

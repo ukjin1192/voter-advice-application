@@ -36,12 +36,66 @@ def get_survey_data_of_user(user_obj, survey_obj):
         factor_list.append(answer.choice.factor)
         updated_at_list.append(answer.updated_at)
 
-    return {'factor_list': factor_list, 'updated_at': max(updated_at_list)}
+    return {'economic_score': user_obj.economic_score, 'factor_list': factor_list, 'updated_at': max(updated_at_list)}
 
 
-def get_one_dimensional_result(user_data, *target_data):
+def get_agreement_score_result(user_data, *target_data):
     """
-    Get one dimensional result which compares target data with user’s data
+    Get agreement score algorithm result which compares target data with user’s data
+    For example,
+    [Data]
+        User's survey data
+            factor_list = [0, -2, 2]
+        User A(1st comparison target)'s survey data
+            factor_list = [1, 1, 1]
+        User B(2nd comparison target)'s survey data
+            factor_list = [2, 2, 2]
+    [Input]
+        user_data = {'name': '나', 'economic_score': 5, 'factor_list': [0, -2, 2]}
+        target_data = [{'name': 'User A', 'economic_score': 7, 'factor_list': [1, 1, 1]},
+                       {'name': 'User B', 'economic_score': 3, 'factor_list': [2, 2, 2]}]
+    [Output]
+        [{
+            'name': '나',
+            'economic_score': 5, 
+            'similarity': 100 
+        },
+        {
+            'name': 'User A',
+            'economic_score': 7,
+            'similarity': 62 
+        }, 
+        {
+            'name': 'User B', 
+            'economic_score': 3,
+            'similarity': 54
+        }]
+    """
+    user_array = numpy.array(user_data['factor_list'])
+    record = []
+
+    # Add own data
+    record.append("{'name': '" + user_data['name'] + "'," \
+            + "'similarity': 100," \
+            +  "'economic_score': '" + str(user_data['economic_score']) + "'}")
+
+    for single_target_data in target_data:
+        origin = user_array
+        target_array = numpy.array(single_target_data['factor_list'])
+        question_count = len(target_array[target_array != 7])
+        agreement = numpy.sum(numpy.array(origin) == target_array)
+        max_agreement = question_count
+        similarity = math.ceil(10000 * (agreement / float(max_agreement))) / 100
+        record.append("{'name': '" + single_target_data['name'] + "'," \
+                + "'similarity': " + str(similarity) + "," \
+                +  "'economic_score': '" + str(single_target_data['economic_score']) + "'}")
+
+    return '[' + ', '.join(record) + ']'
+
+
+def get_city_block_distance_result(user_data, *target_data):
+    """
+    Get city block distance algorithm result which compares target data with user’s data
     For example,
     [Data]
         User's survey data
@@ -144,9 +198,9 @@ def get_rotation_matrix(survey_obj):
     return rotation_matrix, refined_eig_pairs, cum_var_exp
 
 
-def get_two_dimensional_result(rotation_matrix, *target_data):
+def get_pca_result(rotation_matrix, *target_data):
     """
-    Get two dimensional result which multiply target data(including user data) by rotation matrix
+    Get PCA algorithm result which multiply target data(including user data) by rotation matrix
     [Input]
         rotation_matrix = numpy.array([
             [-0.01098383,  0.91666209],
