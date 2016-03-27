@@ -203,12 +203,29 @@ class Question(models.Model):
         'Survey',
         related_name = 'questions'
     )
+    title = models.TextField(
+        verbose_name = _('Title'),
+        max_length = 255
+    )
+    subtitle = models.TextField(
+        verbose_name = _('Subtitle'),
+        max_length = 255,
+        blank = True,
+        null = True
+    )
     explanation = models.TextField(
         verbose_name = _('Explanation'),
     )
+    cheating_paper = models.TextField(
+        verbose_name = _('Cheating paper'),
+        blank = True,
+        null = True
+    )
     image_url = models.CharField(
         verbose_name = _('Image URL'),
-        max_length = 255
+        max_length = 255,
+        blank = True,
+        null = True
     )
     duration_limit = models.PositiveSmallIntegerField(
         verbose_name = _('Duration limit in seconds'),

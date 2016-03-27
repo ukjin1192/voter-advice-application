@@ -26,8 +26,8 @@ class SurveyAdmin(admin.ModelAdmin):
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'explanation', 'image_url', 'duration_limit')
-    search_fields = ('explanation', )
+    list_display = ('id', 'title', 'subtitle', 'explanation', 'cheating_paper', 'image_url', 'duration_limit')
+    search_fields = ('title', 'subtitle', 'explanation', 'cheating_paper')
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'
     ordering = ('-id', )

@@ -165,14 +165,14 @@ $(window).load(function() {
       });
       
       questionList.push({
-        'header_title': questionTemporaryExplanation[0],
-        'header_subtitle': questionTemporaryExplanation[1],
-        'agreement_content': questionTemporaryExplanation[2],
-        'disagreement_content': questionTemporaryExplanation[3],
+        'header_title': question.title,
+        'header_subtitle': question.subtitle,
+        'agreement_content': questionTemporaryExplanation[0],
+        'disagreement_content': questionTemporaryExplanation[1],
         'agreement_choice_id': agreementChoiceID,
         'abtention_choice_id': abtentionChoiceID,
         'disagreement_choice_id': disagreementChoiceID,
-        'cheating_paper_content': questionTemporaryExplanation[4]
+        'cheating_paper_content': question.cheating_paper
       });
       
       // Initiate answer list
