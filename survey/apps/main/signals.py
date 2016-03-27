@@ -29,6 +29,14 @@ def update_cache_when_choice_updated(sender, instance, created, **kwargs):
 @receiver(post_save, sender=ComparisonTarget)
 def update_cache_when_comparison_target_updated(sender, instance, created, **kwargs):
     """
+    Update cache when comparison target updated
+    """
+    redis.set_records_of_comparison_targets_cache(instance.survey)
+
+
+@receiver(post_save, sender=ComparisonTarget)
+def update_cache_when_comparison_target_updated(sender, instance, created, **kwargs):
+    """
     Update cache when comparision target updated
     """
     redis.set_comparison_target_list_cache(instance.survey)
