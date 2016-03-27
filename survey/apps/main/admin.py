@@ -6,7 +6,7 @@ from main.models import User, ComparisonTarget, Survey, Question, Choice, Answer
 
 
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('id', 'username', 'sex', 'year_of_birth', 'political_tendency', 'supporting_party', 'is_active', 'date_joined')
+    list_display = ('id', 'username', 'sex', 'year_of_birth', 'political_tendency', 'supporting_party', 'economic_score', 'is_active', 'date_joined')
     search_fields = ('username', )
     list_filter = ('date_joined', )
     date_hierarchy = 'date_joined'
@@ -26,7 +26,7 @@ class SurveyAdmin(admin.ModelAdmin):
 
 
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'subtitle', 'explanation', 'cheating_paper', 'image_url', 'duration_limit')
+    list_display = ('id', 'title', 'subtitle', 'explanation', 'cheating_paper', 'image_url', 'duration_limit', 'is_economic_bill', 'factor_reversed')
     search_fields = ('title', 'subtitle', 'explanation', 'cheating_paper')
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'

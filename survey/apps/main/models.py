@@ -79,6 +79,10 @@ class User(AbstractBaseUser):
         blank = True,
         null = True
     )
+    economic_score = models.SmallIntegerField(
+        verbose_name = _('Economic score'),
+        default = 0
+    )
     is_active = models.BooleanField(
         verbose_name = _('Active'),
         default = True
@@ -230,6 +234,14 @@ class Question(models.Model):
     duration_limit = models.PositiveSmallIntegerField(
         verbose_name = _('Duration limit in seconds'),
         default = 2
+    )
+    is_economic_bill = models.BooleanField(
+        verbose_name = _('Is economic bill'),
+        default = False
+    )
+    factor_reversed = models.BooleanField(
+        verbose_name = _('Factor reversed'),
+        default = False
     )
     created_at = models.DateTimeField(
         verbose_name = _('Created datetime'),
