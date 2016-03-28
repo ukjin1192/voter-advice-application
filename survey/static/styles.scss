@@ -521,9 +521,15 @@ a, a:focus, a:hover, a:active, a:visited {
 		
 		.result__chart {
 			margin-top: 15px; 
-			padding: 27px 15px; 
+			padding: 27px 0; 
 			background-color: white; 
 			text-align: center; 
+			
+			.chart__title {
+				font-size: 1.2em;
+				font-weight: 700;
+				text-align: center; 
+			}
 		}
 		
 		.result__search {

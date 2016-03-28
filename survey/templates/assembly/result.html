@@ -15,30 +15,33 @@
 
 <div class="container-fit result__body">
 	<div class="container result__container">
-		
+
 		<div class="result__menu">
 			<span class="menu" data-toggle="modal" data-target="#precaution">주의사항</span>
 			<span class="menu" data-toggle="modal" data-target="#faq">FAQ</span>
 			<span class="menu" data-toggle="modal" data-target="#algorithm">방법론</span>
 		</div>
-		
+
 		<div class="alert alert-danger result__alert-message hidden" role="alert">
 			존재하지 않거나 비공개 상태입니다
 		</div>
-		
+
 		<div class="result__summary">
 			<strong>당신</strong>의 표결 성향은<br/>
 			경제적으로 <span class="summary__position"></span>에 속합니다<br/>
 			<span class="summary__best-matching-target"></span> 의원과 가장 가까우며,<br/>
 			<span class="summary__worst-matching-target"></span> 의원과 가장 멉니다.
 		</div>
-		
-		{% comment %}
+
 		<div class="result__chart">
-			Chart here
+			<div class="chart__title">
+				경제 성향에 따른 국회 의원 분포도
+			</div>
+			<div id="result-chart">
+				Chart here
+			</div>
 		</div>
-		{% endcomment %}
-		
+
 		<div class="result__search">
 			<div class="search__title">
 				<div>
@@ -48,7 +51,7 @@
 					<small>나와의 유사도를 계산합니다.</small>
 				</div>
 			</div>
-			
+
 			<form class="search__form">
 				<div class="input-group">
 					<input type="text" class="form-control" id="target-name" placeholder="비교하고 싶은 의원!" required />
@@ -59,26 +62,26 @@
 					</span>
 				</div>
 			</form>
-			
+
 			<div class="alert alert-warning search__warning-message hidden" role="alert">
 				전체 안건에 대한 의결 기록이 없는 의원입니다. 정확성이 떨어집니다.
 			</div>
-			
+
 			<div class="alert alert-danger search__danger-message hidden" role="alert">
 				존재하지 않는 의원입니다.
 			</div>
-			
+
 			<div class="search__summary">
 				<span class="search__target">~~~</span> 의원의 표결 성향은<br/>
 				경제적으로 <span class="search__position">~~</span>에 속하며,<br/>
 				당신과는 <span class="search__similarity">~~한 편</span>입니다!
 			</div>
-			
+
 			<button type="button" class="btn btn-lg search__toggle-btn" data-toggle="collapse" data-target="#answer-table-container">
 				<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 				문항 별로 자세히 비교해보기
 			</button>
-		
+
 			<div class="collapse" id="answer-table-container">
 				<div class="panel-group" id="answer-table" role="tablist" aria-multiselectable="true">
 					<div class="alert alert-info" role="alert">
@@ -87,11 +90,11 @@
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="result__social-media">
 			{% include 'include/social_media_share_group.html' %}
 		</div>
-		
+
 		<div class="row result__page-link">
 			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 page-link__column--left">
 				<a href="/">
@@ -122,73 +125,73 @@
 </div>
 
 <div class="modal fade" id="precaution" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-        <h4 class="modal-title">주의사항</h4>
-      </div>
-      <div class="modal-body">
+				<h4 class="modal-title">주의사항</h4>
+			</div>
+			<div class="modal-body">
 				주의상이 채워질 예정입니다
 			</div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
 					확인
 				</button>
-      </div>
-    </div>
-  </div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="modal fade" id="faq" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-        <h4 class="modal-title">FAQ</h4>
-      </div>
-      <div class="modal-body">
+				<h4 class="modal-title">FAQ</h4>
+			</div>
+			<div class="modal-body">
 				FAQ가 채워질 예정입니다
 			</div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
 					확인
 				</button>
-      </div>
-    </div>
-  </div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="modal fade" id="algorithm" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
-        <h4 class="modal-title">방법론</h4>
-      </div>
-      <div class="modal-body">
+				<h4 class="modal-title">방법론</h4>
+			</div>
+			<div class="modal-body">
 				방법론이 채워질 예정입니다
 			</div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
 					확인
 				</button>
-      </div>
-    </div>
-  </div>
+			</div>
+		</div>
+	</div>
 </div>
 
 <div class="panel panel-default hidden" id="answer-table__virtual-dom">
-  <div class="panel-heading" role="tab" data-toggle="collapse" data-parent="#answer-table" href=""></div>
-  <div class="panel-collapse collapse" id="" role="tabpanel" data-question-id="">
-    <div class="panel-body"></div>
-  </div>
+	<div class="panel-heading" role="tab" data-toggle="collapse" data-parent="#answer-table" href=""></div>
+	<div class="panel-collapse collapse" id="" role="tabpanel" data-question-id="">
+		<div class="panel-body"></div>
+	</div>
 </div>
 {% endblock %}
 
@@ -196,4 +199,5 @@
 {% compress js %}
 <script type="text/javascript" src="{% static 'dist/assembly_result.js' %}"></script>
 {% endcompress %}
+<script src="{% static 'pykih-charts/pykcharts.1.1.0.min.js' %}"></script>
 {% endblock %}
