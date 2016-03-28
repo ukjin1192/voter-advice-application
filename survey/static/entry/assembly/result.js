@@ -102,7 +102,7 @@ $(document).on('submit', '.search__form', function() {
   var matchingRow = _.find(rows, {'name': targetName});
 
   // When searching target does not exist
-  if (matchingRow === undefined) $('.search__danger-message').removeClass('hidden');
+  if (matchingRow === undefined || targetName == '나') $('.search__danger-message').removeClass('hidden');
   else {
     $('.search__target').text(targetName);
     $('.search__position').text(translateEconomicScore(matchingRow.economic_score));
