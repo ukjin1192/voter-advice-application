@@ -21,12 +21,19 @@
 
 	<div class="space"></div>
 
+	<div class="alert alert-danger" role="alert">
+		서비스 준비 중에 있습니다.
+	</div>
+
 	<div class="row">
 		<div class="col-xs-5 col-sm-5 col-md-5 col-lg-5 main-page__column--left">
 			<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/main/guide.png" class="full-width" />
 		</div>
 		<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7 main-page__column--right">
+			<a href="#">
+			{% comment %}
 			<a href="/assembly/">
+			{% endcomment %}
 				<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/main/assembly_a.png" class="full-width" />
 			</a>
 		</div>
