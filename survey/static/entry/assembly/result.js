@@ -16,13 +16,13 @@ var rows;
 
 // Translate economic score into word
 function translateEconomicScore(economicScore) {
-  if (economicScore < -7) {
+  if (economicScore < -9) {
     return '매우 진보';
-  } else if (economicScore < -2) {
+  } else if (economicScore < -4) {
     return '진보';
-  } else if (economicScore <= 2) {
+  } else if (economicScore <= 4) {
     return '중도';
-  } else if (economicScore <= 7 ) {
+  } else if (economicScore <= 9 ) {
     return '보수';
   } else {
     return '매우 보수';
