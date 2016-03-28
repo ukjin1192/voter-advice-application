@@ -75,11 +75,6 @@ urlpatterns = [
         r'^result/(?P<pk>[0-9]+)/$', 
         RedirectView.as_view(url='/', permanent=False)
     ),
-
-    url(
-        r'^temp/$', 
-        TemplateView.as_view(template_name='temp.html')
-    ),
 ]
 
 if settings.RUN_SILK:
