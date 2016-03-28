@@ -113,7 +113,7 @@ def deploy(*command):
     
     if 'STATIC_FILES_UPDATED' in command:
         with cd(ROOT_DIR + "/" + PROJECT_NAME + "/static/"):
-            sudo("production_mode=1 webpack")
+            sudo("webpack")
         with cd(ROOT_DIR):
             sudo("./manage.py collectstatic --noinput")
             sudo("./manage.py compress --force")
