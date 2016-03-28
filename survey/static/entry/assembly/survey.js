@@ -114,7 +114,8 @@ $(window).load(function() {
 
   // Check user is valid
   if (localStorage.getItem('token') === null || localStorage.getItem('user_id') === null) {
-    localStorage.clear()
+    localStorage.removeItem('token');
+    localStorage.removeItem('user_id');
     clearAuthToken();
     
     // Redirect to landing page if user is not valid 
@@ -128,7 +129,8 @@ $(window).load(function() {
       type: 'GET'
     }).fail(function() {
       // When user is invalid
-      localStorage.clear()
+      localStorage.removeItem('token');
+      localStorage.removeItem('user_id');
       clearAuthToken();
       
       // Redirect to landing page if user is not valid 

@@ -17,7 +17,8 @@ $(document).on('click', '.landing__btn--survey', function() {
 
   // Create new user
   if (localStorage.getItem('token') === null || localStorage.getItem('user_id') === null) {
-    localStorage.clear()
+    localStorage.removeItem('token');
+    localStorage.removeItem('user_id');
     clearAuthToken();
     
     // Set CSRF token at HTTP header
@@ -50,7 +51,8 @@ $(document).on('click', '.landing__btn--survey', function() {
       location.href = '/assembly/survey/';
     }).fail(function() {
       // When user is invalid
-      localStorage.clear()
+      localStorage.removeItem('token');
+      localStorage.removeItem('user_id');
       clearAuthToken();
     
       // Redirect to landing page if user is not valid 
@@ -113,7 +115,8 @@ $(window).load(function() {
       if (data.completed_survey) $('.landing__btn--result').removeClass('hidden');
     }).fail(function() {
       // When user is invalid
-      localStorage.clear()
+      localStorage.removeItem('token');
+      localStorage.removeItem('user_id');
       clearAuthToken();
     });
   }
