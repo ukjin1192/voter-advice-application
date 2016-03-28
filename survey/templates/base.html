@@ -122,6 +122,7 @@
   <script type="text/javascript" src="{% static 'dist/base.js' %}"></script>
   {% endcompress %}
 
+  {# This should be placed after base.js #}
   {% block custom_js %}{% endblock %}
 
   {# Support Placehoder for IE below version 10 #}

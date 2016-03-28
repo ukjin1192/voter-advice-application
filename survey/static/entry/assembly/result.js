@@ -111,8 +111,10 @@ $(document).on('submit', '.search__form', function() {
 
 $(window).load(function() {
 
-  // Set authentication token at HTTP header
-  setAuthToken();
+  if (localStorage.getItem('token') != null || localStorage.getItem('user_id') != null) {
+    // Set authentication token at HTTP header
+    setAuthToken();
+  }
 
   // Get result object (One dimensional analysis)
   $.ajax({
@@ -141,8 +143,6 @@ $(window).load(function() {
   }).fail(function() {
     // When result is not exist or updated to non-public
     $('.result__alert-message').removeClass('hidden');
-
-    clearAuthToken();
   });
 
   // Fill out answer table
@@ -176,6 +176,7 @@ $(window).load(function() {
     $('#answer-table__virtual-dom').remove();
   });
 
+  // Draw scatter chart
   window.PykChartsInit = function (e) {
     var k = new PykCharts.multiD.scatter({
       "selector": "#result-chart",

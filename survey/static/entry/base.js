@@ -43,6 +43,12 @@ $(window).on('resize', function() {
 
 $(window).load(function() {
 
+  // Clear legacy user ID and token from the previous version
+  if (localStorage.getItem('visited') === null) {
+    localStorage.clear();
+    localStorage.setItem('visited', true);
+  }
+
   // Hide loading icon
   $('#loading-icon').addClass('hidden');
 
