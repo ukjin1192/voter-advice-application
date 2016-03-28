@@ -37,6 +37,14 @@
 			<div class="chart__title">
 				경제 성향에 따른 국회 의원 분포도
 			</div>
+			<div class="chart__legend">
+				<span class="label" style="background-color: #C01921;">새누리당</span>
+				<span class="label" style="background-color: #1F3895;">더불어민주당</span>
+				<span class="label" style="background-color: #6A9E30;">국민의당</span>
+				<span class="label" style="background-color: #FFCA08;">정의당</span>
+				<span class="label" style="background-color: #0075C1;">기독자유당</span>
+				<span class="label" style="background-color: #777777;">무소속 및 폐지정당</span>
+			</div>
 			<div id="result-chart">
 				Chart here
 			</div>
@@ -72,9 +80,9 @@
 			</div>
 
 			<div class="search__summary">
-				<span class="search__target">~~~</span> 의원의 표결 성향은<br/>
-				경제적으로 <span class="search__position">~~</span>에 속하며,<br/>
-				당신과는 <span class="search__similarity">~~한 편</span>입니다!
+				<span class="search__target">홍길동</span> 의원의 표결 성향은<br/>
+				<span class="search__exception">경제적으로 <span class="search__position">중도</span>에 속하며,<br/></span>
+				당신과는 <span class="search__similarity">가깝지도 멀지도 않은 편</span>입니다!
 			</div>
 
 			<button type="button" class="btn btn-lg search__toggle-btn" data-toggle="collapse" data-target="#answer-table-container" aria-expanded="false" aria-controls="answer-table-container">
@@ -134,6 +142,7 @@
 				<h3 class="modal-title">주의사항</h3>
 			</div>
 			<div class="modal-body">
+				
 				<h4>동명이인</h4>
 				<p>19대 국회는 총 8명 (4건)의 동명이인이 있었습니다.</p>
 				<ol style="margin-left: 20px;">
@@ -148,6 +157,29 @@
 				<h4>당적 최신화</h4>
 				<p>각 정당의 공천이 끝난 이후에도 당적이 변경되는 경우가 생길 수 있어 주의를 기울이고 있습니다.</p>
 				<p>2016년 3월 27일 현재 당적으로 최신화했습니다만, 혹여나 틀린 정보가 있으면 지체 없이 pingcorea@gmail.com으로 제보해주십시오.</p>
+
+				<div class="space"></div>
+				
+				<h4>다음의 의원은 19개 법안 중 10개 이상에 대해 표결이 기록되지 않아 일치도 계산에서 제외되었습니다.</h4>
+				<ul style="margin-left: 20px;">
+					<li>1표: 정윤숙</li>
+					<li>2표: 박근혜</li>
+					<li>3표: 신문식</li>
+					<li>4표: 김근태, 노회찬, 신상진, 안상수, 오신화, 이재균, 장정은, 천정배</li>
+					<li>7표: 고희선, 권은희(국민의당), 김영주(새누리당), 김용남, 김제시, 김형태, 나경원, 박광온, 박맹우, 배덕광, 신정훈, 양창영, 유의동, 이개호, 이정현, 이종배, 정미경, 정용기, 홍철호, 박윤옥</li>
+				</ul>
+
+				<div class="space"></div>
+				
+				<h4>다음의 의원은 14개 경제 법안 중 1개 이상에 대해 표결이 기록되지 않아 경제 성향 계산에서 제외되었습니다.</h4>
+				<ul style="margin-left: 20px;">
+					<li>11표: 신장용, 안종범, 이재영(새누리당 평택을), 현영희</li>
+					<li>12표: 김기현, 김선동. 김진표, 남경필, 박명재, 박성효, 배깅누, 서병수, 서청원, 성완종, 유정복, 윤진식, 이용섭, 정몽준, 황인자</li>
+					<li>13표: 김미희. 김재현, 오병윤, 이낙연, 이석기</li>
+					<li>15표: 김무성, 김현숙, 안덕수, 안철수, 이완구</li>
+					<li>16표: 김재윤, 송광호, 심학봉, 조현룡, 한명숙</li>
+					<li>17표: 이운룡</li>
+				</ul>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">
@@ -219,10 +251,11 @@
 				<p>대다수의 법안들이 여야의 합의를 거쳐 본회의에 상정되며, 법안의 발의 취지 등에 대해 공감하지 않더라도 당론을 따라 찬성 표를 던지는 경우가 많았습니다.</p>
 				<p>실제로 본회의에서 결정된 모든 법안들을 분석해보면 압도적으로 반대표가 적다는 것을 알 수 있습니다.</p>
 
+				<div class="modal__image">
+					<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/algorithm_modal_1.png" class="full-width" />
+				</div>
+
 				<div class="space"></div>
-
-				<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/algorithm_modal_1.png" class="full-width" />
-
 				<div class="space"></div>
 
 				<p>따라서 유럽에서 많이 쓰이는 네덜란드의  <a href="http://www.stemmentracker.nl/Stemmentracker-een-omgekeerde-StemWijzer" target="_blank">Stemmentracker</a>나 체코의 <a href="http://kohovolit.eu/en/" target="_blank">Kohovolit</a> 등과 같은 표결 기반의  의원/정당 성향 매칭 서비스는 한국의 정치성향 평가를 위한 도구로는 적합하지 않습니다. </p>
@@ -239,8 +272,11 @@
 
 				<div class="space"></div>
 
-				<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/algorithm_modal_2.png" class="full-width" />
+				<div class="modal__image">
+					<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/algorithm_modal_2.png" class="full-width" />
+				</div>
 
+				<div class="space"></div>
 				<div class="space"></div>
 
 				<h4>경제/복지 성향 계산 방법</h4>

@@ -186,6 +186,11 @@ a, a:focus, a:hover, a:active, a:visited {
 	}
 }
 
+.modal__image {
+	max-width: 300px;
+	margin: 0 auto;
+}
+
 /* =========
  * Main page
  * ========= */
@@ -521,7 +526,7 @@ a, a:focus, a:hover, a:active, a:visited {
 		
 		.result__chart {
 			margin-top: 15px; 
-			padding: 27px 0; 
+			padding: 27px 10px; 
 			background-color: white; 
 			text-align: center; 
 			
@@ -529,6 +534,15 @@ a, a:focus, a:hover, a:active, a:visited {
 				font-size: 1.2em;
 				font-weight: 700;
 				text-align: center; 
+			}
+			
+			.chart__legend {
+				margin: 15px 0 -20px 0;
+				line-height: 2.0em;
+			}
+			
+			#credit-datasource {
+				display: none;
 			}
 		}
 		
