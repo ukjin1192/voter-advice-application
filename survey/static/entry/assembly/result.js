@@ -2480,7 +2480,6 @@ $(document).on('submit', '.search__form', function() {
   var targetName = $('#target-name').val();
   var matchingRow = _.find(rows, {'name': targetName});
 
-
   // When searching target does not exist
   if (matchingRow === undefined || targetName == '나') $('.search__danger-message').removeClass('hidden');
   else {
@@ -2488,6 +2487,27 @@ $(document).on('submit', '.search__form', function() {
     if (nameListForEconomicScoreException.indexOf(targetName) > -1) $('.search__exception').addClass('hidden');
     $('.search__position').text(translateEconomicScore(matchingRow.economic_score));
     $('.search__similarity').text(translateSimilarity(matchingRow.similarity));
+  }
+
+  // Update answer table if row is already opened
+  var $answerTableRow = $('#answer-table .collapse.in');
+  if (!isNaN(parseInt($answerTableRow.attr('data-question-id')))) {
+    $answerTableRow.find('.choice-voters').html('');
+
+    // Set authentication token at HTTP header
+    setAuthToken();
+
+    $.ajax({
+      url: '/api/records/' + parseInt($answerTableRow.attr('data-question-id'))  + '/',
+      type: 'GET',
+    }).done(function(data) {
+      data.forEach(function(record, index) {
+        if (record.name == $('.search__target').text() || record.name == '나') {
+          $('.choice-voters[data-choice-id="' + record.choice_id + '"]').append('<span class="label" ' +
+            'style="background-color: ' + record.color + ';">' + record.name + '</span>');
+        }
+      });
+    });
   }
 });
 

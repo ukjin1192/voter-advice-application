@@ -479,23 +479,8 @@ a, a:focus, a:hover, a:active, a:visited {
 	
 	.result__container {
 		max-width: 600px;
+		padding-top: 15px;
 		color: #414042;
-		
-		.result__menu {
-			padding: 15px 0;
-			text-align: right; 
-			
-			.menu {
-				border-bottom: 1px solid #414042;
-				font-weight: 700; 
-				color: #414042; 
-				cursor: pointer;
-				
-				&:nth-child(2)  {
-					margin: 0 13px; 
-				}
-			}
-		}
 		
 		.result__alert-message {
 			text-align: center;
@@ -564,7 +549,7 @@ a, a:focus, a:hover, a:active, a:visited {
 			}
 			
 			.search__summary {
-				padding-bottom: 50px;
+				padding-bottom: 30px;
 				font-size: 1.2em; 
 				line-height: 1.5em;
 				
@@ -580,6 +565,19 @@ a, a:focus, a:hover, a:active, a:visited {
 				.search__similarity {
 					font-weight: 700;
 					color: #43C8AD;
+				}
+			}
+			
+			.result__menu {
+				padding-bottom: 30px;
+				text-align: center; 
+				
+				.menu {
+					margin: 0 10px;
+					border-bottom: 1px solid #414042;
+					font-weight: 700; 
+					color: #414042; 
+					cursor: pointer;
 				}
 			}
 			

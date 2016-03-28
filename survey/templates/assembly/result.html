@@ -16,12 +16,6 @@
 <div class="container-fit result__body">
 	<div class="container result__container">
 
-		<div class="result__menu">
-			<span class="menu" data-toggle="modal" data-target="#precaution">주의사항</span>
-			<span class="menu" data-toggle="modal" data-target="#faq">FAQ</span>
-			<span class="menu" data-toggle="modal" data-target="#algorithm">방법론</span>
-		</div>
-
 		<div class="alert alert-danger result__alert-message hidden" role="alert">
 			존재하지 않거나 비공개 상태입니다
 		</div>
@@ -35,7 +29,8 @@
 
 		<div class="result__chart">
 			<div class="chart__title">
-				경제/복지 성향에 따른 국회 의원 분포도
+				경제/복지 성향에 따른 국회 의원 분포도<br/>
+				<small>(260명과 비교)</small>
 			</div>
 			<div class="chart__legend">
 				<span class="label" style="background-color: #C01921;">새누리당</span>
@@ -46,15 +41,16 @@
 				<span class="label" style="background-color: #777777;">무소속 및 기타정당</span>
 				<span class="label" style="background-color: #000000;">나</span>
 			</div>
-			<div id="result-chart">
-				Chart here
-			</div>
+			<div id="result-chart"></div>
 		</div>
 
 		<div class="result__search">
 			<div class="search__title">
 				<div>
 					<strong>국회의원 찾아보기</strong>
+				</div>
+				<div>
+					<small><strong>(300명과 비교)</strong></small>
 				</div>
 				<div>
 					<small>나와의 유사도를 계산합니다.</small>
@@ -85,7 +81,13 @@
 				<span class="search__exception">경제적으로 <span class="search__position">중도</span>에 속하며,<br/></span>
 				당신과는 <span class="search__similarity">가깝지도 멀지도 않은 편</span>입니다!
 			</div>
-
+			
+			<div class="result__menu">
+				<span class="menu" data-toggle="modal" data-target="#precaution">주의사항</span>
+				<span class="menu" data-toggle="modal" data-target="#faq">FAQ</span>
+				<span class="menu" data-toggle="modal" data-target="#algorithm">방법론</span>
+			</div>
+			
 			<button type="button" class="btn btn-lg search__toggle-btn" data-toggle="collapse" data-target="#answer-table-container" aria-expanded="false" aria-controls="answer-table-container">
 				<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 				문항 별로 자세히 비교해보기
@@ -144,6 +146,29 @@
 			</div>
 			<div class="modal-body">
 				
+				<h4>다음의 의원은 14개 경제 법안 중 1개 이상에 대해 표결이 기록되지 않아 경제 성향 계산에서 제외되었습니다.</h4>
+				<ul style="margin-left: 20px;">
+					<li>11표: 신장용, 안종범, 이재영(새누리당 평택을), 현영희</li>
+					<li>12표: 김기현, 김선동. 김진표, 남경필, 박명재, 박성효, 배깅누, 서병수, 서청원, 성완종, 유정복, 윤진식, 이용섭, 정몽준, 황인자</li>
+					<li>13표: 김미희. 김재현, 오병윤, 이낙연, 이석기</li>
+					<li>15표: 김무성, 김현숙, 안덕수, 안철수, 이완구</li>
+					<li>16표: 김재윤, 송광호, 심학봉, 조현룡, 한명숙</li>
+					<li>17표: 이운룡</li>
+				</ul>
+				
+				<div class="space"></div>
+				
+				<h4>다음의 의원은 19개 법안 중 10개 이상에 대해 표결이 기록되지 않아 일치도 계산에서 제외되었습니다.</h4>
+				<ul style="margin-left: 20px;">
+					<li>1표: 정윤숙</li>
+					<li>2표: 박근혜</li>
+					<li>3표: 신문식</li>
+					<li>4표: 김근태, 노회찬, 신상진, 안상수, 오신화, 이재균, 장정은, 천정배</li>
+					<li>7표: 고희선, 권은희(국민의당), 김영주(새누리당), 김용남, 김제시, 김형태, 나경원, 박광온, 박맹우, 배덕광, 신정훈, 양창영, 유의동, 이개호, 이정현, 이종배, 정미경, 정용기, 홍철호, 박윤옥</li>
+				</ul>
+
+				<div class="space"></div>
+				
 				<h4>동명이인</h4>
 				<p>19대 국회는 총 8명 (4건)의 동명이인이 있었습니다.</p>
 				<ol style="margin-left: 20px;">
@@ -158,29 +183,6 @@
 				<h4>당적 최신화</h4>
 				<p>각 정당의 공천이 끝난 이후에도 당적이 변경되는 경우가 생길 수 있어 주의를 기울이고 있습니다.</p>
 				<p>2016년 3월 27일 현재 당적으로 최신화했습니다만, 혹여나 틀린 정보가 있으면 지체 없이 pingcorea@gmail.com으로 제보해주십시오.</p>
-
-				<div class="space"></div>
-				
-				<h4>다음의 의원은 19개 법안 중 10개 이상에 대해 표결이 기록되지 않아 일치도 계산에서 제외되었습니다.</h4>
-				<ul style="margin-left: 20px;">
-					<li>1표: 정윤숙</li>
-					<li>2표: 박근혜</li>
-					<li>3표: 신문식</li>
-					<li>4표: 김근태, 노회찬, 신상진, 안상수, 오신화, 이재균, 장정은, 천정배</li>
-					<li>7표: 고희선, 권은희(국민의당), 김영주(새누리당), 김용남, 김제시, 김형태, 나경원, 박광온, 박맹우, 배덕광, 신정훈, 양창영, 유의동, 이개호, 이정현, 이종배, 정미경, 정용기, 홍철호, 박윤옥</li>
-				</ul>
-
-				<div class="space"></div>
-				
-				<h4>다음의 의원은 14개 경제 법안 중 1개 이상에 대해 표결이 기록되지 않아 경제 성향 계산에서 제외되었습니다.</h4>
-				<ul style="margin-left: 20px;">
-					<li>11표: 신장용, 안종범, 이재영(새누리당 평택을), 현영희</li>
-					<li>12표: 김기현, 김선동. 김진표, 남경필, 박명재, 박성효, 배깅누, 서병수, 서청원, 성완종, 유정복, 윤진식, 이용섭, 정몽준, 황인자</li>
-					<li>13표: 김미희. 김재현, 오병윤, 이낙연, 이석기</li>
-					<li>15표: 김무성, 김현숙, 안덕수, 안철수, 이완구</li>
-					<li>16표: 김재윤, 송광호, 심학봉, 조현룡, 한명숙</li>
-					<li>17표: 이운룡</li>
-				</ul>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">
