@@ -2491,7 +2491,8 @@ $(document).on('submit', '.search__form', function() {
   }
 });
 
-$(window).load(function() {
+// Load user data when DOM ready to boost up
+$(document).ready(function() {
 
   if (localStorage.getItem('token') != null || localStorage.getItem('user_id') != null) {
     // Set authentication token at HTTP header
@@ -2536,6 +2537,9 @@ $(window).load(function() {
     // When result is not exist or updated to non-public
     $('.result__alert-message').removeClass('hidden');
   });
+});
+
+$(window).load(function() {
 
   // Fill out answer table
   $.ajax({
