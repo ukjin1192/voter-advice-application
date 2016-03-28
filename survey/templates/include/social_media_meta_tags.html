@@ -1,53 +1,32 @@
 {% load custom_filter %}
 
-{% comment %}
-<meta property="fb:app_id" content="" />
-{% endcomment %}
+<meta property="fb:app_id" content="1695771247328026" />
 
 {% if request.path == '/' %}
-{# Main Page #}
+  {# Main Page #}
 {% elif request.path == '/assembly/' %}
-{# Assembly landing page #}
+  {# Assembly landing page #}
 {% elif '/assembly/' in request.path %}
-{# Assembly result page #}
+  {# Assembly result page #}
 {% elif request.path == '/party/' %}
-{# Party landing page #}
+  {# Party landing page #}
 {% elif '/party/' in request.path %}
-{# Party result page #}
+  {# Party result page #}
 {% endif %}
 
-{% if '/assembly/' in request.path %}
-  {# Index page : 'website' / Result detail page : 'article' #}
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="핑! 정치성향 테스트" />
-  <meta property="og:site_name" content="pingkorea.com" />
-  <meta property="og:url" content="http://pingkorea.com{{ request.path }}" />
-  <meta property="og:description" content="나의 도플갱어 국회의원은?" />
-  <meta property="og:image" content="{{ 'CDN_URL'|get_settings_variable }}/share/ping.png" />
-  {# Image on the upper side : '1200 x 630' / Image on the left side : '200 x 200' #}
-  <meta property="og:image:width" content="200" />
-  <meta property="og:image:height" content="200" />
+{# Index page : 'website' / Result detail page : 'article' #}
+<meta property="og:type" content="website" />
+<meta property="og:title" content="내가 해도 저것보단 잘하겠다!" />
+<meta property="og:site_name" content="pingkorea.com" />
+<meta property="og:url" content="http://pingkorea.com{{ request.path }}" />
+<meta property="og:description" content="19대 국회 법안, 대신 투표해보기" />
+<meta property="og:image" content="{{ 'CDN_URL'|get_settings_variable }}/share/ping.png" />
+{# Image on the upper side : '1200 x 630' / Image on the left side : '200 x 200' #}
+<meta property="og:image:width" content="200" />
+<meta property="og:image:height" content="200" />
 
-  <meta property="twitter:meta_title" content="[핑! 정치성향 테스트] " />
-  <meta property="twitter:description" content="나의 도플갱어 국회의원은?" />
-  <meta property="twitter:image" content="{{ 'CDN_URL'|get_settings_variable }}/share/ping.png" />
-  <meta property="twitter:image:height" content="200">
-  <meta property="twitter:image:width" content="200">
-{% else %}
-  {# Index page : 'website' / Result detail page : 'article' #}
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="핑! 정치성향 테스트" />
-  <meta property="og:site_name" content="pingkorea.com" />
-  <meta property="og:url" content="http://pingkorea.com{{ request.path }}" />
-  <meta property="og:description" content="나와 가장 어울리는 정당은?" />
-  <meta property="og:image" content="{{ 'CDN_URL'|get_settings_variable }}/share/ping.png" />
-  {# Image on the upper side : '1200 x 630' / Image on the left side : '200 x 200' #}
-  <meta property="og:image:width" content="200" />
-  <meta property="og:image:height" content="200" />
-
-  <meta property="twitter:meta_title" content="[핑! 정치성향 테스트] " />
-  <meta property="twitter:description" content="나와 가장 어울리는 정당은?" />
-  <meta property="twitter:image" content="{{ 'CDN_URL'|get_settings_variable }}/share/ping.png" />
-  <meta property="twitter:image:height" content="200">
-  <meta property="twitter:image:width" content="200">
-{% endif %}
+<meta property="twitter:meta_title" content="내가 해도 저것보단 잘하겠다! " />
+<meta property="twitter:description" content="19대 국회 법안, 대신 투표해보기" />
+<meta property="twitter:image" content="{{ 'CDN_URL'|get_settings_variable }}/share/ping.png" />
+<meta property="twitter:image:height" content="200">
+<meta property="twitter:image:width" content="200">

@@ -1,45 +1,22 @@
 {% load custom_filter %}
 
-{% if '/assembly/' in request.path %}
-  {# Facebook #}
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http://pingkorea.com{{ request.path }}" class="share-btn" target="_blank">
-    <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/facebook.png" />
-  </a>
+{# Facebook #}
+<a href="https://www.facebook.com/sharer/sharer.php?u=http://pingkorea.com{{ request.path }}" class="share-btn" target="_blank">
+  <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/facebook.png" />
+</a>
 
-  {# Twitter #}
-  <a href="https://twitter.com/intent/tweet?text=[핑! 정치성향 테스트] 나의 도플갱어 국회의원은? &url=http://pingkorea.com{{ request.path }}" class="share-btn" id="twitter-share" target="_blank">
-    <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/twitter.png" class="social-media__icon" />
-  </a>
+{# Twitter #}
+<a href="https://twitter.com/intent/tweet?text=내가 해도 저것보단 잘하겠다! 19대 국회 법안, 대신 투표해보기 &url=http://pingkorea.com{{ request.path }}" class="share-btn" id="twitter-share" target="_blank">
+  <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/twitter.png" class="social-media__icon" />
+</a>
 
-  {# Kakaotalk #}
-  <a href="javascript:;" class="share-btn" id="kakaotalk-share">
-    <input type="hidden" id="kakaotalk-share__label" value="[핑! 정치성향 테스트] 나와 도플갱어 국회의원은?" />
-    <input type="hidden" id="kakaotalk-share__image-src" value="{{ 'CDN_URL'|get_settings_variable }}/share/ping.png" />
-    <input type="hidden" id="kakaotalk-share__image-width" value="200" />
-    <input type="hidden" id="kakaotalk-share__image-height" value="200" />
-    <input type="hidden" id="kakaotalk-share__btn-text" value="알아보기" />
-    <input type="hidden" id="kakaotalk-share__url" value="http://pingkorea.com{{ request.path }}" />
-    <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/kakao.png" class="social-media__icon" />
-  </a>
-{% else %}
-  {# Facebook #}
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http://pingkorea.com{{ request.path }}" class="share-btn" target="_blank">
-    <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/facebook.png" />
-  </a>
-
-  {# Twitter #}
-  <a href="https://twitter.com/intent/tweet?text=[핑! 정치성향 테스트] 나와 가장 어울리는 정당은? &url=http://pingkorea.com{{ request.path }}" class="share-btn" id="twitter-share" target="_blank">
-    <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/twitter.png" class="social-media__icon" />
-  </a>
-
-  {# Kakaotalk #}
-  <a href="javascript:;" class="share-btn" id="kakaotalk-share">
-    <input type="hidden" id="kakaotalk-share__label" value="[핑! 정치성향 테스트] 나와 가장 어울리는 정당은?" />
-    <input type="hidden" id="kakaotalk-share__image-src" value="{{ 'CDN_URL'|get_settings_variable }}/share/ping.png" />
-    <input type="hidden" id="kakaotalk-share__image-width" value="200" />
-    <input type="hidden" id="kakaotalk-share__image-height" value="200" />
-    <input type="hidden" id="kakaotalk-share__btn-text" value="알아보기" />
-    <input type="hidden" id="kakaotalk-share__url" value="http://pingkorea.com{{ request.path }}" />
-    <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/kakao.png" class="social-media__icon" />
-  </a>
-{% endif %}
+{# Kakaotalk #}
+<a href="javascript:;" class="share-btn" id="kakaotalk-share">
+  <input type="hidden" id="kakaotalk-share__label" value="내가 해도 저것보단 잘하겠다! 내가 해도 저것보단 잘하겠다!" />
+  <input type="hidden" id="kakaotalk-share__image-src" value="{{ 'CDN_URL'|get_settings_variable }}/share/ping.png" />
+  <input type="hidden" id="kakaotalk-share__image-width" value="200" />
+  <input type="hidden" id="kakaotalk-share__image-height" value="200" />
+  <input type="hidden" id="kakaotalk-share__btn-text" value="나도 해보기" />
+  <input type="hidden" id="kakaotalk-share__url" value="http://pingkorea.com{{ request.path }}" />
+  <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/kakao.png" class="social-media__icon" />
+</a>
