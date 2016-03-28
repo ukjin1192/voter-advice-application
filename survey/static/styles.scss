@@ -486,8 +486,8 @@ a, a:focus, a:hover, a:active, a:visited {
 				color: #414042; 
 				cursor: pointer;
 				
-				&:first-child {
-					margin-right: 13px; 
+				&:nth-child(2)  {
+					margin: 0 13px; 
 				}
 			}
 		}
