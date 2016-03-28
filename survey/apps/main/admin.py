@@ -43,6 +43,7 @@ class ChoiceAdmin(admin.ModelAdmin):
 
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'choice', 'created_at')
+    search_fields = ('user__id', )
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'
     ordering = ('-id', )
