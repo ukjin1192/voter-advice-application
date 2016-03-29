@@ -24,10 +24,10 @@
 </div>
 
 <div class="survey__body">
-	<div class="section"></div>
+	<div class="section" data-anchor="main"></div>
 </div>
 
-<div class="slide" id="slide-virtual-dom">
+<div class="slide" id="slide-virtual-dom" data-anchor="">
 	<div class="container">
 		<div class="row statement statement--agreement">
 			<div class="col-xs-3 col-sm-2 col-md-2 col-lg-2 statement--left">
@@ -80,12 +80,16 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
         <h4 class="modal-title">컨닝페이퍼</h4>
       </div>
       <div class="modal-body"></div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">확인</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">
+					확인
+				</button>
       </div>
     </div>
   </div>
@@ -93,9 +97,7 @@
 {% endblock %}
 
 {% block custom_js %}
-{% comment %}
 {% compress js %}
-<script type="text/javascript" src="{% static 'dist/survey.js' %}"></script>
+<script type="text/javascript" src="{% static 'dist/assembly_survey.js' %}"></script>
 {% endcompress %}
-{% endcomment %}
 {% endblock %}

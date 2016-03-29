@@ -1,0 +1,334 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+{% load compress %}
+{% load custom_filter %}
+
+{% block container %}
+<div class="result__header">
+	<div class="container-fit header__title-container">
+		<div class="container header__title">
+			도플갱어 국회의원 찾기
+		</div>
+	</div>
+</div>
+
+<div class="container-fit result__body">
+	<div class="container result__container">
+
+		<div class="alert alert-danger result__alert-message hidden" role="alert">
+			존재하지 않거나 비공개 상태입니다
+		</div>
+
+		<div class="result__summary">
+			<strong>당신</strong>의 표결 성향은<br/>
+			경제적으로 <span class="summary__position"></span>에 속합니다<br/>
+			<span class="summary__best-matching-target"></span> 의원과 가장 가까우며,<br/>
+			<span class="summary__worst-matching-target"></span> 의원과 가장 멉니다.
+		</div>
+
+		<div class="result__chart">
+			<div class="chart__title">
+				경제/복지 성향에 따른 국회의원 분포도<br/>
+				<small>(경제법안 14개에 대해 264명과 비교)</small>
+			</div>
+			<div class="chart__legend">
+				<span class="label" style="background-color: #C01921;">새누리당</span>
+				<span class="label" style="background-color: #1F3895;">더불어민주당</span>
+				<span class="label" style="background-color: #6A9E30;">국민의당</span>
+				<span class="label" style="background-color: #FFCA08;">정의당</span>
+				<span class="label" style="background-color: #0075C1;">기독자유당</span>
+				<span class="label" style="background-color: #777777;">무소속 및 기타정당</span>
+				<span class="label" style="background-color: #000000;">나</span>
+			</div>
+			<div id="result-chart"></div>
+		</div>
+
+		<div class="result__search">
+			<div class="search__title">
+				<div>
+					<strong>국회의원 찾아보기</strong>
+				</div>
+				<div>
+					<small><strong>(19개 전체 법안에 대해 300명과 비교)</strong></small>
+				</div>
+				<div>
+					<small>나와의 유사도를 계산합니다.</small>
+				</div>
+			</div>
+
+			<form class="search__form">
+				<div class="input-group">
+					<input type="text" class="form-control" id="target-name" placeholder="비교하고 싶은 의원!" required />
+					<span class="input-group-btn">
+						<button type="submit" class="btn btn-default">
+							<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+						</button>
+					</span>
+				</div>
+			</form>
+
+			<div class="alert alert-warning search__warning-message hidden" role="alert">
+				전체 안건에 대한 의결 기록이 없는 의원입니다. 정확성이 떨어집니다.
+			</div>
+
+			<div class="alert alert-danger search__danger-message hidden" role="alert">
+				존재하지 않는 의원입니다.
+			</div>
+
+			<div class="search__summary">
+				<span class="search__target">홍길동</span> 의원의 표결 성향은<br/>
+				<span class="search__exception">경제적으로 <span class="search__position">중도</span>에 속하며,<br/></span>
+				당신과는 <span class="search__similarity">가깝지도 멀지도 않은 편</span>입니다!
+			</div>
+			
+			<button type="button" class="btn btn-lg search__toggle-btn" data-toggle="collapse" data-target="#answer-table-container" aria-expanded="false" aria-controls="answer-table-container">
+				<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+				문항 별로 자세히 비교해보기
+			</button>
+			
+			<div class="collapse" id="answer-table-container">
+				<div class="panel-group" id="answer-table" role="tablist" aria-multiselectable="true">
+					<div class="alert alert-info" role="alert">
+						각 문항을 클릭해서 확인할 수 있습니다
+					</div>
+				</div>
+			</div>
+			
+			<div class="result__menu">
+				<span class="menu" data-toggle="modal" data-target="#precaution">주의사항</span>
+				<span class="menu" data-toggle="modal" data-target="#faq">FAQ</span>
+				<span class="menu" data-toggle="modal" data-target="#algorithm">방법론</span>
+			</div>
+		</div>
+		
+		<div class="result__social-media">
+			{% include 'include/social_media_share_group.html' %}
+		</div>
+		
+		<div class="row result__page-link">
+			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 page-link__column--left">
+				<a href="/">
+					<button type="button" class="btn btn-lg btn-block page-link__btn">
+						<span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;
+						홈으로 가기
+					</button>
+				</a>
+			</div>
+			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 page-link__column--right">
+				<a href="/assembly/">
+					<button type="button" class="btn btn-lg btn-block page-link__btn">
+						<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;
+						<span id="go-to-survey-landding-page-btn">다시 해보기</span>
+					</button>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% include 'include/recommendation.html' %}
+
+<div class="result__footer">
+	<div>
+		<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/common/footer_light.png" class="footer__image" />
+	</div>
+</div>
+
+<div class="modal fade" id="precaution" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h3 class="modal-title">주의사항</h3>
+			</div>
+			<div class="modal-body">
+				
+				<h4>다음의 의원은 14개 경제 법안 중 1개 이상에 대해 표결이 기록되지 않아 경제 성향 계산에서 제외되었습니다.</h4>
+				<ul style="margin-left: 20px;">
+					<li>11표: 신장용, 안종범, 이재영(새누리당 평택을), 현영희</li>
+					<li>12표: 김기현, 김선동. 김진표, 남경필, 박명재, 박성효, 배깅누, 서병수, 서청원, 성완종, 유정복, 윤진식, 이용섭, 정몽준, 황인자</li>
+					<li>13표: 김미희. 김재현, 오병윤, 이낙연, 이석기</li>
+					<li>15표: 김무성, 김현숙, 안덕수, 안철수, 이완구</li>
+					<li>16표: 김재윤, 송광호, 심학봉, 조현룡, 한명숙</li>
+					<li>17표: 이운룡</li>
+				</ul>
+				
+				<div class="space"></div>
+				
+				<h4>다음의 의원은 19개 법안 중 10개 이상에 대해 표결이 기록되지 않아 일치도 계산에서 제외되었습니다.</h4>
+				<ul style="margin-left: 20px;">
+					<li>1표: 정윤숙</li>
+					<li>2표: 박근혜</li>
+					<li>3표: 신문식</li>
+					<li>4표: 김근태, 노회찬, 신상진, 안상수, 오신화, 이재균, 장정은, 천정배</li>
+					<li>7표: 고희선, 권은희(국민의당), 김영주(새누리당), 김용남, 김제시, 김형태, 나경원, 박광온, 박맹우, 배덕광, 신정훈, 양창영, 유의동, 이개호, 이정현, 이종배, 정미경, 정용기, 홍철호, 박윤옥</li>
+				</ul>
+
+				<div class="space"></div>
+				
+				<h4>동명이인</h4>
+				<p>19대 국회는 총 8명 (4건)의 동명이인이 있었습니다.</p>
+				<ol style="margin-left: 20px;">
+					<li>새누리당 권은희 의원과 국민의 당 권은희 의원</li>
+					<li>새누리당 (평택을) 이재영 의원, 새누리당 비례대표 이재영 의원</li>
+					<li>새누리당 김영주 의원과 더불어민주당 김영주 의원</li>
+				</ol>
+				<p>이 중 국민의당 권은희 의원과 평택을 이재영 의원, 새누리당 김영주 의원은 19개 법안 중 10 개 미만에 대해 표결이 기록됨으로써 계산에서 제외되었습니다.</p>
+				
+				<div class="space"></div>
+				
+				<h4>당적 최신화</h4>
+				<p>각 정당의 공천이 끝난 이후에도 당적이 변경되는 경우가 생길 수 있어 주의를 기울이고 있습니다.</p>
+				<p>2016년 3월 27일 현재 당적으로 최신화했습니다만, 혹여나 틀린 정보가 있으면 지체 없이 pingcorea@gmail.com으로 제보해주십시오.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					확인
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="faq" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h3 class="modal-title">FAQ</h3>
+			</div>
+			<div class="modal-body">
+
+				<h4>X, Y 축이 무슨 의미죠?</h4>
+				<p>X 축(가로축)은  경제 법안에 대한 표결 성향을 나타냅니다. 오른쪽으로 치우칠 수록 정부의 시장 규제와 조세 누진성에 반대하고 공공 영역의 축소와 자유로운 경쟁에 찬성하는 의견을 가지고 있습니다. 왼쪽으로 치우칠 수록 반대 의견을 가지고 있다고 보시면 됩니다.</p>
+				<p>Y 축(세로축)은 해당하는 경제성향(X 값)을 가진 의원이 얼마나 많은지의 빈도수를 보여줍니다. Y 축 값이 10이면 10명이 같은 경제성향을 가지고 있다는 뜻입니다.</p>
+				<p>좌에서 우로 가면서 좌우 중도 진영에 많은 의원이 분포하는 전형적인 쌍봉형태를 이룸을 알 수 있습니다.</p>
+
+				<div class="space"></div>
+				
+				<h4>지금 20대 총선이 코앞인데 이런 걸 왜 만든 거죠?</h4>
+				<p>19대 국회에 대해 제대로 이해해야만 20대 국회의원을 잘 뽑을 수 있다는 생각에서 시작했습니다. 19대 국회가 파행만 거듭하는 식물 국회였다고 비판하는 목소리가 높습니다. 같은 일이 20대에도 반복되지 않으려면, 계파투쟁이나 의원 개인의 지분확보를 위해 매달리는 국회가 아니라 공정하고 객관적인 태도로 정책적 차별성을 명확히 드러내는 국회가 되어야 합니다. 의미있는 논쟁이 벌어지는 의회를 만들기 위해서 정책 데이터에 바탕해서 표를 던지는 유권자의 태도가 중요하다고 믿습니다. 핑코리아는 현명한 유권자의 정치적 판단을 위한 지표로 활용되기를 바랍니다. </p>
+				<p>모쪼록 20대 국회의원 후보자들에게 날카로운 질문을 던져 오늘 발견하신 궁금점들을 해소하고, 자신의 정책적 입장을 대변하는 의원을 찾으시기를 희망합니다.</p>
+
+				<div class="space"></div>
+				
+				<h4>누가 만든 거예요?</h4>
+				<p>P!NG-01은 풀뿌리정치벤처 와글(WAGL)의 총선 투표 가이드 서비스 P!NG Korea 팀과 한국 탐사저널리즘센터(뉴스타파) 소속 기자들이 함께 만들었습니다. 데이터는 참여연대 의정 감시센터의 협조를 받았습니다.</p>
+
+				<div class="space"></div>
+				
+				<h4>어떻게 만든 거죠?</h4>
+				<p>본회의에서 표결에 부쳐진 법안 2968개 중 20개 이상의 반대표를 받았던 115개 법안을 주제별로 분류했습니다. 이 중 중복된 내용을 묻는 법안들을 제하고, 사회적 쟁점이 되었던 법안 19건을 선정했습니다.</p>
+
+				<div class="space"></div>
+				
+				<p>자세한 내용은 방법론 페이지를 참조해 주세요!</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					확인
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="algorithm" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h3 class="modal-title">방법론</h3>
+			</div>
+			<div class="modal-body">
+
+				<h4>19개 법안으로 돌아보는 19대 국회</h4>
+				<p>한국 정당들의 투표행태에는 몇가지 특징이 있습니다. 첫째 계파에 따른 일괄투표 성향이 강하다는 점, 둘째 당내 비주류 의견이 다양하지 못하다는 점, 셋째 법안에 반대할 경우 아예 투표에 참여하지 않는 경우가 많다는 점입니다. </p>
+				<p>대다수의 법안들이 여야의 합의를 거쳐 본회의에 상정되며, 법안의 발의 취지 등에 대해 공감하지 않더라도 당론을 따라 찬성 표를 던지는 경우가 많았습니다.</p>
+				<p>실제로 본회의에서 결정된 모든 법안들을 분석해보면 압도적으로 반대표가 적다는 것을 알 수 있습니다.</p>
+
+				<div class="modal__image">
+					<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/algorithm_modal_1.png" class="full-width" />
+				</div>
+
+				<div class="space"></div>
+				<div class="space"></div>
+
+				<p>따라서 유럽에서 많이 쓰이는 네덜란드의  <a href="http://www.stemmentracker.nl/Stemmentracker-een-omgekeerde-StemWijzer" target="_blank">Stemmentracker</a>나 체코의 <a href="http://kohovolit.eu/en/" target="_blank">Kohovolit</a> 등과 같은 표결 기반의  의원/정당 성향 매칭 서비스는 한국의 정치성향 평가를 위한 도구로는 적합하지 않습니다. </p>
+				<p>때문에 핑코리아는 명확한 찬성과 반대의 입장이 드러난 대표적인 법안을 추출하여 분석의 기준으로 삼았습니다.</p>
+				<p>가령, 테러 방지법과 같은 법안은 찬성과 반대의 입장이 명확히 드러난 대표적인 법안이었죠. 이 법안들을 한데 모으면 일정한 패턴을 찾을 수 있을 것이라 가정하고 작업에 착수했습니다.</p>
+				<p>우선 본회의에서 표결에 부쳐진 법안 2968개 중 20개 이상의 반대표를 받았던 115개 법안을 주제별로 분류했습니다. 이 중 중복된 내용을 묻는 법안들을 제하고, 사회적 쟁점이 되었던 법안 19건을 선정했습니다.</p>
+
+				<div class="space"></div>
+
+				<h4>정책적 차별성이 드러나는 경제/복지 법안</h4>
+				<p>(모든 근거 자료는 <a href="http://likms.assembly.go.kr/bill/jsp/main.jsp" target="_blank">국회 의안정보시스템</a>에서 확인하실 수 있습니다.)</p>
+				<p>정량적인 분석 결과 지난 4년동안 국회 본회의에서 가장 찬반이 많이 엇갈린 분야는 재정, 경제, 복지 관련 법안이었습니다.</p>
+				<p>세 분야에 대한 각 의원들의 입장은 밀접한 상호 연관성을 가지고 피력되고 있어서 경제/복지의 단일 스펙트럼에서 국회의원의 분포를 드러내는 것이 적절하다고 판단했습니다.</p>
+
+				<div class="space"></div>
+
+				<div class="modal__image">
+					<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/algorithm_modal_2.png" class="full-width" />
+				</div>
+
+				<div class="space"></div>
+				<div class="space"></div>
+
+				<h4>경제/복지 성향 계산 방법</h4>
+				<p>경제/복지 성향은 19개 법안 중 14개의 관련법안에 대해 진보적 성향이 드러나는 표결 시 -1점, 보수적 성향이 드러나는 표결 시 1점을 부여하고 중립을 0점으로 설정하여 자연스럽게 왼쪽에서 오른쪽으로 진보-보수 성향을 가늠할 수 있도록 했습니다.</p>
+				<p>여기서 경제적 진보는  시장에 대한 규제, 공공영역의 확장, 복지 지출 확대, 누진적 조세에 찬성합니다. 경제적 보수는 시장 자유를 위한 규제완화, 공공영역의 축소, 복지 지출 감축, 조세 감면에 찬성합니다.</p>
+				<p>총 14개 법안에서 모두 보수적 표결을 진행한 사용자와 의원은 +14점, 진보적 표결을 진행한 사용자와 의원은 -14점을 부여받는데, -14점 이상 -9점 미만은 매우 진보, -9점 이상 -4점 미만은 진보, -4점 이상 +4점 이하는 중도, +4점 초과 +9점 이하는 보수, +9점 초과 +14점 이하는 매우 보수로 분류하였습니다.</p>
+
+				<div class="space"></div>
+
+				<h4>유사도 계산 방법</h4>
+				<p>국회의원과 나의 거리를 잴 때 있어 중요한 결정 요소는 어떤 의원을 비교 대상으로 삼는가 하는 것이었습니다. 총 19개 법안 중 10건 이상에 대해 표결결과가 기록된 300명의 의원들과 대조하였습니다.</p>
+				<p>각 법안마다 앱 사용자의 의견과 국회의원의 표결내용이 같을 때 해당 의원은 점수를 1점 획득하는 방식으로 300명의 표결참여 의원에 대해 사용자와의 일치도 지수를 부과했습니다. 한 국회의원이 나와 100% 의견일치를 했다면 19점을 얻고 일치도 지수는 100이 됩니다.</p>
+				<p>단, 지방선거 등에 출마하기 위해 의원직을 포기하거나 선거법 위반으로 의원 자격을 박탈당한 경우 해당 표결은 유사도 계산에서 제외하였습니다. 예를 들어, 성완종 전 의원의 경우 의원직을 박탈당한 이후 8건의 법안에 대해서는 기록이 없습니다. 따라서 위와 같이 5개 법안에 대해 똑같이 표결했더라도 일치도는 8 분의 5, 즉 62.5(%)가 됩니다.</p>
+				<p>가장 엄밀한 방법은 19개 법안에 대해 모두 표결을 진행한 의원들에 대해서만 거리를 계산하는 것이겠으나, 이런 엄격한 기준을 통과하는 의원은 264명에 불과하며, 현재 원내 정당들의 대표인 김무성, 안철수 대표가 제외됩니다.</p>
+				<p>또한, 결석, 불참, 청가, 출장 등으로 빠진 경우는 부득이 계산에서 제외하였습니다.</p>
+
+				<div class="space"></div>
+
+				<h4>가정과 한계점:</h4>
+				<p>저희의 방법론은 몇 가지 한계를 가지고 있습니다.</p>
+				<p>첫째, 저희가 선정한 19개 법안만 포함하였으므로 미포함 법안과 관련한 입장은 데이터에 반영되지 못했습니다. 또한 상임위에서 본회의에 상정하지 못한 채 논쟁만 되었던 법안들도 계산에서 제외됩니다.</p>
+				<p>둘째, 법안 표결이 성향을 파악한다는 가정을 하고 있으나, 소위 “빅딜”을 통해 주고받은 쟁점 법안들 같은 경우 이념 성향을 파악하는 데에 제한적일 수 있습니다. 하지만 그럼에도 불구하고 항의 투표(protest vote)를 던진 의원들의 입장을 유의미한 변수로 인정했다는 점에서 당내 비주류 의원의 좌표를 명확히 했습니다.</p>
+				<p>셋째, 당초 쟁점 법안이었으나 여야 합의로 통과된 법안들은 반대표 수가 미미하여 포함되지 않았습니다. 김영란 법, 세월호 특별법 같은 경우가 여기 해당됩니다.</p>
+
+				<div class="space"></div>
+
+				<h4>Default: Open 원칙</h4>
+				<p>P!NG은 투명성을 지향합니다. 데이터를 검색하기 쉬운 형태로 조만간 배포할 예정이오니, 매의 눈으로 찾아보시고 저희가 찾아내지 못한 오류를 제보해주시면 적극 수정하겠습니다.</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					확인
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="panel panel-default hidden" id="answer-table__virtual-dom">
+	<div class="panel-heading" role="tab" data-toggle="collapse" data-parent="#answer-table" href=""></div>
+	<div class="panel-collapse collapse" id="" role="tabpanel" data-question-id="">
+		<div class="panel-body"></div>
+	</div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+{% compress js %}
+<script type="text/javascript" src="{% static 'dist/assembly_result.js' %}"></script>
+{% endcompress %}
+<script src="{% static 'pykih-charts/pykcharts.1.1.0.min.js' %}"></script>
+{% endblock %}
