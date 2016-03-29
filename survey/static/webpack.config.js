@@ -19,8 +19,6 @@ module.exports = {
       'bootstrap-webpack',
       'lodash',
       'fullpage.js',
-      'd3',
-      'dimple-js',
       'fastclick',
       'rangeslider.js'
     ]

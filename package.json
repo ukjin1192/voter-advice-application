@@ -1,19 +1,19 @@
 {
-  "name": "political-survey",
-  "version": "0.0.0",
-  "description": "Survey to recognize where my political tendency positioned",
+  "name": "voter-advice-application",
+  "version": "0.1.0",
+  "description": "A Korean Voter Advice Application",
   "main": "./survey/static/js/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ukjin1192/political-survey.git"
+    "url": "https://github.com/ukjin1192/voter-advice-application.git"
   },
   "author": "Uk-Jin, Yang",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/ukjin1192/political-survey/issues"
+    "url": "https://github.com/ukjin1192/voter-advice-application/issues"
   },
   "dependencies": {
     "jquery": "~2.1.4",
@@ -21,11 +21,8 @@
     "bootstrap": "~3.3.6",
     "bootstrap-webpack": "0.0.5",
     "fullpage.js": "~2.7.6",
-    "d3": "~3.5.14",
-    "dimple-js": "~2.1.4",
     "lodash": "~4.0.1",
     "fastclick": "~1.0.6",
-    "rangeslider.js": "~2.1.1",
     "jquery-slimscroll": "~1.3.6"
   },
   "devDependencies": {
