@@ -203,6 +203,10 @@ a, a:focus, a:hover, a:active, a:visited {
 	.main-page__logo {
 		display: block;
 		padding: 22px 0;
+		
+		img {
+			max-width: 66px;
+		}
 	}
 
 	.main-page__column--left {
@@ -221,6 +225,7 @@ a, a:focus, a:hover, a:active, a:visited {
 
 .main-page__footer {
 	max-width: 500px;
+	margin: 0 auto;
 }
 
 /* =====================
