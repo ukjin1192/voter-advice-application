@@ -379,6 +379,10 @@ a, a:focus, a:hover, a:active, a:visited {
 	.footer__main-container {
 		padding: 15px 37px;
 		
+		@media screen and (min-width: $screen-sm-min) {
+			padding: 15px 37px 45px 15px;
+		}
+		
 		.footer__description {
 			margin-bottom: 15px; 
 			font-weight: 500; 
@@ -572,19 +576,6 @@ a, a:focus, a:hover, a:active, a:visited {
 				}
 			}
 			
-			.result__menu {
-				padding-bottom: 30px;
-				text-align: center; 
-				
-				.menu {
-					margin: 0 10px;
-					border-bottom: 1px solid #414042;
-					font-weight: 700; 
-					color: #414042; 
-					cursor: pointer;
-				}
-			}
-			
 			.search__toggle-btn {
 				margin-bottom: 15px;
 				border-radius: 0;
@@ -605,6 +596,19 @@ a, a:focus, a:hover, a:active, a:visited {
 					.label {
 						margin: 0 3px;
 					}
+				}
+			}
+			
+			.result__menu {
+				margin-top: 30px;
+				text-align: center; 
+				
+				.menu {
+					margin: 0 10px;
+					border-bottom: 1px solid #414042;
+					font-weight: 700; 
+					color: #414042; 
+					cursor: pointer;
 				}
 			}
 		}

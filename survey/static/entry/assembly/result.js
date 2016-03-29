@@ -2604,7 +2604,7 @@ $(window).load(function() {
       "chart_height": 800,
       "chart_margin_left": 30,
       "chart_margin_right": 0,
-      "chart_margin_top": -20,
+      "chart_margin_top": -10,
       "chart_margin_bottom": 80,
 
       //Chart color parameters

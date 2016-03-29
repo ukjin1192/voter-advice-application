@@ -82,17 +82,11 @@
 				당신과는 <span class="search__similarity">가깝지도 멀지도 않은 편</span>입니다!
 			</div>
 			
-			<div class="result__menu">
-				<span class="menu" data-toggle="modal" data-target="#precaution">주의사항</span>
-				<span class="menu" data-toggle="modal" data-target="#faq">FAQ</span>
-				<span class="menu" data-toggle="modal" data-target="#algorithm">방법론</span>
-			</div>
-			
 			<button type="button" class="btn btn-lg search__toggle-btn" data-toggle="collapse" data-target="#answer-table-container" aria-expanded="false" aria-controls="answer-table-container">
 				<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 				문항 별로 자세히 비교해보기
 			</button>
-
+			
 			<div class="collapse" id="answer-table-container">
 				<div class="panel-group" id="answer-table" role="tablist" aria-multiselectable="true">
 					<div class="alert alert-info" role="alert">
@@ -100,16 +94,22 @@
 					</div>
 				</div>
 			</div>
+			
+			<div class="result__menu">
+				<span class="menu" data-toggle="modal" data-target="#precaution">주의사항</span>
+				<span class="menu" data-toggle="modal" data-target="#faq">FAQ</span>
+				<span class="menu" data-toggle="modal" data-target="#algorithm">방법론</span>
+			</div>
 		</div>
-
+		
 		<div class="result__social-media">
 			{% include 'include/social_media_share_group.html' %}
 		</div>
-
+		
 		<div class="row result__page-link">
 			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 page-link__column--left">
 				<a href="/">
-					<button type="button" class="btn btn-default btn-block page-link__btn">
+					<button type="button" class="btn btn-lg btn-block page-link__btn">
 						<span class="glyphicon glyphicon-home" aria-hidden="true"></span>&nbsp;
 						홈으로 가기
 					</button>
@@ -117,7 +117,7 @@
 			</div>
 			<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 page-link__column--right">
 				<a href="/assembly/">
-					<button type="button" class="btn btn-default btn-block page-link__btn">
+					<button type="button" class="btn btn-lg btn-block page-link__btn">
 						<span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;
 						<span id="go-to-survey-landding-page-btn">다시 해보기</span>
 					</button>
