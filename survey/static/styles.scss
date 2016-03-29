@@ -121,7 +121,7 @@ a, a:focus, a:hover, a:active, a:visited {
 
 .share-btn {
 	display: inline;
-	padding: 7px;
+	margin: 0 6px;
 	
 	img {
 		width: 12%;
@@ -217,6 +217,10 @@ a, a:focus, a:hover, a:active, a:visited {
 		margin-top: 29px;
 		text-align: right; 
 	}
+}
+
+.main-page__footer {
+	max-width: 500px;
 }
 
 /* =====================
