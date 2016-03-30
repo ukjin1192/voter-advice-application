@@ -2467,6 +2467,36 @@ $(document).on('click', '.share-btn', function() {
   });
 });
 
+$(document).on('click', '.voice-of-customer__submit-btn', function() {
+  if ($('#voice-of-customer textarea').val() != '') {
+    $('.voice-of-customer__alert-message').addClass('hidden');
+    
+    var $submitBtn = $(this);
+    $submitBtn.button('loading');
+    
+    // Set authentication and CSRF tokens at HTTP header
+    setAuthToken();
+    setCSRFToken();
+    
+    var formData = new FormData();
+    formData.append('survey_id', surveyID);
+    formData.append('context', $('#voice-of-customer textarea').val());
+    
+    $.ajax({
+      url: '/api/voice_of_customers/',
+      type: 'POST',
+      data: formData,
+      contentType: false,
+      processData: false
+    }).done(function(data) {
+      $('#voice-of-customer textarea').val('');
+      $('.voice-of-customer__alert-message').removeClass('hidden');
+    }).always(function() {
+      $submitBtn.button('reset');
+    });
+  }
+});
+
 // Search and compare with specific national assembly member
 $(document).on('submit', '.search__form', function() {
   event.preventDefault();

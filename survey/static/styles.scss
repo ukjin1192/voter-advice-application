@@ -173,6 +173,19 @@ a, a:focus, a:hover, a:active, a:visited {
 	margin: 0 auto;
 }
 
+#voice-of-customer {
+
+	.voice-of-customer__alert-message {
+		margin-top: 15px;
+	}
+
+	.voice-of-customer__submit-btn {
+		margin-top: 15px;
+		background-color: #415FCF; 
+		color: white; 
+	}
+}
+
 /* =========
  * Main page
  * ========= */
@@ -606,7 +619,7 @@ a, a:focus, a:hover, a:active, a:visited {
 				text-align: center; 
 				
 				.menu {
-					margin: 0 10px;
+					margin: 0 8px;
 					border-bottom: 1px solid #414042;
 					font-weight: 700; 
 					color: #414042; 

@@ -99,6 +99,7 @@
 				<span class="menu" data-toggle="modal" data-target="#precaution">주의사항</span>
 				<span class="menu" data-toggle="modal" data-target="#faq">FAQ</span>
 				<span class="menu" data-toggle="modal" data-target="#algorithm">방법론</span>
+				<span class="menu" data-toggle="modal" data-target="#voice-of-customer">사용자 의견</span>
 			</div>
 		</div>
 		
@@ -197,7 +198,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">
-					확인
+					닫기
 				</button>
 			</div>
 		</div>
@@ -242,7 +243,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">
-					확인
+					닫기
 				</button>
 			</div>
 		</div>
@@ -321,7 +322,34 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">
-					확인
+					닫기
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="voice-of-customer" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h3 class="modal-title">사용자 의견</h3>
+			</div>
+			<div class="modal-body">
+				<textarea class="form-control" rows="7" placeholder="수정해야 하거나, 추가됐으면 하는 것들을 알려주시면 적극 반영하겠습니다 :)"></textarea>
+        <div class="alert alert-info voice-of-customer__alert-message hidden" role="alert">
+          감사합니다! 빠른 시일내에 반영하도록 하겠습니다
+        </div>
+        <button class="btn btn-lg btn-block voice-of-customer__submit-btn" data-loading-text="전송중입니다">
+          사용자 의견 전송하기
+        </button>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+					닫기
 				</button>
 			</div>
 		</div>
