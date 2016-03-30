@@ -37,7 +37,7 @@ function syncChoice(value) {
 
 // Synchronize title and subtitle
 function syncTitle(index) {
-	$('.header__title').text(questionList[index].header_title);
+	$('.header__title').text((index + 1).toString() + '. ' + questionList[index].header_title);
 	$('.header__subtitle').text(questionList[index].header_subtitle);
 }
 
