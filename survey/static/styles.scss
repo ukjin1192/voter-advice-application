@@ -345,6 +345,27 @@ a, a:focus, a:hover, a:active, a:visited {
 			}
 		}
 	}
+
+	.additional-info {
+		width: 250px;
+		margin: 0 auto;
+		text-align: center;
+	}
+}
+
+.modal__cheating-paper--trigger {
+	padding: 8px 15px;
+	text-align: right;
+	cursor: pointer;
+	
+	.glyphicon {
+		color: #BCBEC0;
+	}
+}
+
+.survey__submit-btn {
+	background-color: #415FCF; 
+	color: white; 
 }
 
 .survey__footer {
@@ -355,16 +376,6 @@ a, a:focus, a:hover, a:active, a:visited {
 
 	.footer__sub-container {
 		background-color: #EBEBEB;
-		
-		.footer__modal-trigger {
-			padding: 8px 15px;
-			text-align: right;
-			cursor: pointer;
-			
-			.glyphicon {
-				color: #BCBEC0;
-			}
-		}
 	}
 
 	.footer__main-container {

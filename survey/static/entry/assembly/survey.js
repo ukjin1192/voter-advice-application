@@ -37,15 +37,12 @@ function syncChoice(value) {
 
 // Synchronize title and subtitle
 function syncTitle(index) {
-	$('.header__title').text((index + 1).toString() + '. ' + questionList[index].header_title);
-	$('.header__subtitle').text(questionList[index].header_subtitle);
+	$('.header__title').text(questionList[index].title);
+	$('.header__subtitle').text(questionList[index].subtitle);
 }
 
 // Save choice
 function saveChoice(choiceID) {
-  // When user completed survey
-  if (activeSlideIndex == questionList.length) var completed = true; 
-  else var completed = false;
 
   // Set authentication and CSRF tokens at HTTP header
   setAuthToken();
@@ -61,29 +58,57 @@ function saveChoice(choiceID) {
     contentType: false,
     processData: false
   }).done(function(data) {
-    // When user completed survey
-    if (completed) {
-      var formData = new FormData();
-      formData.append('survey_id', surveyID);
-      formData.append('category', 'agreement_score');
-      
-      // Set authentication and CSRF tokens at HTTP header
-      setAuthToken();
-      setCSRFToken();
-      
-      $.ajax({
-        url: '/api/results/',
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false
-      }).done(function(data) {
-        // Move to result page
-        location.href = '/assembly/result/' + data.id + '/';
-      });
-    }
   });
 }
+
+// Submit survey (Update user profile and create new result)
+$(document).on('click', '.survey__submit-btn', function() {
+
+  var $submitBtn = $(this);
+  $submitBtn.button('loading');
+
+  // Update user profile
+  if ($('input[name="sex"]:checked').val() != undefined || $('#year-of-birth').val() != '' || $('#political-tendency').val() != '') {
+    // Set authentication and CSRF tokens at HTTP header
+    setAuthToken();
+    setCSRFToken();
+    
+    var formData = new FormData();
+    if ($('input[name="sex"]:checked').val() != undefined) formData.append('sex', $('input[name="sex"]:checked').val());
+    if ($('#year-of-birth').val() != '') formData.append('year_of_birth', $('#year-of-birth').val());
+    if ($('#political-tendency').val() != '') formData.append('political_tendency', $('#political-tendency').val());
+    
+    $.ajax({
+      url: '/api/users/' + localStorage.getItem('user_id') + '/',
+      type: 'PATCH',
+      data: formData,
+      contentType: false,
+      processData: false
+    });
+  }
+
+  // Set authentication and CSRF tokens at HTTP header
+  setAuthToken();
+  setCSRFToken();
+
+  var formData = new FormData();
+  formData.append('survey_id', surveyID);
+  formData.append('category', 'agreement_score');
+  
+  // Create new result
+  $.ajax({
+    url: '/api/results/',
+    type: 'POST',
+    data: formData,
+    contentType: false,
+    processData: false
+  }).done(function(data) {
+    // Move to result page
+    location.href = '/assembly/result/' + data.id + '/';
+  }).always(function() {
+    $submitBtn.button('reset');
+  });
+});
 
 // Toggle slide navigation arrows
 $(document).on('click', '.slide', function() {
@@ -167,8 +192,8 @@ $(window).load(function() {
       });
       
       questionList.push({
-        'header_title': question.title,
-        'header_subtitle': question.subtitle,
+        'title': (index + 1).toString() + '. ' + question.title,
+        'subtitle': question.subtitle,
         'agreement_content': questionTemporaryExplanation[0],
         'disagreement_content': questionTemporaryExplanation[1],
         'agreement_choice_id': agreementChoiceID,
@@ -192,6 +217,16 @@ $(window).load(function() {
     
     $('#slide-virtual-dom').remove();
     
+    // Append additional info slide
+    var $slide = $('#additional-info-slide').clone().removeClass('hidden').removeAttr('id');
+    $('.survey__body .section').append($slide);
+    questionList.push({
+      'title': '사용자 설문 조사(선택사항)',
+      'subtitle': '서비스 개선을 위해 활용됩니다.',
+    });
+    
+    $('#additional-info-slide').remove();
+    
     // Inititate fullpage.js with options
     $('.survey__body').fullpage({
       fixedElements: '.survey__header, .survey__footer',
@@ -206,7 +241,6 @@ $(window).load(function() {
         activeSlideIndex = $('.slide').index($('.slide.active')) + 1;
         
         syncProgressBar(activeSlideIndex * 100 / questionList.length);
-        syncChoice(answerList[activeSlideIndex]);
         syncTitle(activeSlideIndex - 1);
         
         // Toggle off slide navigation arrows
@@ -219,7 +253,7 @@ $(window).load(function() {
         // Update active slide index
         activeSlideIndex = slideIndex + 1;
         
-        syncChoice(answerList[activeSlideIndex]);
+        if (activeSlideIndex != questionList.length) syncChoice(answerList[activeSlideIndex]);
         
         // Toggle off slide navigation arrows
         $('.fp-controlArrow').addClass('hidden');
@@ -230,6 +264,14 @@ $(window).load(function() {
         
         syncProgressBar((nextSlideIndex + 1) * 100 / questionList.length);
         syncTitle(nextSlideIndex);
+        
+        if (nextSlideIndex + 1 == questionList.length) {
+          $('.footer__sub-container, .footer__description, .footer__choices').addClass('hidden');
+          $('.survey__submit-btn').removeClass('hidden');
+        } else {
+          $('.footer__sub-container, .footer__description, .footer__choices').removeClass('hidden');
+          $('.survey__submit-btn').addClass('hidden');
+        }
       },
     }); 
   });

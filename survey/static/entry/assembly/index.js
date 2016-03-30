@@ -68,16 +68,13 @@ $(document).on('click', '.landing__btn--result', function() {
   btn.button('loading');
   $('#loading-icon').removeClass('hidden');
 
-  // Set authentication token at HTTP header
+  // Set authentication and CSRF tokens at HTTP header
   setAuthToken();
+  setCSRFToken();
 
   var formData = new FormData();
   formData.append('survey_id', surveyID);
   formData.append('category', 'agreement_score');
-  
-  // Set authentication and CSRF tokens at HTTP header
-  setAuthToken();
-  setCSRFToken();
   
   $.ajax({
     url: '/api/results/',
