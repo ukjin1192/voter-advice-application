@@ -327,8 +327,10 @@
 {% endblock %}
 
 {% block custom_js %}
+{% comment %}
 {% compress js %}
-<script type="text/javascript" src="{% static 'dist/assembly_result.js' %}"></script>
+<script type="text/javascript" src="{% static 'dist/party_result.js' %}"></script>
 {% endcompress %}
 <script src="{% static 'pykih-charts/pykcharts.1.1.0.min.js' %}"></script>
+{% endcomment %}
 {% endblock %}

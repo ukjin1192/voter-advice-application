@@ -10,14 +10,10 @@
 		<div class="container header__title">&nbsp;</div>
 	</div>
 
-	<div class="container-fit header__subtitle-container">
-		<div class="container header__subtitle">&nbsp;</div>
-	</div>
-
 	<div class="container-fit header__progress-container">
 		<div class="container">
 			<div class="progress header__progress">
-				<div class="progress-bar header__progress-bar" role="progressbar"></div>
+				<div class="progress-bar header__progress-bar header__progress-bar--green" role="progressbar"></div>
 			</div>
 		</div>
 	</div>
@@ -29,51 +25,14 @@
 
 <div class="slide" id="slide-virtual-dom" data-anchor="">
 	<div class="container">
-		<div class="row statement statement--agreement">
-			<div class="col-xs-3 col-sm-2 col-md-2 col-lg-2 statement--left">
-				<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/btn_agreement.png" class="statement__category--image" />
-				<div class="statement__category--text">
-					찬성 의견
-				</div>
-			</div>
-			<div class="col-xs-9 col-sm-10 col-md-10 col-lg-10 statement__content statement__content--right"></div>
+		<div class="question__explanation" style="padding: 30px 10px 10px 10px; font-size: 1.5em; background-color: white;"></div>
+		<div class="container modal-trigger" data-toggle="modal" data-target="#cheating-paper" style="text-align: right; padding: 8px 15px; cursor: pointer; background-color: white;">
+			컨닝페이퍼
+			<span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: #BCBEC0;"></span>
 		</div>
-		<div class="row statement statement--disagreement">
-			<div class="col-xs-9 col-sm-10 col-md-10 col-lg-10 statement__content statement__content--left"></div>
-			<div class="col-xs-3 col-sm-2 col-md-2 col-lg-2 statement--right">
-				<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/assembly/btn_disagreement.png" class="statement__category--image" />
-				<div class="statement__category--text">
-					반대 의견
-				</div>
-			</div>
-		</div>
+		<div class="question__choices" style="text-align: center;"></div>
 		<div class="cheating-paper__content hidden"></div>
 	</div>
-</div>
-
-<div class="container-fit survey__footer">
-	<div class="footer__sub-container">
-		<div class="container footer__modal-trigger" data-toggle="modal" data-target="#cheating-paper">
-			컨닝페이퍼
-			<span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
-		</div>
-	</div>
-	<div class="container footer__main-container">
-		<div class="footer__description">
-			이 법안에 대해 표결해 주십시오
-		</div>
-		<div class="footer__choices">
-			<div class="choice choice--agreement">
-				찬성
-			</div>
-			<div class="choice choice--disagreement choice--center">
-				반대
-			</div>
-			<div class="choice choice--abtention">
-				기권
-			</div>
-		</div>
-  </div>
 </div>
 
 <div class="modal fade" id="cheating-paper" tabindex="-1" role="dialog">
@@ -98,6 +57,6 @@
 
 {% block custom_js %}
 {% compress js %}
-<script type="text/javascript" src="{% static 'dist/assembly_survey.js' %}"></script>
+<script type="text/javascript" src="{% static 'dist/party_survey.js' %}"></script>
 {% endcompress %}
 {% endblock %}

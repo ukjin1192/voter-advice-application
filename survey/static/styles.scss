@@ -285,8 +285,12 @@ a, a:focus, a:hover, a:active, a:visited {
 			margin: 15px 0; 
 			background-color: #D3D4D5;
 			
-			.header__progress-bar {
+			.header__progress-bar--blue {
 				background-color: #415FCF;
+			}
+			
+			.header__progress-bar--green {
+				background-color: #43C8AD;
 			}
 		}
 	}

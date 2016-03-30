@@ -12,6 +12,7 @@ module.exports = {
     assembly_survey: './entry/assembly/survey',
     assembly_result: './entry/assembly/result',
     party_index: './entry/party/index',
+    party_survey: './entry/party/survey',
     vendor: [
       'jquery', 
       'jquery.cookie', 
@@ -38,7 +39,7 @@ module.exports = {
     // Separate main file with vendors
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
-      chunks: ['base, assembly_index, assembly_survey, assembly_result, party_index'],
+      chunks: ['base, assembly_index, assembly_survey, assembly_result, party_index', 'party_survey'],
       filename: 'vendor.js',
       minChunks: Infinity
     }),
