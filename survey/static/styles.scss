@@ -572,7 +572,7 @@ a, a:focus, a:hover, a:active, a:visited {
 			}
 			
 			.search__summary {
-				padding-bottom: 30px;
+				padding-bottom: 15px;
 				font-size: 1.2em; 
 				line-height: 1.5em;
 				
@@ -589,6 +589,10 @@ a, a:focus, a:hover, a:active, a:visited {
 					font-weight: 700;
 					color: #43C8AD;
 				}
+			}
+			
+			.search__helpful-link {
+				margin-bottom: 20px
 			}
 			
 			.search__toggle-btn {
