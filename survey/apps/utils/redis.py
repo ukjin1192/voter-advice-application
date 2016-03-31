@@ -41,6 +41,7 @@ def set_survey_data_of_comparison_targets_cache(survey_obj):
         comparison_target_data = {'name': comparison_target.name, 
                 'economic_score': comparison_target.user.economic_score,
                 'color': comparison_target.color, 
+                'is_reliable': comparison_target.is_reliable,
                 'factor_list': raw_data['factor_list']}
         comparison_targets_data.append(comparison_target_data)
         comparison_targets_updated_at.append(raw_data['updated_at'])

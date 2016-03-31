@@ -436,7 +436,10 @@ class ResultViewSet(viewsets.ModelViewSet):
         
         data = request.data
         data['record'] = record
-        if category == 'pca':
+        
+        if category == 'city_block_distance':
+            data['expected_target'] = request.user.supporting_party
+        elif category == 'pca':
             data['x_axis_name'] = rotation_matrix['x_axis_name']
             data['y_axis_name'] = rotation_matrix['y_axis_name']
         

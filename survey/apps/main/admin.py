@@ -14,7 +14,7 @@ class UserAdmin(admin.ModelAdmin):
 
 
 class ComparisonTargetAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'survey', 'name', 'color')
+    list_display = ('id', 'user', 'survey', 'name', 'color', 'is_reliable')
     search_fields = ('name', )
     ordering = ('-id', )
 
@@ -57,7 +57,7 @@ class RotationMatrixAdmin(admin.ModelAdmin):
 
 
 class ResultAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'survey', 'record', 'category', 'x_axis_name', 'y_axis_name', 'is_public', 'created_at')
+    list_display = ('id', 'user', 'survey', 'record', 'expected_target', 'category', 'x_axis_name', 'y_axis_name', 'is_public', 'created_at')
     list_filter = ('created_at', )
     date_hierarchy = 'created_at'
     ordering = ('-id', )

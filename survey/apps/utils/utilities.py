@@ -51,9 +51,21 @@ def get_agreement_score_result(user_data, *target_data):
         User B(2nd comparison target)'s survey data
             factor_list = [2, 2, 2]
     [Input]
-        user_data = {'name': '나', 'economic_score': 5, 'factor_list': [0, -2, 2]}
-        target_data = [{'name': 'User A', 'economic_score': 7, 'factor_list': [1, 1, 1]},
-                       {'name': 'User B', 'economic_score': 3, 'factor_list': [2, 2, 2]}]
+        user_data = {
+            'name': '나', 
+            'economic_score': 5, 
+            'factor_list': [0, -2, 2]
+        }
+        target_data = [{
+            'name': 'User A', 
+            'economic_score': 7, 
+            'factor_list': [1, 1, 1]
+        },
+        {
+            'name': 'User B', 
+            'economic_score': 3, 
+            'factor_list': [2, 2, 2]
+        }]
     [Output]
         [{
             'name': '나',
@@ -76,8 +88,8 @@ def get_agreement_score_result(user_data, *target_data):
 
     # Add own data
     record.append("{'name': '" + user_data['name'] + "'," \
-            + "'similarity': 100," \
-            +  "'economic_score': '" + str(user_data['economic_score']) + "'}")
+            + "'economic_score': " + str(user_data['economic_score']) + "," \
+            + "'similarity': 100}")
 
     for single_target_data in target_data:
         origin = user_array
@@ -87,8 +99,8 @@ def get_agreement_score_result(user_data, *target_data):
         max_agreement = question_count
         similarity = math.ceil(10000 * (agreement / float(max_agreement))) / 100
         record.append("{'name': '" + single_target_data['name'] + "'," \
-                + "'similarity': " + str(similarity) + "," \
-                +  "'economic_score': '" + str(single_target_data['economic_score']) + "'}")
+                + "'economic_score': " + str(single_target_data['economic_score']) + "," \
+                + "'similarity': " + str(similarity) + "}")
 
     return '[' + ', '.join(record) + ']'
 
@@ -106,18 +118,30 @@ def get_city_block_distance_result(user_data, *target_data):
             factor_list = [2, 2, 2]
     [Input]
         user_data = [0, -2, 2]
-        target_data = [{'name': 'User A', 'color': '#AEAEAE', 'factor_list': [1, 1, 1]},
-                       {'name': 'User B', 'color': '#EEEEEE', 'factor_list': [2, 2, 2]}]
+        target_data = [{
+            'name': 'User A', 
+            'color': '#AEAEAE', 
+            'is_reliable': True,
+            'factor_list': [1, 1, 1]
+        },
+        {
+            'name': 'User B', 
+            'color': '#EEEEEE', 
+            'is_reliable': False,
+            'factor_list': [2, 2, 2]
+        }]
     [Output]
         [{
             'name': 'User A', 
-            'similarity': 62, 
-            'color': '#AEAEAE'
+            'color': '#AEAEAE',
+            'is_reliable': True,
+            'similarity': 62
         }, 
         {
             'name': 'User B', 
-            'similarity': 54, 
-            'color': '#EEEEEE'
+            'color': '#EEEEEE',
+            'is_reliable': False,
+            'similarity': 54 
         }]
     """
     question_count = len(user_data)
@@ -130,8 +154,9 @@ def get_city_block_distance_result(user_data, *target_data):
         max_disagreement = float(sum(numpy.absolute(user_data) + 2))
         agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
         record.append("{'name': '" + single_target_data['name'] + "'," \
-                + "'similarity': " + str(agreement_score) + "," \
-                +  "'color': '" + single_target_data['color'] + "'}")
+                + "'color': '" + single_target_data['color'] + "'," \
+                + "'is_reliable': '" + str(single_target_data['is_reliable']) + "'," \
+                + "'similarity': " + str(agreement_score) + "}")
 
     return '[' + ', '.join(record) + ']'
 

@@ -149,6 +149,10 @@ class ComparisonTarget(models.Model):
         blank = True,
         null = True
     )
+    is_reliable = models.BooleanField(
+        verbose_name = _('Is reliable'),
+        default = True
+    )
     created_at = models.DateTimeField(
         verbose_name = _('Created datetime'),
         auto_now_add = True,
@@ -396,6 +400,12 @@ class Result(models.Model):
     record = models.TextField(
         verbose_name = _('Record'),
     ) 
+    expected_target = models.CharField(
+        verbose_name = _('Expected target'),
+        max_length = 255,
+        blank = True,
+        null = True
+    )
     category = models.CharField(
         verbose_name = _('Category'),
         choices = getattr(settings, 'RESULT_CATEGORY_CHOICES'),

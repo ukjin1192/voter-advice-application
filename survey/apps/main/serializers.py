@@ -18,7 +18,7 @@ class ComparisonTargetSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ComparisonTarget
-        fields = ('id', 'survey', 'name', 'color', 'completed_survey')
+        fields = ('id', 'survey', 'name', 'color', 'is_reliable', 'completed_survey')
 
     def get_completed_survey(self, obj):
         """
@@ -75,7 +75,7 @@ class ResultSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Result
-        fields = ('id', 'user', 'survey', 'record', 'category', 'x_axis_name', 'y_axis_name', 'is_public', 'updated_at')
+        fields = ('id', 'user', 'survey', 'record', 'expected_target', 'category', 'x_axis_name', 'y_axis_name', 'is_public', 'updated_at')
 
 
 class VoiceOfCustomerSerializer(serializers.HyperlinkedModelSerializer):
