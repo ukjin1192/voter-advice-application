@@ -27,7 +27,9 @@ function syncProgressBar(value) {
 
 // Synchronize title
 function syncTitle(index) {
-	$('.header__title').text(questionList[index].title);
+  $('.header__title').text(questionList[index].title);
+  if (index + 1 == questionList.length) $('.header__subtitle').text(questionList[index].subtitle);
+  else $('.header__subtitle').text(questionList[index].subtitle + ' (' + (index + 1).toString() + '/' + (questionList.length - 1).toString() + ')');
 }
 
 // Save choice
@@ -57,7 +59,8 @@ $(document).on('click', '.survey__submit-btn', function() {
   $submitBtn.button('loading');
 
   // Update user profile
-  if ($('input[name="sex"]:checked').val() != undefined || $('#year-of-birth').val() != '' || $('#political-tendency').val() != '') {
+  if ($('input[name="sex"]:checked').val() != undefined || $('#year-of-birth').val() != '' || 
+    $('#political-tendency').val() != '' || $('#supporting-party').val() != '') {
     // Set authentication and CSRF tokens at HTTP header
     setAuthToken();
     setCSRFToken();
@@ -66,6 +69,7 @@ $(document).on('click', '.survey__submit-btn', function() {
     if ($('input[name="sex"]:checked').val() != undefined) formData.append('sex', $('input[name="sex"]:checked').val());
     if ($('#year-of-birth').val() != '') formData.append('year_of_birth', $('#year-of-birth').val());
     if ($('#political-tendency').val() != '') formData.append('political_tendency', $('#political-tendency').val());
+    if ($('#supporting-party').val() != '') formData.append('supporting_party', $('#supporting-party').val());
     
     $.ajax({
       url: '/api/users/' + localStorage.getItem('user_id') + '/',
@@ -145,7 +149,23 @@ $(window).load(function() {
       location.href = '/party/';
     });
   }
+  
+  // Get comparison targets
+  $.ajax({
+    url: '/api/comparison_targets/',
+    type: 'GET',
+    data: {
+      'survey_id': surveyID
+    }
+  }).done(function(data) {
+    
+    data.forEach(function(comparison_target, index) {
+      $('#supporting-party').append('<option value="' + comparison_target.name +'">' +
+        comparison_target.name + '</option>');
+    });
+  });
 
+  // Get questions
   $.ajax({
     url: '/api/questions/',
     type: 'GET',
@@ -157,7 +177,8 @@ $(window).load(function() {
     data.forEach(function(question, index) {
       
       questionList.push({
-        'title': (index + 1).toString() + '. ' + question.title,
+        'title': question.title,
+        'subtitle': question.subtitle
       });
       
       var $slide = $('#slide-virtual-dom').clone().removeClass('hidden').removeAttr('id');
@@ -180,6 +201,7 @@ $(window).load(function() {
     $('.survey__body .section').append($slide);
     questionList.push({
       'title': '사용자 설문 조사 (선택사항)',
+      'subtitle': '서비스 개선에 활용됩니다.'
     });
     
     $('#additional-info-slide').remove();
