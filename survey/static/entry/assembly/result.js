@@ -2703,6 +2703,9 @@ $(window).load(function() {
     });
     k.execute();
     
+    // Hide credit
+    $('#credit-datasource').css('display', 'none');
+    
     // Adjust x axis title position
     var yPosition = parseInt($('.x-axis-title').attr('y'));
     $('.x-axis-title').attr('y', yPosition - 5);
