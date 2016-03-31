@@ -221,8 +221,8 @@ $(window).load(function() {
     var $slide = $('#additional-info-slide').clone().removeClass('hidden').removeAttr('id');
     $('.survey__body .section').append($slide);
     questionList.push({
-      'title': '사용자 설문 조사(선택사항)',
-      'subtitle': '서비스 개선을 위해 활용됩니다.',
+      'title': '사용자 설문 조사 (선택사항)',
+      'subtitle': '서비스 개선에 활용됩니다.',
     });
     
     $('#additional-info-slide').remove();

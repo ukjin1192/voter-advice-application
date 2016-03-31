@@ -15,7 +15,7 @@
 	</div>
 
 	<div class="container-fit header__progress-container">
-		<div class="container">
+		<div class="container header__progress-container">
 			<div class="progress header__progress">
 				<div class="progress-bar header__progress-bar header__progress-bar--blue" role="progressbar"></div>
 			</div>
@@ -54,7 +54,7 @@
 
 <div class="container-fit survey__footer">
 	<div class="footer__sub-container">
-		<div class="container modal__cheating-paper--trigger" data-toggle="modal" data-target="#cheating-paper">
+		<div class="container cheating-paper-btn" data-toggle="modal" data-target="#cheating-paper">
 			컨닝페이퍼
 			<span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
 		</div>
@@ -83,7 +83,6 @@
 
 <div class="slide hidden" data-anchor="additional-info" id="additional-info-slide">
 	<div class="additional-info">
-
 		<h3>성별이 어떻게 되십니까?</h3>
 		<div>
 			<label class="radio-inline">
@@ -95,18 +94,18 @@
 				여자
 			</label>
 		</div>
-
+		
 		<div class="space"></div>
-
+		
 		<h3>언제 태어나셨습니까?</h3>
-		<div class="short-width-group">
+		<div>
 			<input type="number" class="form-control" id="year-of-birth" min="{{ 'MIN_YEAR_OF_BIRTH'|get_settings_variable }}" max="{{ 'MAX_YEAR_OF_BIRTH'|get_settings_variable }}" placeholder="출생년도" autocomplete="off" />
 		</div>
 		
 		<div class="space"></div>
-
+		
 		<h3>정치성향이 어떻습니까?</h3>
-		<div class="short-width-group">
+		<div>
 			<select class="form-control" id="political-tendency">
 				<option value="">클릭해서 선택하세요</option>
 				<option value="none">없음</option>
