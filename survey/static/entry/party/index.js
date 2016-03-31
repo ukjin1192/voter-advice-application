@@ -73,7 +73,7 @@ $(document).on('click', '.landing__btn--result', function() {
 
   var formData = new FormData();
   formData.append('survey_id', surveyID);
-  formData.append('category', 'comparison_1d');
+  formData.append('category', 'city_block_distance');
   
   // Set authentication and CSRF tokens at HTTP header
   setAuthToken();

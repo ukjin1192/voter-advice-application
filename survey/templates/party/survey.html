@@ -11,7 +11,7 @@
 	</div>
 
 	<div class="container-fit header__progress-container">
-		<div class="container">
+		<div class="container header__progress-wrapper">
 			<div class="progress header__progress">
 				<div class="progress-bar header__progress-bar header__progress-bar--green" role="progressbar"></div>
 			</div>
@@ -24,14 +24,62 @@
 </div>
 
 <div class="slide" id="slide-virtual-dom" data-anchor="">
-	<div class="container">
-		<div class="question__explanation" style="padding: 30px 10px 10px 10px; font-size: 1.5em; background-color: white;"></div>
-		<div class="container modal-trigger" data-toggle="modal" data-target="#cheating-paper" style="text-align: right; padding: 8px 15px; cursor: pointer; background-color: white;">
-			컨닝페이퍼
-			<span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: #BCBEC0;"></span>
+	<div class="container question">
+		<div class="question__explanation-container">
+			<div class="question__explanation"></div>
 		</div>
-		<div class="question__choices" style="text-align: center;"></div>
+		<div class="cheating-paper-btn cheating-paper-btn--white" data-toggle="modal" data-target="#cheating-paper">
+			컨닝페이퍼
+			<span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+		</div>
+		<div class="question__choices"></div>
 		<div class="cheating-paper__content hidden"></div>
+	</div>
+</div>
+
+<div class="slide hidden" data-anchor="additional-info" id="additional-info-slide">
+	<div class="additional-info">
+		<h3>성별이 어떻게 되십니까?</h3>
+		<div>
+			<label class="radio-inline">
+				<input type="radio" name="sex" value="male" />
+				남자
+			</label>
+			<label class="radio-inline">
+				<input type="radio" name="sex" value="female" />
+				여자
+			</label>
+		</div>
+		
+		<div class="space"></div>
+		
+		<h3>언제 태어나셨습니까?</h3>
+		<div>
+			<input type="number" class="form-control" id="year-of-birth" min="{{ 'MIN_YEAR_OF_BIRTH'|get_settings_variable }}" max="{{ 'MAX_YEAR_OF_BIRTH'|get_settings_variable }}" placeholder="출생년도" autocomplete="off" />
+		</div>
+		
+		<div class="space"></div>
+		
+		<h3>정치성향이 어떻습니까?</h3>
+		<div>
+			<select class="form-control" id="political-tendency">
+				<option value="">클릭해서 선택하세요</option>
+				<option value="none">없음</option>
+				<option value="conservative">보수</option>
+				<option value="conservative_center">중도에 가까운 보수</option>
+				<option value="center">중도</option>
+				<option value="progressive_center">중도에 가까운 진보</option>
+				<option value="progressive">진보</option>
+			</select>
+		</div>
+		
+		<div class="space"></div>
+		<div class="space"></div>
+		
+		<button type="button" class="btn btn-lg btn-block survey__submit-btn" data-loading-text="로딩중입니다">
+			<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>&nbsp;
+			결과 확인하기
+		</button>
 	</div>
 </div>
 

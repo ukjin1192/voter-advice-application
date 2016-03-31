@@ -25,16 +25,13 @@ function syncProgressBar(value) {
   $('.header__progress-bar').css('width', value + '%');
 }
 
-// Synchronize title and subtitle
+// Synchronize title
 function syncTitle(index) {
-	$('.header__title').text((index + 1).toString() + '. ' + questionList[index].title);
+	$('.header__title').text(questionList[index].title);
 }
 
 // Save choice
 function saveChoice(choiceID) {
-  // When user completed survey
-  if (activeSlideIndex == questionList.length) var completed = true; 
-  else var completed = false;
 
   // Set authentication and CSRF tokens at HTTP header
   setAuthToken();
@@ -50,29 +47,57 @@ function saveChoice(choiceID) {
     contentType: false,
     processData: false
   }).done(function(data) {
-    // When user completed survey
-    if (completed) {
-      var formData = new FormData();
-      formData.append('survey_id', surveyID);
-      formData.append('category', 'agreement_score');
-      
-      // Set authentication and CSRF tokens at HTTP header
-      setAuthToken();
-      setCSRFToken();
-      
-      $.ajax({
-        url: '/api/results/',
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false
-      }).done(function(data) {
-        // Move to result page
-        location.href = '/party/result/' + data.id + '/';
-      });
-    }
   });
 }
+
+// Submit survey (Update user profile and create new result)
+$(document).on('click', '.survey__submit-btn', function() {
+
+  var $submitBtn = $(this);
+  $submitBtn.button('loading');
+
+  // Update user profile
+  if ($('input[name="sex"]:checked').val() != undefined || $('#year-of-birth').val() != '' || $('#political-tendency').val() != '') {
+    // Set authentication and CSRF tokens at HTTP header
+    setAuthToken();
+    setCSRFToken();
+    
+    var formData = new FormData();
+    if ($('input[name="sex"]:checked').val() != undefined) formData.append('sex', $('input[name="sex"]:checked').val());
+    if ($('#year-of-birth').val() != '') formData.append('year_of_birth', $('#year-of-birth').val());
+    if ($('#political-tendency').val() != '') formData.append('political_tendency', $('#political-tendency').val());
+    
+    $.ajax({
+      url: '/api/users/' + localStorage.getItem('user_id') + '/',
+      type: 'PATCH',
+      data: formData,
+      contentType: false,
+      processData: false
+    });
+  }
+
+  // Set authentication and CSRF tokens at HTTP header
+  setAuthToken();
+  setCSRFToken();
+
+  var formData = new FormData();
+  formData.append('survey_id', surveyID);
+  formData.append('category', 'city_block_distance');
+  
+  // Create new result
+  $.ajax({
+    url: '/api/results/',
+    type: 'POST',
+    data: formData,
+    contentType: false,
+    processData: false
+  }).done(function(data) {
+    // Move to result page
+    location.href = '/party/result/' + data.id + '/';
+  }).always(function() {
+    $submitBtn.button('reset');
+  });
+});
 
 // Toggle slide navigation arrows
 $(document).on('click', '.slide', function() {
@@ -83,6 +108,11 @@ $(document).on('click', '.slide', function() {
 // Choose choice and move to next slide
 $(document).on('click', '.choice', function() {
   var $choice = $(this);
+
+  $choice.closest('.question__choices').find('.choice').removeClass('active');
+  $choice.addClass('active');
+
+  saveChoice($choice.attr('data-choice-id'));
 
   // Move to next slide
   $.fn.fullpage.moveSlideRight();
@@ -127,7 +157,7 @@ $(window).load(function() {
     data.forEach(function(question, index) {
       
       questionList.push({
-        'title': question.title,
+        'title': (index + 1).toString() + '. ' + question.title,
       });
       
       var $slide = $('#slide-virtual-dom').clone().removeClass('hidden').removeAttr('id');
@@ -137,13 +167,22 @@ $(window).load(function() {
       
       var choices = question.choices;
       choices.forEach(function(choice, index) {
-        $slide.find('.question__choices').append('<div class="question__choice" data-choice-id="' + choice.id + '" style="background-color: #414042; font-size: 1.2em; padding; 5px 0;"">' + choice.context + '</div>');
+        $slide.find('.question__choices').append('<div class="choice" data-choice-id="' + choice.id + '">' + choice.context + '</div>');
       });
       
       $('.survey__body .section').append($slide);
     });
     
     $('#slide-virtual-dom').remove();
+    
+    // Append additional info slide
+    var $slide = $('#additional-info-slide').clone().removeClass('hidden').removeAttr('id');
+    $('.survey__body .section').append($slide);
+    questionList.push({
+      'title': '사용자 설문 조사 (선택사항)',
+    });
+    
+    $('#additional-info-slide').remove();
     
     // Inititate fullpage.js with options
     $('.survey__body').fullpage({
@@ -152,6 +191,7 @@ $(window).load(function() {
       paddingTop: $('.survey__header').outerHeight(),
       scrollOverflow: true, 
       loopHorizontal: false,
+      verticalCentered: false,
       
       afterRender: function() {
         // Update active slide index
