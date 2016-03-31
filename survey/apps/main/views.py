@@ -236,10 +236,6 @@ class AnswerViewSet(viewsets.ModelViewSet):
             answer.choice = choice
             answer.save()
             
-            # When user completed survey
-            if Answer.objects.filter(user=request.user).count() == questions_count:
-                survey.participants.add(request.user)
-            
             return Response(status=status.HTTP_200_OK)
         
         serializer = self.get_serializer(data=request.data)
