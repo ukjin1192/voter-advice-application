@@ -234,7 +234,7 @@ $(window).load(function() {
         // Update active slide index
         activeSlideIndex = $('.slide').index($('.slide.active')) + 1;
         
-        syncProgressBar(activeSlideIndex * 100 / questionList.length);
+        syncProgressBar(activeSlideIndex * 100 / (questionList.length - 1));
         syncTitle(activeSlideIndex - 1);
         
         // Toggle off slide navigation arrows
@@ -256,14 +256,14 @@ $(window).load(function() {
       onSlideLeave: function(anchorLink, index, slideIndex, direction, nextSlideIndex) {
         var $leavingSlide = $(this);
         
-        syncProgressBar((nextSlideIndex + 1) * 100 / questionList.length);
+        syncProgressBar((nextSlideIndex + 1) * 100 / (questionList.length - 1));
         syncTitle(nextSlideIndex);
         
         if (nextSlideIndex + 1 == questionList.length) {
-          $('.footer__sub-container, .footer__description, .footer__choices').addClass('hidden');
+          $('.header__progress-container, .footer__sub-container, .footer__description, .footer__choices').addClass('hidden');
           $('.survey__submit-btn').removeClass('hidden');
         } else {
-          $('.footer__sub-container, .footer__description, .footer__choices').removeClass('hidden');
+          $('.header__progress-container, .footer__sub-container, .footer__description, .footer__choices').removeClass('hidden');
           $('.survey__submit-btn').addClass('hidden');
         }
       },

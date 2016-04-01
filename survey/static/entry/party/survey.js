@@ -205,7 +205,7 @@ $(window).load(function() {
         // Update active slide index
         activeSlideIndex = $('.slide').index($('.slide.active')) + 1;
         
-        syncProgressBar(activeSlideIndex * 100 / questionList.length);
+        syncProgressBar(activeSlideIndex * 100 / (questionList.length - 1));
         syncTitle(activeSlideIndex - 1);
         
         // Toggle off slide navigation arrows
@@ -225,8 +225,14 @@ $(window).load(function() {
       onSlideLeave: function(anchorLink, index, slideIndex, direction, nextSlideIndex) {
         var $leavingSlide = $(this);
         
-        syncProgressBar((nextSlideIndex + 1) * 100 / questionList.length);
+        syncProgressBar((nextSlideIndex + 1) * 100 / (questionList.length - 1));
         syncTitle(nextSlideIndex);
+        
+        if (nextSlideIndex + 1 == questionList.length) {
+          $('.header__progress-container').addClass('hidden');
+        } else {
+          $('.header__progress-container').removeClass('hidden');
+        }
       },
     }); 
   });
