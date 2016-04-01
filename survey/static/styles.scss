@@ -186,6 +186,39 @@ a, a:focus, a:hover, a:active, a:visited {
 	}
 }
 
+.bar-chart {
+	margin-bottom: 15px;
+	
+	.bar-chart__legend {
+		padding-right: 5px;
+		font-weight: 700;
+		font-size: 0.8em;
+		text-align: right;
+		
+		@media screen and (max-width: $screen-xxs-max) {
+			font-size: 0.7em;
+		}
+		
+		.legend__value {
+			margin-left: 8px;
+		}
+	}
+
+	.bar-chart__bar {
+		padding: 0 30px 0 5px;
+		
+		.progress {
+			height: 12px;
+			margin: 2px 0 0 0;
+			border-radius: 0 6px 6px 0;
+		}
+		
+		.progress-bar {
+			border-radius: 0 6px 6px 0;
+		}
+	}
+}
+
 /* =========
  * Main page
  * ========= */
@@ -573,7 +606,7 @@ a, a:focus, a:hover, a:active, a:visited {
 		
 		.result__summary {
 			padding: 27px 15px; 
-			line-height: 1.5em;
+			line-height: 1.7em;
 			font-size: 1.2em; 
 			background-color: white; 
 			text-align: center; 
@@ -609,6 +642,10 @@ a, a:focus, a:hover, a:active, a:visited {
 			.chart__legend {
 				margin: 15px 0 -20px 0;
 				line-height: 2.0em;
+			}
+			
+			.chart__container {
+				margin: 30px 0 35px 0;
 			}
 		}
 		

@@ -21,7 +21,10 @@
 		
 		<div class="result__summary"></div>
 		
-		<div class="result__chart"></div>
+		<div class="result__chart">
+			<div class="chart__title">나와 각 정당의 유사도</div>
+			<div class="chart__container"></div>
+		</div>
 		
 		<div class="result__search">
 			<button type="button" class="btn btn-lg search__toggle-btn" data-toggle="collapse" data-target="#answer-table-container" aria-expanded="false" aria-controls="answer-table-container">
@@ -164,6 +167,17 @@
 					닫기
 				</button>
 			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row bar-chart hidden" id="bar-chart__virtual-dom">
+	<div class="col-xs-4 col-sm-3 col-md-3 col-lg-3 bar-chart__legend">
+		<span class="legend__name"></span><span class="legend__value"></span>
+	</div>
+	<div class="col-xs-8 col-sm-9 col-md-9 col-lg-9 bar-chart__bar">
+		<div class="progress">
+			<div class="progress-bar" role="progressbar"></div>
 		</div>
 	</div>
 </div>
