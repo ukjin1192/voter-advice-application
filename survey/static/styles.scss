@@ -276,8 +276,15 @@ a, a:focus, a:hover, a:active, a:visited {
 			width: 170px; 
 			border-radius: 0;
 			font-size: 1.5em;
-			background-color: #415FCF; 
 			color: white; 
+			
+			&.landing__btn--blue {
+				background-color: #415FCF; 
+			}
+			
+			&.landing__btn--green {
+				background-color: #40bea4; 
+			}
 			
 			&.landing__btn--result {
 				margin-top: 30px;
