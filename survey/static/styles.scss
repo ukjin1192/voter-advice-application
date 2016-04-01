@@ -277,7 +277,7 @@ a, a:focus, a:hover, a:active, a:visited {
 			border-radius: 0;
 			font-size: 1.5em;
 			color: white; 
-			
+		
 			&.landing__btn--blue {
 				background-color: #415FCF; 
 			}
@@ -306,7 +306,7 @@ a, a:focus, a:hover, a:active, a:visited {
 		background-color: #323234;
 		
 		.header__title {
-			padding: 15px 15px 11px 37px; 
+			padding: 15px 15px 11px 15px; 
 			overflow-x: scroll;
 			white-space: nowrap;
 			font-weight: 700; 
@@ -319,7 +319,7 @@ a, a:focus, a:hover, a:active, a:visited {
 		background-color: #444444;
 		
 		.header__subtitle {
-			padding: 8px 8px 8px 37px; 
+			padding: 8px 8px 8px 15px; 
 			overflow-x: scroll;
 			white-space: nowrap;
 			font-weight: 300; 
@@ -421,6 +421,8 @@ a, a:focus, a:hover, a:active, a:visited {
 				font-weight: 700;
 				background-color: white;
 				vertical-align: middle;
+				word-break: keep-all;
+				text-align: center;
 				
 				@media screen and (min-width: $screen-sm-min) {
 					padding: 0 30px;
@@ -471,6 +473,7 @@ a, a:focus, a:hover, a:active, a:visited {
 }
 
 .survey__submit-btn {
+	border-radius: 0 !important;
 	background-color: #415FCF; 
 	color: white; 
 
@@ -612,6 +615,7 @@ a, a:focus, a:hover, a:active, a:visited {
 			line-height: 1.7em;
 			font-size: 1.2em; 
 			background-color: white; 
+			word-break: keep-all;
 			text-align: center; 
 			
 			.summary__position {
@@ -648,7 +652,14 @@ a, a:focus, a:hover, a:active, a:visited {
 			}
 			
 			.chart__container {
-				margin: 30px 0 35px 0;
+				margin-top: 30px;
+			}
+			
+			#show-hidden-result-btn {
+				margin-top: 35px;
+				border-radius: 0;
+				background-color: #415FCF; 
+				color: white; 
 			}
 		}
 		

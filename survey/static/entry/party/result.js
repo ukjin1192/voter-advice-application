@@ -29,6 +29,12 @@ function translateSimilarity(similarity) {
   }
 }
 
+// Show hidden result
+$(document).on('click', '#show-hidden-result-btn', function() {
+  $('.chart__container--hidden').removeClass('hidden');
+  $('#show-hidden-result-btn').addClass('hidden');
+});
+
 // Fill out report card row
 $(document).on('show.bs.collapse', '#answer-table .panel-collapse', function() {
   $('#loading-icon').removeClass('hidden');
@@ -135,7 +141,8 @@ $(document).ready(function() {
         'background-color': row.color
       });
       
-      $('.chart__container').append($barChart);
+      if (index < 6) $('.chart__container').append($barChart);
+      else $('.chart__container--hidden').append($barChart);
     });
     
     $('#bar-chart__virtual-dom').remove();
