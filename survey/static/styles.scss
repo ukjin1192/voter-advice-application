@@ -575,7 +575,7 @@ a, a:focus, a:hover, a:active, a:visited {
 		
 		.header__title {
 			max-width: 600px;
-			padding: 15px 15px 11px 37px; 
+			padding: 15px 15px 11px 15px; 
 			overflow-x: scroll;
 			white-space: nowrap;
 			font-weight: 700; 
@@ -589,7 +589,7 @@ a, a:focus, a:hover, a:active, a:visited {
 		
 		.header__subtitle {
 			max-width: 600px;
-			padding: 8px 8px 8px 37px; 
+			padding: 8px 8px 8px 15px; 
 			overflow-x: scroll;
 			white-space: nowrap;
 			font-weight: 300; 
@@ -660,6 +660,7 @@ a, a:focus, a:hover, a:active, a:visited {
 				border-radius: 0;
 				background-color: #415FCF; 
 				color: white; 
+				cursor: pointer;
 			}
 		}
 		
