@@ -183,8 +183,8 @@ $(window).load(function() {
       
       var choices = question.choices;
       choices.forEach(function(choice, index) {
-        $answerTableRow.find('.panel-body').append('<p>' + choice.context +
-          ' : <span class="choice-voters" data-choice-id="' + choice.id + '"></span></p>');
+        $answerTableRow.find('.panel-body').append('<div class="choice-record">' + choice.context +
+          ' : <span class="choice-voters" data-choice-id="' + choice.id + '"></span></div>');
       });
       
       $('#answer-table').append($answerTableRow);

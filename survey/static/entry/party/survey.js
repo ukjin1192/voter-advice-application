@@ -24,7 +24,7 @@ function syncProgressBar(value) {
 function syncTitle(index) {
   $('.header__title').text(questionList[index].title);
   if (index + 1 == questionList.length) $('.header__subtitle').text(questionList[index].subtitle);
-  else $('.header__subtitle').text(questionList[index].subtitle + ' (' + (index + 1).toString() + '/' + (questionList.length - 1).toString() + ')');
+  else $('.header__subtitle').text((index + 1).toString() + '/' + (questionList.length - 1).toString() + ' ' + questionList[index].subtitle);
 }
 
 // Save choice

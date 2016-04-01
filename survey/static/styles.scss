@@ -190,14 +190,10 @@ a, a:focus, a:hover, a:active, a:visited {
 	margin-bottom: 15px;
 	
 	.bar-chart__legend {
-		padding-right: 5px;
+		padding: 0 5px 0 0;
 		font-weight: 700;
 		font-size: 0.8em;
 		text-align: right;
-		
-		@media screen and (max-width: $screen-xxs-max) {
-			font-size: 0.7em;
-		}
 		
 		.legend__value {
 			margin-left: 8px;
@@ -707,8 +703,21 @@ a, a:focus, a:hover, a:active, a:visited {
 				.panel-body {
 					text-align: left;
 					
-					.label {
-						margin: 0 3px;
+					.choice-record {
+						
+						&:not(:last-child) {
+							margin-bottom: 30px;
+						}
+					}
+					
+					.choice-voters {
+						line-height: 2.0em;
+						
+						.label {
+							display: inline-block;
+							margin: 0 3px;
+							padding: 4px 6px
+						}
 					}
 				}
 			}
