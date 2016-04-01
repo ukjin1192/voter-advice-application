@@ -15,11 +15,6 @@ var surveyID = 2;
 var activeSlideIndex;   // Starting from 1
 var questionList = [];  // Starting from 0
 
-// Show additional information of statement
-$(document).on('show.bs.modal', '#cheating-paper', function() {
-  $(this).find('.modal-body').html($('.slide.active').find('.cheating-paper__content').text());
-});
-
 // Synchronize progress bar
 function syncProgressBar(value) {
   $('.header__progress-bar').css('width', value + '%');
@@ -184,7 +179,6 @@ $(window).load(function() {
       var $slide = $('#slide-virtual-dom').clone().removeClass('hidden').removeAttr('id');
       $slide.attr('data-anchor', index + 1);
       $slide.find('.question__explanation').text(question.explanation);
-      $slide.find('.cheating-paper__content').text(question.cheating_paper);
       
       var choices = question.choices;
       choices.forEach(function(choice, index) {
