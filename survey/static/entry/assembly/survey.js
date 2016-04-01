@@ -57,7 +57,6 @@ function saveChoice(choiceID) {
     data: formData,
     contentType: false,
     processData: false
-  }).done(function(data) {
   });
 }
 
@@ -67,46 +66,40 @@ $(document).on('click', '.survey__submit-btn', function() {
   var $submitBtn = $(this);
   $submitBtn.button('loading');
 
-  // Update user profile
-  if ($('input[name="sex"]:checked').val() != undefined || $('#year-of-birth').val() != '' || $('#political-tendency').val() != '') {
-    // Set authentication and CSRF tokens at HTTP header
-    setAuthToken();
-    setCSRFToken();
-    
-    var formData = new FormData();
-    if ($('input[name="sex"]:checked').val() != undefined) formData.append('sex', $('input[name="sex"]:checked').val());
-    if ($('#year-of-birth').val() != '') formData.append('year_of_birth', $('#year-of-birth').val());
-    if ($('#political-tendency').val() != '') formData.append('political_tendency', $('#political-tendency').val());
-    
-    $.ajax({
-      url: '/api/users/' + localStorage.getItem('user_id') + '/',
-      type: 'PATCH',
-      data: formData,
-      contentType: false,
-      processData: false
-    });
-  }
-
   // Set authentication and CSRF tokens at HTTP header
   setAuthToken();
   setCSRFToken();
-
-  var formData = new FormData();
-  formData.append('survey_id', surveyID);
-  formData.append('category', 'agreement_score');
   
-  // Create new result
+  var formData = new FormData();
+  if ($('input[name="sex"]:checked').val() != undefined) formData.append('sex', $('input[name="sex"]:checked').val());
+  if ($('#year-of-birth').val() != '') formData.append('year_of_birth', $('#year-of-birth').val());
+  if ($('#political-tendency').val() != '') formData.append('political_tendency', $('#political-tendency').val());
+  
+  // Update user profile
   $.ajax({
-    url: '/api/results/',
-    type: 'POST',
+    url: '/api/users/' + localStorage.getItem('user_id') + '/',
+    type: 'PATCH',
     data: formData,
     contentType: false,
     processData: false
   }).done(function(data) {
-    // Move to result page
-    location.href = '/assembly/result/' + data.id + '/';
-  }).always(function() {
-    $submitBtn.button('reset');
+    var formData = new FormData();
+    formData.append('survey_id', surveyID);
+    formData.append('category', 'agreement_score');
+    
+    // Create new result
+    $.ajax({
+      url: '/api/results/',
+      type: 'POST',
+      data: formData,
+      contentType: false,
+      processData: false
+    }).done(function(data) {
+      // Move to result page
+      location.href = '/assembly/result/' + data.id + '/';
+    }).always(function() {
+      $submitBtn.button('reset');
+    });
   });
 });
 
@@ -163,6 +156,7 @@ $(window).load(function() {
     });
   }
 
+  // Get questions
   $.ajax({
     url: '/api/questions/',
     type: 'GET',
@@ -222,7 +216,7 @@ $(window).load(function() {
     $('.survey__body .section').append($slide);
     questionList.push({
       'title': '사용자 설문 조사 (선택사항)',
-      'subtitle': '서비스 개선에 활용됩니다.',
+      'subtitle': '서비스 개선에 활용됩니다.'
     });
     
     $('#additional-info-slide').remove();
