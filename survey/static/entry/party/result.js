@@ -35,6 +35,17 @@ $(document).on('click', '#show-hidden-result-btn', function() {
   $('#show-hidden-result-btn').addClass('hidden');
 });
 
+// Toggle answer table
+$(document).on('click', '#show-answer-table-btn', function() {
+  if ($('#answer-table-container').hasClass('hidden')) {
+    $('#answer-table-container').removeClass('hidden');
+    $(this).find('.glyphicon-chevron-down').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+  } else {
+    $('#answer-table-container').addClass('hidden');
+    $(this).find('.glyphicon-chevron-up').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+  }
+});
+
 // Fill out report card row
 $(document).on('show.bs.collapse', '#answer-table .panel-collapse', function() {
   $('#loading-icon').removeClass('hidden');
@@ -185,7 +196,7 @@ $(window).load(function() {
       var questionIndex = index + 1;
       var $answerTableRow = $('#answer-table__virtual-dom').clone().removeClass('hidden').removeAttr('id');
       $answerTableRow.find('.panel-heading').attr('href', '#Q' + questionIndex).
-          html('#' + questionIndex + ' ' +  question.title);
+          html('#' + questionIndex + ' [' + question.subtitle + '] ' + question.title);
       $answerTableRow.find('.panel-collapse').attr({
         'id': 'Q' + questionIndex, 
         'data-question-id': question.id

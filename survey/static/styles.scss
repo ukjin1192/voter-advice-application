@@ -606,6 +606,17 @@ a, a:focus, a:hover, a:active, a:visited {
 		padding-top: 15px;
 		color: #414042;
 		
+		.result__navbar {
+			margin-bottom: 15px;
+		
+			.navbar__btn {
+				border-radius: 0;
+				background-color: #415FCF; 
+				color: white; 
+				cursor: pointer;
+			}
+		}
+		
 		.result__alert-message {
 			text-align: center;
 		}
@@ -705,7 +716,7 @@ a, a:focus, a:hover, a:active, a:visited {
 				margin-bottom: 20px
 			}
 			
-			.search__toggle-btn {
+			#show-answer-table-btn {
 				margin-bottom: 15px;
 				border-radius: 0;
 				background-color: #415FCF; 

@@ -2423,6 +2423,17 @@ function translateSimilarity(similarity) {
   }
 }
 
+// Toggle answer table
+$(document).on('click', '#show-answer-table-btn', function() {
+  if ($('#answer-table-container').hasClass('hidden')) {
+    $('#answer-table-container').removeClass('hidden');
+    $(this).find('.glyphicon-chevron-down').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+  } else {
+    $('#answer-table-container').addClass('hidden');
+    $(this).find('.glyphicon-chevron-up').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+  }
+});
+
 // Fill out report card row
 $(document).on('show.bs.collapse', '#answer-table .panel-collapse', function() {
   $('#loading-icon').removeClass('hidden');
