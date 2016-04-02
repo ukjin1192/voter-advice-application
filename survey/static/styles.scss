@@ -403,7 +403,7 @@ a, a:focus, a:hover, a:active, a:visited {
 	}
 
 	.question {
-		padding: 0 1px;
+		padding: 0 2px;
 		
 		.question__explanation-container {
 			display: table;
@@ -666,7 +666,7 @@ a, a:focus, a:hover, a:active, a:visited {
 				margin-top: 30px;
 			}
 			
-			#show-hidden-result-btn {
+			.show-hidden-result-btn {
 				margin-top: 35px;
 				border-radius: 0;
 				background-color: #415FCF; 

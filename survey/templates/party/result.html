@@ -17,17 +17,17 @@
 	<div class="container result__container">
 		<div class="row result__navbar">
 			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-				<button type="button" class="btn btn-block navbar__btn" disabled>
+				<button type="button" class="btn btn-block navbar__btn navbar__btn--1st" disabled>
 					종합 결과
 				</button>
 			</div>
 			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-				<button type="button" class="btn btn-block navbar__btn">
+				<button type="button" class="btn btn-block navbar__btn navbar__btn--2nd">
 					세부 결과
 				</button>
 			</div>
 			<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-				<button type="button" class="btn btn-block navbar__btn">
+				<button type="button" class="btn btn-block navbar__btn navbar__btn--3rd">
 					성향 척도
 				</button>
 			</div>
@@ -37,17 +37,71 @@
 			존재하지 않거나 비공개 상태입니다
 		</div>
 		
-		<div class="result__summary"></div>
+		<div class="result__summary" data-tab-id="1"></div>
+		<div class="result__summary hidden" data-tab-id="2">
+			당신의<br/>
+		</div>
+		<div class="result__summary hidden" data-tab-id="3">
+			당신의<br/>
+		</div>
 		
-		<div class="result__chart">
+		<div class="result__chart" data-tab-id="1" data-category="all">
 			<div class="chart__title">나와 각 정당의 유사도</div>
 			
 			<div class="chart__container"></div>
 			<div class="chart__container--hidden hidden"></div>
 			
-			<button type="button" class="btn" id="show-hidden-result-btn">
+			<button type="button" class="btn show-hidden-result-btn">
 				<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
-				더 많은 결과 보기
+				나머지 정당들도 보기
+			</button>
+		</div>
+		
+		<div class="result__chart hidden" data-tab-id="2" data-category="사회/언론">
+			<div class="chart__title">사회/언론</div>
+			
+			<div class="chart__container"></div>
+			<div class="chart__container--hidden hidden"></div>
+			
+			<button type="button" class="btn show-hidden-result-btn">
+				<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+				나머지 정당들도 보기
+			</button>
+		</div>
+		
+		<div class="result__chart hidden" data-tab-id="2" data-category="생태/다양성">
+			<div class="chart__title">생태/다양성</div>
+			
+			<div class="chart__container"></div>
+			<div class="chart__container--hidden hidden"></div>
+			
+			<button type="button" class="btn show-hidden-result-btn">
+				<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+				나머지 정당들도 보기
+			</button>
+		</div>
+		
+		<div class="result__chart hidden" data-tab-id="2" data-category="경제/노동">
+			<div class="chart__title">경제/노동</div>
+			
+			<div class="chart__container"></div>
+			<div class="chart__container--hidden hidden"></div>
+			
+			<button type="button" class="btn show-hidden-result-btn">
+				<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+				나머지 정당들도 보기
+			</button>
+		</div>
+		
+		<div class="result__chart hidden" data-tab-id="2" data-category="외교/안보">
+			<div class="chart__title">외교/안보</div>
+			
+			<div class="chart__container"></div>
+			<div class="chart__container--hidden hidden"></div>
+			
+			<button type="button" class="btn show-hidden-result-btn">
+				<span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+				나머지 정당들도 보기
 			</button>
 		</div>
 		

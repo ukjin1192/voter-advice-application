@@ -12,7 +12,6 @@ var clearAuthToken = require('../../module/clearAuthToken.js');
 var pathName = window.location.pathname;
 var surveyID = 2;
 var resultID = pathName.match(/result\/(\d+)/)[1];
-var rows;
 
 // Translate similarity into word
 function translateSimilarity(similarity) {
@@ -29,10 +28,47 @@ function translateSimilarity(similarity) {
   }
 }
 
+// Translate factor sum into word
+function translateFactorSum(factorSum) {
+  if (factorSum >= 9) {
+    return '보수';
+  } else if (factorSum > 3) {
+    return '중도에 가까운 보수';
+  } else if (factorSum >= -3) {
+    return '중도';
+  } else if (factorSum > -9) {
+    return '중도에 가까운 진보';
+  } else {
+    return '진보';
+  }
+}
+
+// Toggle tab contents
+$(document).on('click', '.navbar__btn', function() {
+  var $btn = $(this);
+  $btn.closest('.result__navbar').find('.navbar__btn').removeAttr('disabled');
+  $btn.attr('disabled', 'disabled');
+  
+  if ($btn.hasClass('navbar__btn--1st')) {
+    $('[data-tab-id="1"]').removeClass('hidden');
+    $('[data-tab-id="2"]').addClass('hidden');
+    $('[data-tab-id="3"]').addClass('hidden');
+  } else if ($btn.hasClass('navbar__btn--2nd')) {
+    $('[data-tab-id="1"]').addClass('hidden');
+    $('[data-tab-id="2"]').removeClass('hidden');
+    $('[data-tab-id="3"]').addClass('hidden');
+  } else if ($btn.hasClass('navbar__btn--3rd')) {
+    $('[data-tab-id="1"]').addClass('hidden');
+    $('[data-tab-id="2"]').addClass('hidden');
+    $('[data-tab-id="3"]').removeClass('hidden');
+  }
+});
+
 // Show hidden result
-$(document).on('click', '#show-hidden-result-btn', function() {
-  $('.chart__container--hidden').removeClass('hidden');
-  $('#show-hidden-result-btn').addClass('hidden');
+$(document).on('click', '.show-hidden-result-btn', function() {
+  var $btn = $(this);
+  $btn.closest('.result__chart').find('.chart__container--hidden').removeClass('hidden');
+  $btn.addClass('hidden');
 });
 
 // Toggle answer table
@@ -136,45 +172,76 @@ $(document).ready(function() {
     // / When user is not an owner of result
     if (data.user != localStorage.getItem('user_id')) $('#go-to-survey-landding-page-btn').text('나도 해보기');
     
+    var categories = ['all', '사회/언론', '생태/다양성', '경제/노동', '외교/안보'];
+    
     // Parse record as JSON format 
-    rows = JSON.parse(data.record.replace(/'/g, '"'));
+    var record = JSON.parse(data.record.replace(/'/g, '"'));
     
-    // Filter similarity which compare with all questions
-    rows = _.filter(rows, {'category': 'all'});
+    // Filter factor sum data
+    var factorSumList = _.filter(record, {'classification': 'factor_sum'});
+    var factorSumMine = _.find(factorSumList, {'name': 'me'});
     
-    // Reordering in descending order
-    rows = _.orderBy(rows, 'similarity', 'desc');
+    var $summaryBlock = $('.result__summary[data-tab-id="3"]');
+    categories.forEach(function(category, index) {
+      if (category != 'all') {
+        $summaryBlock.append('<strong>' + category + '</strong> 성향은 <strong>' + translateFactorSum(factorSumMine[category]) + '</strong> 입니다.<br/>');
+      }
+    });
     
-    // Fiil out result chart
-    rows.forEach(function(row, index) {
-      var $barChart = $('#bar-chart__virtual-dom').clone().removeClass('hidden').removeAttr('id');
-      $barChart.find('.legend__name').text(row.name);
-      $barChart.find('.legend__value').text(row.similarity + '%');
-      $barChart.find('.progress-bar').css({
-        'width': row.similarity + '%',
-        'background-color': row.color
+    /*
+    factorSumList.forEach(function(factorSum, index) {
+      categories.forEach(function(category, index) {
+        console.log(factorSum.name + ' ' + factorSum[category]);
+      });
+    });
+    */
+    
+    // Filter similarity data
+    var result = _.filter(record, {'classification': 'category'});
+    
+    // Sort in descending order
+    result = _.orderBy(result, 'similarity', 'desc');
+    
+    categories.forEach(function(category, index) {
+      // Filter specific category
+      var rows = _.filter(result, {'category': category});
+      
+      // Fill out result chart
+      var $chartBlock = $('.result__chart[data-category="' + category + '"]');
+      rows.forEach(function(row, index) {
+        var $barChart = $('#bar-chart__virtual-dom').clone().removeClass('hidden').removeAttr('id');
+        $barChart.find('.legend__name').text(row.name);
+        $barChart.find('.legend__value').text(row.similarity + '%');
+        $barChart.find('.progress-bar').css({
+          'width': row.similarity + '%',
+          'background-color': row.color
+        });
+        
+        if (index < 6) $chartBlock.find('.chart__container').append($barChart);
+        else $chartBlock.find('.chart__container--hidden').append($barChart);
       });
       
-      if (index < 6) $('.chart__container').append($barChart);
-      else $('.chart__container--hidden').append($barChart);
+      // Fill out result summary
+      if (category == 'all') {
+        var $summaryBlock = $('.result__summary[data-tab-id="1"]');
+        if (data.expected_target === null) $summaryBlock.append('지지정당을 선택하지 않으셨군요. ');
+        else if (data.expected_target == 'none') $summaryBlock.append('지지정당이 없으시군요. ');
+        else {
+          var expectedTarget = _.find(result, {'name': data.expected_target});
+          if (expectedTarget === undefined) $summaryBlock.append('선택하신 <strong>' + data.expected_target + '</strong>의 데이터가 없습니다. ');
+          else $summaryBlock.append('지지를 표명하신 <strong><span style="color: ' + expectedTarget.color + ';">' + 
+              data.expected_target + '</span></strong>과의 거리는 <strong>' + translateSimilarity(expectedTarget.similarity) + '</strong>입니다. ');
+        }
+        
+        $summaryBlock.append('가장 가까운 정당은 <strong><span style="color: ' + rows[0].color + ';">' + rows[0].name + '</span></strong>이고, ' +
+          '가장 먼 당은 <strong><span style="color: ' + rows[rows.length - 1].color + ';">' + rows[rows.length - 1].name + '</span></strong>입니다.');
+      } else {
+        var $summaryBlock = $('.result__summary[data-tab-id="2"]');
+        $summaryBlock.append('<strong>' + category + '</strong> 성향은 <strong><span style="color: ' + rows[0].color + ';">' + rows[0].name + '</span></strong>과 가깝습니다.<br/>');
+      }
     });
     
     $('#bar-chart__virtual-dom').remove();
-    
-    // Fill out result summary
-    if (data.expected_target === null) {
-      $('.result__summary').append('지지정당을 선택하지 않으셨군요. ');
-    } else if (data.expected_target == 'none') {
-      $('.result__summary').append('지지정당이 없으시군요. ');
-    } else {
-      var expectedTarget = _.find(rows, {'name': data.expected_target});
-      if (expectedTarget === undefined) $('.result__summary').append('선택하신 <strong>' + data.expected_target + '</strong>의 데이터가 없습니다. ');
-      else $('.result__summary').append('지지를 표명하신 <strong><span style="color: ' + expectedTarget.color + ';">' + 
-          data.expected_target + '</span></strong>과의 거리는 <strong>' + translateSimilarity(expectedTarget.similarity) + '</strong>입니다. ');
-    }
-    
-    $('.result__summary').append('가장 가까운 정당은 <strong><span style="color: ' + rows[0].color + ';">' + rows[0].name + '</span></strong>이고, ' +
-      '가장 먼 당은 <strong><span style="color: ' + rows[rows.length - 1].color + ';">' + rows[rows.length - 1].name + '</span></strong>입니다.');
   }).fail(function() {
     // When result is not exist or updated to non-public
     $('.result__alert-message').removeClass('hidden');
