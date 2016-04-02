@@ -177,8 +177,8 @@ STATICFILES_FINDERS += (
 # Variables in `models.py`
 MIN_YEAR_OF_BIRTH = 1910
 MAX_YEAR_OF_BIRTH = 2010
-MIN_FACTOR_VALUE = -2
-MAX_FACTOR_VALUE = 7
+MIN_FACTOR_VALUE = -3
+MAX_FACTOR_VALUE = 3
 SEX_CHOICES = (
     ('male', 'Male'),
     ('female', 'Female')

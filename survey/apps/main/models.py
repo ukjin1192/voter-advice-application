@@ -280,7 +280,8 @@ class Choice(models.Model):
     )
     factor = models.SmallIntegerField(
         verbose_name = _('Factor'),
-        validators = [MaxValueValidator(getattr(settings, 'MAX_FACTOR_VALUE')), 
+        # validators = [MaxValueValidator(getattr(settings, 'MAX_FACTOR_VALUE')), 
+        validators = [MaxValueValidator(7), 
             MinValueValidator(getattr(settings, 'MIN_FACTOR_VALUE'))]
     )
     created_at = models.DateTimeField(
