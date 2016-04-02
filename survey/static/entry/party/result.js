@@ -128,6 +128,9 @@ $(document).ready(function() {
     // Parse record as JSON format 
     rows = JSON.parse(data.record.replace(/'/g, '"'));
     
+    // Filter similarity which compare with all questions
+    rows = _.filter(rows, {'category': 'all'});
+    
     // Reordering in descending order
     rows = _.orderBy(rows, 'similarity', 'desc');
     

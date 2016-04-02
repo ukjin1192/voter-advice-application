@@ -105,7 +105,7 @@ def get_agreement_score_result(user_data, *target_data):
     return '[' + ', '.join(record) + ']'
 
 
-def get_city_block_distance_result(user_data, *target_data):
+def get_city_block_distance_result(questions_category, user_data, *target_data):
     """
     Get city block distance algorithm result which compares target data with user’s data
     For example,
@@ -117,6 +117,7 @@ def get_city_block_distance_result(user_data, *target_data):
         User B(2nd comparison target)'s survey data
             factor_list = [2, 2, 2]
     [Input]
+        questions_category = ['category_a', 'category_b', 'category_a']
         user_data = [0, -2, 2]
         target_data = [{
             'name': 'User A', 
@@ -132,12 +133,42 @@ def get_city_block_distance_result(user_data, *target_data):
         }]
     [Output]
         [{
+            'category': 'all',
             'name': 'User A', 
             'color': '#AEAEAE',
             'is_reliable': True,
             'similarity': 62
         }, 
         {
+            'category': 'all',
+            'name': 'User B', 
+            'color': '#EEEEEE',
+            'is_reliable': False,
+            'similarity': 54 
+        },
+        {
+            'category': 'category_a',
+            'name': 'User A', 
+            'color': '#AEAEAE',
+            'is_reliable': True,
+            'similarity': 62
+        }, 
+        {
+            'category': 'category_a',
+            'name': 'User B', 
+            'color': '#EEEEEE',
+            'is_reliable': False,
+            'similarity': 54 
+        },
+        {
+            'category': 'category_b',
+            'name': 'User A', 
+            'color': '#AEAEAE',
+            'is_reliable': True,
+            'similarity': 62
+        }, 
+        {
+            'category': 'category_b',
             'name': 'User B', 
             'color': '#EEEEEE',
             'is_reliable': False,
@@ -147,16 +178,41 @@ def get_city_block_distance_result(user_data, *target_data):
     question_count = len(user_data)
     record = []
 
+    # Get result for all questions
     for single_target_data in target_data:
         target_factor_list = single_target_data['factor_list']
         disagreement = sum(numpy.absolute(numpy.subtract(user_data, target_factor_list)))
         factor_max_distance = getattr(settings, 'MAX_FACTOR_VALUE') - getattr(settings, 'MIN_FACTOR_VALUE')
         max_disagreement = float(sum(numpy.absolute(user_data) + 2))
         agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
-        record.append("{'name': '" + single_target_data['name'] + "'," \
+        record.append("{'category': 'all'," \
+                + "'name': '" + single_target_data['name'] + "'," \
                 + "'color': '" + single_target_data['color'] + "'," \
                 + "'is_reliable': '" + str(single_target_data['is_reliable']) + "'," \
                 + "'similarity': " + str(agreement_score) + "}")
+
+    # Get result per category
+    categories = list(set(questions_category))
+    for category in categories:
+        valid_index_list = []
+        for index, question_category in enumerate(questions_category):
+            if question_category == category:
+                valid_index_list.append(index)
+        
+        temp_user_data = list(user_data[i] for i in valid_index_list)
+        
+        for single_target_data in target_data:
+            target_factor_list = single_target_data['factor_list']
+            temp_target_factor_list = list(target_factor_list[i] for i in valid_index_list)
+            disagreement = sum(numpy.absolute(numpy.subtract(temp_user_data, temp_target_factor_list)))
+            factor_max_distance = getattr(settings, 'MAX_FACTOR_VALUE') - getattr(settings, 'MIN_FACTOR_VALUE')
+            max_disagreement = float(sum(numpy.absolute(temp_user_data) + 2))
+            agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
+            record.append("{'category': '" + category + "'," \
+                    + "'name': '" + single_target_data['name'] + "'," \
+                    + "'color': '" + single_target_data['color'] + "'," \
+                    + "'is_reliable': '" + str(single_target_data['is_reliable']) + "'," \
+                    + "'similarity': " + str(agreement_score) + "}")
 
     return '[' + ', '.join(record) + ']'
 

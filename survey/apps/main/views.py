@@ -402,7 +402,12 @@ class ResultViewSet(viewsets.ModelViewSet):
                         {'state': True, 'id': result.id, 'message': 'Result already exist.'},
                         status=status.HTTP_200_OK)
             
-            record = utilities.get_city_block_distance_result(user_data['factor_list'], *target_data)
+            questions_category = []
+            questions = cache.get('survey:' + str(survey.id) + ':questions')
+            for question in questions:
+                questions_category.append(question['subtitle'])
+            
+            record = utilities.get_city_block_distance_result(questions_category, user_data['factor_list'], *target_data)
         
         elif category == 'pca':
             rotation_matrix = cache.get('survey:' + str(survey.id) + ':rotation_matrix')
