@@ -133,6 +133,25 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
         }]
     [Output]
         [{
+            'classification': 'factor_sum',
+            'name': 'me', 
+            'category_a': 2,
+            'category_b': -2,
+        },
+        {
+            'classification': 'factor_sum',
+            'name': 'User A', 
+            'category_a': 2,
+            'category_b': 1,
+        },
+        {
+            'classification': 'factor_sum',
+            'name': 'User B', 
+            'category_a': 4,
+            'category_b': 2,
+        },
+        {
+            'classification': 'category',
             'category': 'all',
             'name': 'User A', 
             'color': '#AEAEAE',
@@ -140,6 +159,7 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
             'similarity': 62
         }, 
         {
+            'classification': 'category',
             'category': 'all',
             'name': 'User B', 
             'color': '#EEEEEE',
@@ -147,6 +167,7 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
             'similarity': 54 
         },
         {
+            'classification': 'category',
             'category': 'category_a',
             'name': 'User A', 
             'color': '#AEAEAE',
@@ -154,6 +175,7 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
             'similarity': 62
         }, 
         {
+            'classification': 'category',
             'category': 'category_a',
             'name': 'User B', 
             'color': '#EEEEEE',
@@ -161,6 +183,7 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
             'similarity': 54 
         },
         {
+            'classification': 'category',
             'category': 'category_b',
             'name': 'User A', 
             'color': '#AEAEAE',
@@ -168,6 +191,7 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
             'similarity': 62
         }, 
         {
+            'classification': 'category',
             'category': 'category_b',
             'name': 'User B', 
             'color': '#EEEEEE',
@@ -176,23 +200,60 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
         }]
     """
     question_count = len(user_data)
+    categories = list(set(questions_category))
     record = []
 
-    # Get result for all questions
+    # Caclulate factor sum for user
+    user_factor_sum = {}
+    for category in categories:
+        valid_index_list = []
+        for index, question_category in enumerate(questions_category):
+            if question_category == category:
+                valid_index_list.append(index)
+        
+        temp_user_data = list(user_data[i] for i in valid_index_list)
+        user_factor_sum[category] = sum(temp_user_data)
+
+    temp_string = ""
+    for key, value in user_factor_sum.iteritems(): 
+        temp_string += ",'" + key + "': " + str(value)
+
+    record.append("{'classification': 'factor_sum', 'name': 'me'" + temp_string + "}")
+
+    # Caclulate factor sum for comparison targets
+    for single_target_data in target_data:
+        target_factor_sum = {}
+        target_factor_list = single_target_data['factor_list']
+        
+        for category in categories:
+            valid_index_list = []
+            for index, question_category in enumerate(questions_category):
+                if question_category == category:
+                    valid_index_list.append(index)
+            
+            temp_target_factor_list = list(target_factor_list[i] for i in valid_index_list)
+            target_factor_sum[category] = sum(temp_target_factor_list)
+        
+        temp_string = ""
+        for key, value in target_factor_sum.iteritems(): 
+            temp_string += ",'" + key + "': " + str(value)
+        
+        record.append("{'classification': 'factor_sum', 'name': '" + single_target_data['name'] + "'" + temp_string + "}")
+
+    # Calculate similarity by comparing with all questions
     for single_target_data in target_data:
         target_factor_list = single_target_data['factor_list']
         disagreement = sum(numpy.absolute(numpy.subtract(user_data, target_factor_list)))
         factor_max_distance = getattr(settings, 'MAX_FACTOR_VALUE') - getattr(settings, 'MIN_FACTOR_VALUE')
         max_disagreement = float(sum(numpy.absolute(user_data) + 2))
         agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
-        record.append("{'category': 'all'," \
+        record.append("{'classification': 'category', 'category': 'all'," \
                 + "'name': '" + single_target_data['name'] + "'," \
                 + "'color': '" + single_target_data['color'] + "'," \
                 + "'is_reliable': '" + str(single_target_data['is_reliable']) + "'," \
                 + "'similarity': " + str(agreement_score) + "}")
 
-    # Get result per category
-    categories = list(set(questions_category))
+    # Calculate similarity by comparing with specific category
     for category in categories:
         valid_index_list = []
         for index, question_category in enumerate(questions_category):
@@ -208,7 +269,7 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
             factor_max_distance = getattr(settings, 'MAX_FACTOR_VALUE') - getattr(settings, 'MIN_FACTOR_VALUE')
             max_disagreement = float(sum(numpy.absolute(temp_user_data) + 2))
             agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
-            record.append("{'category': '" + category + "'," \
+            record.append("{'classification': 'category', 'category': '" + category + "'," \
                     + "'name': '" + single_target_data['name'] + "'," \
                     + "'color': '" + single_target_data['color'] + "'," \
                     + "'is_reliable': '" + str(single_target_data['is_reliable']) + "'," \
