@@ -1,22 +1,74 @@
 {% load custom_filter %}
 
+{# Assembly page #}
+{% if '/assembly/' in request.path %}
+
 {# Facebook #}
 <a href="https://www.facebook.com/sharer/sharer.php?u=http://pingkorea.com{{ request.path }}" class="share-btn" target="_blank">
   <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/facebook.png" />
 </a>
 
 {# Twitter #}
-<a href="https://twitter.com/intent/tweet?text=내가 해도 저것보단 잘하겠다! 19대 국회 법안, 대신 투표해보기 &url=http://pingkorea.com{{ request.path }}" class="share-btn" id="twitter-share" target="_blank">
+<a href="https://twitter.com/intent/tweet?text=나의 도플갱어 국회의원은? 19대 국회 법안 투표해서 나와 가장 비슷한 국회의원을 찾아보세요 &url=http://pingkorea.com{{ request.path }}" class="share-btn" id="twitter-share" target="_blank">
   <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/twitter.png" class="social-media__icon" />
 </a>
 
 {# Kakaotalk #}
 <a href="javascript:;" class="share-btn" id="kakaotalk-share">
-  <input type="hidden" id="kakaotalk-share__label" value="내가 해도 저것보단 잘하겠다! 19대 국회 법안, 대신 투표해보기" />
-  <input type="hidden" id="kakaotalk-share__image-src" value="{{ 'CDN_URL'|get_settings_variable }}/share/ping.png" />
-  <input type="hidden" id="kakaotalk-share__image-width" value="200" />
-  <input type="hidden" id="kakaotalk-share__image-height" value="200" />
+  <input type="hidden" id="kakaotalk-share__label" value="나의 도플갱어 국회의원은? 19대 국회 법안 투표해서 나와 가장 비슷한 국회의원을 찾아보세요" />
+  <input type="hidden" id="kakaotalk-share__image-src" value="{{ 'CDN_URL'|get_settings_variable }}/share/assembly.png" />
+  <input type="hidden" id="kakaotalk-share__image-width" value="1200" />
+  <input type="hidden" id="kakaotalk-share__image-height" value="630" />
   <input type="hidden" id="kakaotalk-share__btn-text" value="나도 해보기" />
   <input type="hidden" id="kakaotalk-share__url" value="http://pingkorea.com{{ request.path }}" />
   <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/kakao.png" class="social-media__icon" />
 </a>
+
+{# Party page #}
+{% elif '/party/' in request.path %}
+
+{# Facebook #}
+<a href="https://www.facebook.com/sharer/sharer.php?u=http://pingkorea.com{{ request.path }}" class="share-btn" target="_blank">
+  <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/facebook.png" />
+</a>
+
+{# Twitter #}
+<a href="https://twitter.com/intent/tweet?text비례대표는 기호 몇 번? 쟁점 이슈들에 투표해서 나와 잘 맞는 정당도 찾고, 분야별 나의 정치 성향도 알아보세요 =&url=http://pingkorea.com{{ request.path }}" class="share-btn" id="twitter-share" target="_blank">
+  <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/twitter.png" class="social-media__icon" />
+</a>
+
+{# Kakaotalk #}
+<a href="javascript:;" class="share-btn" id="kakaotalk-share">
+  <input type="hidden" id="kakaotalk-share__label" value="비례대표는 기호 몇 번? 쟁점 이슈들에 투표해서 나와 잘 맞는 정당도 찾고, 분야별 나의 정치 성향도 알아보세요" />
+  <input type="hidden" id="kakaotalk-share__image-src" value="{{ 'CDN_URL'|get_settings_variable }}/share/party.png" />
+  <input type="hidden" id="kakaotalk-share__image-width" value="1200" />
+  <input type="hidden" id="kakaotalk-share__image-height" value="630" />
+  <input type="hidden" id="kakaotalk-share__btn-text" value="나도 해보기" />
+  <input type="hidden" id="kakaotalk-share__url" value="http://pingkorea.com{{ request.path }}" />
+  <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/kakao.png" class="social-media__icon" />
+</a>
+
+{# Main Page #}
+{% else %}
+
+{# Facebook #}
+<a href="https://www.facebook.com/sharer/sharer.php?u=http://pingkorea.com{{ request.path }}" class="share-btn" target="_blank">
+  <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/facebook.png" />
+</a>
+
+{# Twitter #}
+<a href="https://twitter.com/intent/tweet?text=2016 총선 투표 가이드: 나와 잘 맞는 정당과 국회의원을 찾아보세요 &url=http://pingkorea.com{{ request.path }}" class="share-btn" id="twitter-share" target="_blank">
+  <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/twitter.png" class="social-media__icon" />
+</a>
+
+{# Kakaotalk #}
+<a href="javascript:;" class="share-btn" id="kakaotalk-share">
+  <input type="hidden" id="kakaotalk-share__label" value="2016 총선 투표 가이드: 나와 잘 맞는 정당과 국회의원을 찾아보세요" />
+  <input type="hidden" id="kakaotalk-share__image-src" value="{{ 'CDN_URL'|get_settings_variable }}/share/main.png" />
+  <input type="hidden" id="kakaotalk-share__image-width" value="1200" />
+  <input type="hidden" id="kakaotalk-share__image-height" value="630" />
+  <input type="hidden" id="kakaotalk-share__btn-text" value="나도 해보기" />
+  <input type="hidden" id="kakaotalk-share__url" value="http://pingkorea.com{{ request.path }}" />
+  <img src="{{ 'CDN_URL'|get_settings_variable }}/social-media-icons/kakao.png" class="social-media__icon" />
+</a>
+{% endif %}
