@@ -38,10 +38,11 @@ def get_survey_data_of_user(user_obj, survey_obj):
         return {}
 
     for answer, question in zip(answers, questions):
-        if question.factor_reversed:
-            factor_list.append(answer.choice.factor * -1)
+        factor = answer.choice.factor
+        if question['factor_reversed'] and factor != 7:
+            factor_list.append(factor * -1)
         else:
-            factor_list.append(answer.choice.factor)
+            factor_list.append(factor)
         updated_at_list.append(answer.updated_at)
 
     return {'economic_score': user_obj.economic_score, 'factor_list': factor_list, 'updated_at': max(updated_at_list)}
@@ -269,33 +270,18 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
         record.append("{'classification': 'factor_sum', 'name': '" + single_target_data['name'] + "'" + temp_string + "}")
 
     # Calculate similarity by comparing with all questions
-    """
     for single_target_data in target_data:
-        target_factor_list = single_target_data['factor_list']
-        disagreement = sum(numpy.absolute(numpy.subtract(user_data, target_factor_list)))
-        factor_max_distance = getattr(settings, 'MAX_FACTOR_VALUE') - getattr(settings, 'MIN_FACTOR_VALUE')
-        max_disagreement = float(sum(numpy.absolute(user_data) + 2))
-        agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
-        record.append("{'classification': 'category', 'category': 'all'," \
-                + "'name': '" + single_target_data['name'] + "'," \
-                + "'color': '" + single_target_data['color'] + "'," \
-                + "'is_reliable': '" + str(single_target_data['is_reliable']) + "'," \
-                + "'similarity': " + str(agreement_score) + "}")
-    """
-
-    for single_target_data in target_data:
-        user_data = numpy.array(user_data)
+        user_array = numpy.array(user_data)
         target_factor_list = numpy.array(single_target_data['factor_list'])
-        user_data_na = user_data != 7
+        user_array_na = user_array != 7
         target_factor_list_na = target_factor_list != 7
-        na_filter = user_data_na & target_factor_list_na
-        user_data = user_data[na_filter]
+        na_filter = user_array_na & target_factor_list_na
+        user_array = user_array[na_filter]
         target_factor_list = target_factor_list[na_filter]
-        # filter user_data by na_filter and gauge question number (for use in max disagreement)
-        qnum = len(user_data)
-        disagreement = sum(numpy.absolute(numpy.subtract(user_data, target_factor_list)))
+        qnum = len(user_array)
+        disagreement = sum(numpy.absolute(numpy.subtract(user_array, target_factor_list)))
         factor_max_distance = getattr(settings, 'MAX_FACTOR_VALUE') - getattr(settings, 'MIN_FACTOR_VALUE')
-        max_disagreement = float(sum(numpy.absolute(user_data) + factor_max_distance / 2))
+        max_disagreement = float(sum(numpy.absolute(user_array) + factor_max_distance / 2))
         agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
         record.append("{'classification': 'category', 'category': 'all'," \
                 + "'name': '" + single_target_data['name'] + "'," \
@@ -303,7 +289,6 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
                 + "'is_reliable': '" + str(single_target_data['is_reliable']) + "'," \
                 + "'similarity': " + str(agreement_score) + "}")
 
-    """
     # Calculate similarity by comparing with specific category
     for category in categories:
         valid_index_list = []
@@ -314,44 +299,21 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
         temp_user_data = list(user_data[i] for i in valid_index_list)
         
         for single_target_data in target_data:
-            target_factor_list = single_target_data['factor_list']
-            temp_target_factor_list = list(target_factor_list[i] for i in valid_index_list)
-            disagreement = sum(numpy.absolute(numpy.subtract(temp_user_data, temp_target_factor_list)))
+            user_array = numpy.array(temp_user_data)
+            temp = single_target_data['factor_list']
+            target_factor_list = list(temp[i] for i in valid_index_list)
+            target_factor_list = numpy.array(target_factor_list)
+            user_array_na = user_array != 7
+            target_factor_list_na = target_factor_list != 7
+            na_filter = user_array_na & target_factor_list_na
+            user_array = user_array[na_filter]
+            target_factor_list = target_factor_list[na_filter]
+            qnum = len(user_array)
+            disagreement = sum(numpy.absolute(numpy.subtract(user_array, target_factor_list)))
             factor_max_distance = getattr(settings, 'MAX_FACTOR_VALUE') - getattr(settings, 'MIN_FACTOR_VALUE')
-            max_disagreement = float(sum(numpy.absolute(temp_user_data) + 2))
+            max_disagreement = float(sum(numpy.absolute(user_array) + factor_max_distance / 2))
             agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
             record.append("{'classification': 'category', 'category': '" + category + "'," \
-                    + "'name': '" + single_target_data['name'] + "'," \
-                    + "'color': '" + single_target_data['color'] + "'," \
-                    + "'is_reliable': '" + str(single_target_data['is_reliable']) + "'," \
-                    + "'similarity': " + str(agreement_score) + "}")
-    """
-
-    # Calculate similarity by comparing with specific category
-    for category in categories:
-        valid_index_list = []
-        for index, question_category in enumerate(questions_category):
-            if question_category == category:
-                valid_index_list.append(index)
-        
-        temp_user_data = list(user_data[i] for i in valid_index_list)
-        
-        for single_target_data in target_data:
-            temp_user_data = numpy.array(temp_user_data)
-            target_factor_list = numpy.array(single_target_data['factor_list'])
-            temp_target_factor_list = list(target_factor_list[i] for i in valid_index_list)
-            temp_user_data_na = temp_user_data != 7
-            temp_target_factor_list_na = temp_target_factor_list != 7
-            na_filter = temp_user_data_na & temp_target_factor_list_na
-            temp_user_data = temp_user_data[na_filter]
-            temp_target_factor_list = temp_target_factor_list[na_filter]
-            # filter temp_user_data by na_filter and gauge question number (for use in max disagreement)
-            qnum = len(temp_user_data)
-            disagreement = sum(numpy.absolute(numpy.subtract(temp_user_data, temp_target_factor_list)))
-            factor_max_distance = getattr(settings, 'MAX_FACTOR_VALUE') - getattr(settings, 'MIN_FACTOR_VALUE')
-            max_disagreement = float(sum(numpy.absolute(temp_user_data) + factor_max_distance / 2))
-            agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
-            record.append("{'classification': 'category', 'category': 'all'," \
                     + "'name': '" + single_target_data['name'] + "'," \
                     + "'color': '" + single_target_data['color'] + "'," \
                     + "'is_reliable': '" + str(single_target_data['is_reliable']) + "'," \
