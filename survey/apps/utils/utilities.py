@@ -7,7 +7,9 @@ import cloudinary.uploader
 import math
 import numpy
 from django.conf import settings
+from django.core.cache import cache
 from main.models import User, ComparisonTarget, Survey, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer
+from utils import redis
 
 # Cloudinary configuration
 cloudinary.config( 
@@ -32,8 +34,15 @@ def get_survey_data_of_user(user_obj, survey_obj):
     factor_list = []
     updated_at_list = []
 
-    for answer in answers:
-        factor_list.append(answer.choice.factor)
+    questions = cache.get('survey:' + str(survey_obj.id) + ':questions')
+    if questions is None:
+        questions = redis.set_questions_cache(survey_obj)
+
+    for answer, question in zip(answers, questions):
+        if question.factor_reversed:
+            factor_list.append(answer.choice.factor * -1)
+        else:
+            factor_list.append(answer.choice.factor)
         updated_at_list.append(answer.updated_at)
 
     return {'economic_score': user_obj.economic_score, 'factor_list': factor_list, 'updated_at': max(updated_at_list)}
@@ -212,6 +221,16 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
                 valid_index_list.append(index)
         
         temp_user_data = list(user_data[i] for i in valid_index_list)
+        
+        # Dealing exception if user answered as 'unawareness' when calculate factor sum
+        # Substitue value '7' for average value of that category
+        unanwareness_answers_count = temp_user_data.count(7)
+        if len(temp_user_data) == unanwareness_answers_count:
+            average_value = 0
+        else:
+            average_value = (sum(temp_user_data) - 7 * unanwareness_answers_count) / (len(temp_user_data) - unanwareness_answers_count)
+        temp_user_data = [average_value if x == 7 else x for x in temp_user_data] 
+        
         user_factor_sum[category] = sum(temp_user_data)
 
     temp_string = ""
@@ -232,6 +251,16 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
                     valid_index_list.append(index)
             
             temp_target_factor_list = list(target_factor_list[i] for i in valid_index_list)
+            
+            # Dealing exception if user answered as 'unawareness' when calculate factor sum
+            # Substitue value '7' for average value of that category
+            unanwareness_answers_count = temp_target_factor_list.count(7)
+            if len(temp_target_factor_list) == unanwareness_answers_count:
+                average_value = 0
+            else:
+                average_value = (sum(temp_target_factor_list) - 7 * unanwareness_answers_count) / (len(temp_target_factor_list) - unanwareness_answers_count)
+            temp_target_factor_list = [average_value if x == 7 else x for x in temp_target_factor_list] 
+            
             target_factor_sum[category] = sum(temp_target_factor_list)
         
         temp_string = ""
