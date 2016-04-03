@@ -227,7 +227,7 @@ $(document).ready(function() {
         if (data.expected_target === null) $summaryBlock.prepend('지지정당을 선택하지 않으셨습니다.');
         else if (data.expected_target == 'none') $summaryBlock.prepend('지지정당이 없습니다.');
         else {
-          var expectedTarget = _.find(result, {'name': data.expected_target});
+          var expectedTarget = _.find(result, {'category': 'all', 'name': data.expected_target});
           if (expectedTarget === undefined) $summaryBlock.prepend('선택하신 <strong>' + data.expected_target + '</strong>의 데이터가 없습니다.');
           else $summaryBlock.prepend('지지를 표명하신 <strong><span style="color: ' + expectedTarget.color + ';">' + 
               data.expected_target + '</span></strong>과의 거리는 <strong>' + translateSimilarity(expectedTarget.similarity) + '</strong>입니다.');
