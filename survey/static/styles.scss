@@ -586,6 +586,17 @@ a, a:focus, a:hover, a:active, a:visited {
 			font-size: 1.8em;
 			color: white; 
 		}
+		
+		.header__home-link {
+			float: right;
+			
+			.glyphicon {
+				// Make clickable area bigger
+				margin: -10px;
+				padding: 10px;
+				color: white;
+			}
+		}
 	}
 	
 	.header__subtitle-container {
