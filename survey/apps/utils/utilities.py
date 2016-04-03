@@ -282,7 +282,10 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
         disagreement = sum(numpy.absolute(numpy.subtract(user_array, target_factor_list)))
         factor_max_distance = getattr(settings, 'MAX_FACTOR_VALUE') - getattr(settings, 'MIN_FACTOR_VALUE')
         max_disagreement = float(sum(numpy.absolute(user_array) + factor_max_distance / 2))
-        agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
+        if max_disagreement <= 0:
+            agreement_score = 0
+        else:
+            agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
         record.append("{'classification': 'category', 'category': 'all'," \
                 + "'name': '" + single_target_data['name'] + "'," \
                 + "'color': '" + single_target_data['color'] + "'," \
@@ -312,7 +315,10 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
             disagreement = sum(numpy.absolute(numpy.subtract(user_array, target_factor_list)))
             factor_max_distance = getattr(settings, 'MAX_FACTOR_VALUE') - getattr(settings, 'MIN_FACTOR_VALUE')
             max_disagreement = float(sum(numpy.absolute(user_array) + factor_max_distance / 2))
-            agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
+            if max_disagreement <= 0:
+                agreement_score = 0
+            else:
+                agreement_score = math.ceil(100 * (1 - (disagreement / max_disagreement)))
             record.append("{'classification': 'category', 'category': '" + category + "'," \
                     + "'name': '" + single_target_data['name'] + "'," \
                     + "'color': '" + single_target_data['color'] + "'," \
