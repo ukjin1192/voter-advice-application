@@ -321,7 +321,7 @@ class ResultViewSet(viewsets.ModelViewSet):
         except:
             result = None
         
-        # Randomly fill out unaswered questions
+        # Choose 'unawareness' for unaswered questions
         if request.user not in survey.participants.all():
             all_questions = cache.get('survey:' + str(survey.id) + ':questions')
             if all_questions is None:
@@ -338,10 +338,13 @@ class ResultViewSet(viewsets.ModelViewSet):
             # Extract id list of unanswered question
             unanswered_questions_id_list = list(set(all_questions_id_list) - set(answered_questions_id_list))
             
-            # Random choice for unanswered question
+            # Choose 'unawareness' for unaswered questions, or choose randomly if failed
             for unanswered_question_id in unanswered_questions_id_list:
                 question = Question.objects.prefetch_related('choices').get(id=unanswered_question_id)
-                Answer(user=request.user, choice=question.choices.all().order_by('?')[0]).save()
+                try:
+                    Answer(user=request.user, choice=question.choices.filter(factor=7)[0]).save()
+                except:
+                    Answer(user=request.user, choice=question.choices.all().order_by('?')[0]).save()
             
             # Add user to participant list of survey
             survey.participants.add(request.user)
