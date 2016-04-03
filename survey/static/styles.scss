@@ -408,7 +408,7 @@ a, a:focus, a:hover, a:active, a:visited {
 		.question__explanation-container {
 			display: table;
 			width: 100%;
-			height: 180px;
+			height: 170px;
 			
 			@media screen and (min-width: $screen-sm-min) {
 				height: 300px;
@@ -456,7 +456,7 @@ a, a:focus, a:hover, a:active, a:visited {
 
 	.additional-info {
 		width: 250px;
-		margin: 0 auto;
+		margin: -40px auto 0 auto;
 		text-align: center;
 	}
 }
