@@ -33,11 +33,11 @@ function translateFactorSum(factorSum) {
   if (factorSum >= 9) {
     return '보수';
   } else if (factorSum > 3) {
-    return '중도에 가까운 보수';
+    return '중도 보수';
   } else if (factorSum >= -3) {
     return '중도';
   } else if (factorSum > -9) {
-    return '중도에 가까운 진보';
+    return '중도 진보';
   } else {
     return '진보';
   }

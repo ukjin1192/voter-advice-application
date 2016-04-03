@@ -623,12 +623,28 @@ a, a:focus, a:hover, a:active, a:visited {
 		
 		.result__navbar {
 			margin-bottom: 15px;
-		
-			.navbar__btn {
-				border-radius: 0;
-				background-color: #415FCF; 
-				color: white; 
-				cursor: pointer;
+			
+			.navbar__column {
+				padding: 0 8px;
+				
+				&:first-child {
+					padding: 0 1px 0 15px;
+				}
+				
+				&:last-child {
+					padding: 0 15px 0 1px;
+				}
+				
+				.navbar__btn {
+					border-radius: 0;
+					background-color: #415FCF; 
+					color: white; 
+					cursor: pointer;
+					
+					@media screen and (max-width: $screen-xxs-max) {
+						font-size: 0.85em;
+					}
+				}
 			}
 		}
 		
@@ -736,6 +752,10 @@ a, a:focus, a:hover, a:active, a:visited {
 				border-radius: 0;
 				background-color: #415FCF; 
 				color: white; 
+				
+				@media screen and (max-width: $screen-xxs-max) {
+					font-size: 1.2em;
+				}
 			}
 			
 			#answer-table {
