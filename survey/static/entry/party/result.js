@@ -233,11 +233,39 @@ $(document).ready(function() {
               data.expected_target + '</span></strong>과의 거리는 <strong>' + translateSimilarity(expectedTarget.similarity) + '</strong>입니다.');
         }
         
-        $summaryBlock.prepend('가장 가까운 정당은 <strong><span style="color: ' + rows[0].color + ';">' + rows[0].name + '</span></strong>이고<br/>' +
-          '가장 먼 당은 <strong><span style="color: ' + rows[rows.length - 1].color + ';">' + rows[rows.length - 1].name + '</span></strong>입니다.<div class="space"></div>');
+        // Deal with tie score
+        var highestSimilarity = rows[0].similarity;
+        var lowestSimilarity = rows[rows.length - 1].similarity;
+        
+        var bestMatchingTargets = _.filter(rows, {'similarity': highestSimilarity});
+        var bestMatchingText = '가장 가까운 정당은 ';
+        bestMatchingTargets.forEach(function(bestMatchingTarget, index) {
+          bestMatchingText += '<strong><span style="color: ' + bestMatchingTarget.color + ';">' + bestMatchingTarget.name + '</span></strong> ';
+        });
+        bestMatchingText += '이고<br/>';
+        
+        var worstMatchingTargets = _.filter(rows, {'similarity': lowestSimilarity});
+        var worstMatchingText = '가장 먼 정당은 ';
+        worstMatchingTargets.forEach(function(worstMatchingTarget, index) {
+          worstMatchingText += '<strong><span style="color: ' + worstMatchingTarget.color + ';">' + worstMatchingTarget.name + '</span></strong> ';
+        });
+        worstMatchingText += '입니다.<div class="space"></div>';
+        
+        $summaryBlock.prepend(bestMatchingText  + worstMatchingText);
       } else {
         var $summaryBlock = $('.result__summary[data-tab-id="2"]');
-        $summaryBlock.prepend('<strong>' + category + '</strong> 성향은 <strong><span style="color: ' + rows[0].color + ';">' + rows[0].name + '</span></strong>과 가깝습니다.<div class="space"></div>');
+        
+        // Deal with tie score
+        var highestSimilarity = rows[0].similarity;
+        
+        var bestMatchingTargets = _.filter(rows, {'similarity': highestSimilarity});
+        var bestMatchingText = '<strong>' + category + '</strong> 성향은 ';
+        bestMatchingTargets.forEach(function(bestMatchingTarget, index) {
+          bestMatchingText += '<strong><span style="color: ' + bestMatchingTarget.color + ';">' + bestMatchingTarget.name + '</span></strong> ';
+        });
+        bestMatchingText += '과 가깝습니다.<div class="space"></div>';
+        
+        $summaryBlock.append(bestMatchingText);
       }
     });
     
