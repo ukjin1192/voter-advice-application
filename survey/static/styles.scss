@@ -408,7 +408,7 @@ a, a:focus, a:hover, a:active, a:visited {
 		.question__explanation-container {
 			display: table;
 			width: 100%;
-			height: 230px;
+			height: 180px;
 			
 			@media screen and (min-width: $screen-sm-min) {
 				height: 300px;
@@ -416,7 +416,7 @@ a, a:focus, a:hover, a:active, a:visited {
 			
 			.question__explanation {
 				display: table-cell;
-				padding: 0 15px;
+				padding: 0 10px;
 				font-size: 1.5em;
 				font-weight: 700;
 				background-color: white;
@@ -667,7 +667,7 @@ a, a:focus, a:hover, a:active, a:visited {
 			}
 			
 			.show-hidden-result-btn {
-				margin-top: 35px;
+				margin: 15px 0;
 				border-radius: 0;
 				background-color: #415FCF; 
 				color: white; 

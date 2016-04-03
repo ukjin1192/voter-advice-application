@@ -199,7 +199,6 @@ $(window).load(function() {
       paddingTop: $('.survey__header').outerHeight(),
       scrollOverflow: true, 
       loopHorizontal: false,
-      verticalCentered: false,
       
       afterRender: function() {
         // Update active slide index
