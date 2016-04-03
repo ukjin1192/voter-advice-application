@@ -224,20 +224,20 @@ $(document).ready(function() {
       // Fill out result summary
       if (category == 'all') {
         var $summaryBlock = $('.result__summary[data-tab-id="1"]');
-        if (data.expected_target === null) $summaryBlock.append('지지정당을 선택하지 않으셨군요. ');
-        else if (data.expected_target == 'none') $summaryBlock.append('지지정당이 없으시군요. ');
+        if (data.expected_target === null) $summaryBlock.prepend('지지정당을 선택하지 않으셨습니다.');
+        else if (data.expected_target == 'none') $summaryBlock.prepend('지지정당이 없습니다.');
         else {
           var expectedTarget = _.find(result, {'name': data.expected_target});
-          if (expectedTarget === undefined) $summaryBlock.append('선택하신 <strong>' + data.expected_target + '</strong>의 데이터가 없습니다. ');
-          else $summaryBlock.append('지지를 표명하신 <strong><span style="color: ' + expectedTarget.color + ';">' + 
-              data.expected_target + '</span></strong>과의 거리는 <strong>' + translateSimilarity(expectedTarget.similarity) + '</strong>입니다. ');
+          if (expectedTarget === undefined) $summaryBlock.prepend('선택하신 <strong>' + data.expected_target + '</strong>의 데이터가 없습니다.');
+          else $summaryBlock.prepend('지지를 표명하신 <strong><span style="color: ' + expectedTarget.color + ';">' + 
+              data.expected_target + '</span></strong>과의 거리는 <strong>' + translateSimilarity(expectedTarget.similarity) + '</strong>입니다.');
         }
         
-        $summaryBlock.append('가장 가까운 정당은 <strong><span style="color: ' + rows[0].color + ';">' + rows[0].name + '</span></strong>이고, ' +
-          '가장 먼 당은 <strong><span style="color: ' + rows[rows.length - 1].color + ';">' + rows[rows.length - 1].name + '</span></strong>입니다.');
+        $summaryBlock.prepend('가장 가까운 정당은 <strong><span style="color: ' + rows[0].color + ';">' + rows[0].name + '</span></strong>이고<br/>' +
+          '가장 먼 당은 <strong><span style="color: ' + rows[rows.length - 1].color + ';">' + rows[rows.length - 1].name + '</span></strong>입니다.<div class="space"></div>');
       } else {
         var $summaryBlock = $('.result__summary[data-tab-id="2"]');
-        $summaryBlock.append('<strong>' + category + '</strong> 성향은 <strong><span style="color: ' + rows[0].color + ';">' + rows[0].name + '</span></strong>과 가깝습니다.<br/>');
+        $summaryBlock.prepend('<strong>' + category + '</strong> 성향은 <strong><span style="color: ' + rows[0].color + ';">' + rows[0].name + '</span></strong>과 가깝습니다.<div class="space"></div>');
       }
     });
     
