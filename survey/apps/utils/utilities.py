@@ -203,7 +203,7 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
     categories = list(set(questions_category))
     record = []
 
-    # Caclulate factor sum for user
+    # Calculate factor sum for user
     user_factor_sum = {}
     for category in categories:
         valid_index_list = []
@@ -220,7 +220,7 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
 
     record.append("{'classification': 'factor_sum', 'name': 'me'" + temp_string + "}")
 
-    # Caclulate factor sum for comparison targets
+    # Calculate factor sum for comparison targets
     for single_target_data in target_data:
         target_factor_sum = {}
         target_factor_list = single_target_data['factor_list']
