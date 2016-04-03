@@ -91,7 +91,7 @@ $(document).on('click', '.survey__submit-btn', function() {
 });
 
 // Toggle slide navigation arrows
-$(document).on('click', '.slide', function() {
+$(document).on('click', '.question__explanation', function() {
   if ($('.fp-controlArrow').hasClass('hidden')) $('.fp-controlArrow').removeClass('hidden');
   else $('.fp-controlArrow').addClass('hidden');
 });
