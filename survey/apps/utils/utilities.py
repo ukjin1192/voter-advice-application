@@ -39,7 +39,7 @@ def get_survey_data_of_user(user_obj, survey_obj):
 
     for answer, question in zip(answers, questions):
         factor = answer.choice.factor
-        if question['factor_reversed'] and factor != 7:
+        if 'factor_reversed' in question and question['factor_reversed'] == True and factor != 7:
             factor_list.append(factor * -1)
         else:
             factor_list.append(factor)
