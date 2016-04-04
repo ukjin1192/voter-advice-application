@@ -109,7 +109,7 @@ def deploy(*command):
     if 'SERVER_CODE_UPDATED' in command:
         with cd(ROOT_DIR):
             sudo("ps -ef | grep uwsgi | grep -v grep | awk '{print $2}' | xargs kill -15")
-            sudo("uwsgi --uid www-data --gid www-data --emperor /etc/uwsgi/vassals --master --die-on-term --daemonize=" + ROOT_DIR + "/logs/uwsgi.log")
+            sudo("uwsgi --uid www-data --gid www-data --emperor /etc/uwsgi/vassals --master --die-on-term --daemonize=" + ROOT_DIR + "/logs/uwsgi.log --disable-logging")
     
     if 'STATIC_FILES_UPDATED' in command:
         with cd(ROOT_DIR + "/" + PROJECT_NAME + "/static/"):
