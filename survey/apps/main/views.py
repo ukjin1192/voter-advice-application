@@ -253,10 +253,6 @@ class AnswerViewSet(viewsets.ModelViewSet):
                 user.economic_score += choice.factor 
                 user.save()
         
-        # When user completed survey
-        if Answer.objects.filter(user=request.user).count() == questions_count:
-            survey.participants.add(request.user)
-        
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
