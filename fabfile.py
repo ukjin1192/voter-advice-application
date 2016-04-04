@@ -41,7 +41,7 @@ def docker_onboot():
 
 
 def run_uwsgi():
-    local("sudo uwsgi --uid www-data --gid www-data --emperor /etc/uwsgi/vassals --master --die-on-term --daemonize=" + ROOT_DIR + "/logs/uwsgi.log")
+    local("sudo uwsgi --uid www-data --gid www-data --emperor /etc/uwsgi/vassals --master --die-on-term --daemonize=" + ROOT_DIR + "/logs/uwsgi.log --disable-logging")
 
 
 def stop_uwsgi():
