@@ -34,7 +34,7 @@ $(document).on('click', '.landing__btn--survey', function() {
       
       // Move to survey page
       location.href = '/party/survey/';
-    }).always(function() {
+    }).fail(function() {
       btn.button('reset');
     }); 
   } 
@@ -57,7 +57,7 @@ $(document).on('click', '.landing__btn--survey', function() {
     
       // Redirect to landing page if user is not valid 
       location.href = '/party/';
-    }).always(function() {
+      
       btn.button('reset');
     });
   }
@@ -88,7 +88,7 @@ $(document).on('click', '.landing__btn--result', function() {
   }).done(function(data) {
     // Move to result page
     location.href = '/party/result/' + data.id + '/';
-  }).always(function() {
+  }).fail(function() {
     btn.button('reset');
     $('#loading-icon').addClass('hidden');
   });
@@ -102,6 +102,8 @@ $(window).load(function() {
   $('.landing__image').attr('height', $(window).height());
 
   if (localStorage.getItem('token') != null && localStorage.getItem('user_id') != null) {
+    $('#loading-icon').removeClass('hidden');
+    
     // Set authentication token at HTTP header
     setAuthToken();
     
@@ -118,6 +120,8 @@ $(window).load(function() {
       localStorage.removeItem('token');
       localStorage.removeItem('user_id');
       clearAuthToken();
+    }).always(function() {
+      $('#loading-icon').addClass('hidden');
     });
   }
 });

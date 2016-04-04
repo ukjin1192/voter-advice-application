@@ -97,16 +97,10 @@ $(document).on('click', '.survey__submit-btn', function() {
     }).done(function(data) {
       // Move to result page
       location.href = '/assembly/result/' + data.id + '/';
-    }).always(function() {
+    }).fail(function() {
       $submitBtn.button('reset');
     });
   });
-});
-
-// Toggle slide navigation arrows
-$(document).on('click', '.slide', function() {
-  if ($('.fp-controlArrow').hasClass('hidden')) $('.fp-controlArrow').removeClass('hidden');
-  else $('.fp-controlArrow').addClass('hidden');
 });
 
 // Choose choice and move to next slide
@@ -155,6 +149,8 @@ $(window).load(function() {
       location.href = '/assembly/';
     });
   }
+
+  $('#loading-icon').removeClass('hidden');
 
   // Get questions
   $.ajax({
@@ -236,9 +232,6 @@ $(window).load(function() {
         
         syncProgressBar(activeSlideIndex * 100 / (questionList.length - 1));
         syncTitle(activeSlideIndex - 1);
-        
-        // Toggle off slide navigation arrows
-        $('.fp-controlArrow').addClass('hidden');
       },
       
       afterSlideLoad: function(anchorLink, index, slideAnchor, slideIndex) {
@@ -248,9 +241,6 @@ $(window).load(function() {
         activeSlideIndex = slideIndex + 1;
         
         if (activeSlideIndex != questionList.length) syncChoice(answerList[activeSlideIndex]);
-        
-        // Toggle off slide navigation arrows
-        $('.fp-controlArrow').addClass('hidden');
       },
       
       onSlideLeave: function(anchorLink, index, slideIndex, direction, nextSlideIndex) {
@@ -268,5 +258,7 @@ $(window).load(function() {
         }
       },
     }); 
+  }).always(function() {
+    $('#loading-icon').addClass('hidden');
   });
 });

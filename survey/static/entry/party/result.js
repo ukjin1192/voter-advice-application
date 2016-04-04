@@ -158,6 +158,8 @@ $(document).on('click', '.voice-of-customer__submit-btn', function() {
 // Load user data when DOM ready to boost up
 $(document).ready(function() {
 
+  $('#loading-icon').removeClass('hidden');
+
   if (localStorage.getItem('token') != null || localStorage.getItem('user_id') != null) {
     // Set authentication token at HTTP header
     setAuthToken();
@@ -281,6 +283,8 @@ $(document).ready(function() {
   }).fail(function() {
     // When result is not exist or updated to non-public
     $('.result__alert-message').removeClass('hidden');
+  }).always(function() {
+    $('#loading-icon').addClass('hidden');
   });
 });
 
