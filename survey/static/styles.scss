@@ -965,6 +965,7 @@ a, a:focus, a:hover, a:active, a:visited {
 	height: 35px;
 	margin-top: -35px;
 	border: none;
+	opacity: 0.4;
 
 	@media screen and (min-width: $screen-sm-min) {
 		width: 72px !important;
