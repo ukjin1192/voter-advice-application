@@ -184,7 +184,7 @@ $(document).ready(function() {
     var $summaryBlock = $('.result__summary[data-tab-id="3"]');
     categories.forEach(function(category, index) {
       if (category != 'all') {
-        $summaryBlock.append('<strong>' + category + '</strong> 성향은 <strong>' + translateFactorSum(factorSumMine[category]) + '</strong> 입니다.<br/>');
+        $summaryBlock.append('<strong>' + category + '</strong> 성향은 <strong>' + translateFactorSum(factorSumMine[category]) + '</strong> 입니다.<div class="space"></div>');
       }
     });
     
@@ -237,35 +237,43 @@ $(document).ready(function() {
         var highestSimilarity = rows[0].similarity;
         var lowestSimilarity = rows[rows.length - 1].similarity;
         
-        var bestMatchingTargets = _.filter(rows, {'similarity': highestSimilarity});
-        var bestMatchingText = '가장 가까운 정당은 ';
-        bestMatchingTargets.forEach(function(bestMatchingTarget, index) {
-          bestMatchingText += '<strong><span style="color: ' + bestMatchingTarget.color + ';">' + bestMatchingTarget.name + '</span></strong> ';
-        });
-        bestMatchingText += '이고<br/>';
-        
-        var worstMatchingTargets = _.filter(rows, {'similarity': lowestSimilarity});
-        var worstMatchingText = '가장 먼 정당은 ';
-        worstMatchingTargets.forEach(function(worstMatchingTarget, index) {
-          worstMatchingText += '<strong><span style="color: ' + worstMatchingTarget.color + ';">' + worstMatchingTarget.name + '</span></strong> ';
-        });
-        worstMatchingText += '입니다.<div class="space"></div>';
-        
-        $summaryBlock.prepend(bestMatchingText  + worstMatchingText);
+        if (highestSimilarity == 0) { 
+          $summaryBlock.prepend('가까운 정당이 없습니다.');
+        } else {
+          var bestMatchingTargets = _.filter(rows, {'similarity': highestSimilarity});
+          var bestMatchingText = '가장 가까운 정당은 ';
+          bestMatchingTargets.forEach(function(bestMatchingTarget, index) {
+            bestMatchingText += '<strong><span style="color: ' + bestMatchingTarget.color + ';">' + bestMatchingTarget.name + '</span></strong> ';
+          });
+          bestMatchingText += '이고<br/>';
+          
+          var worstMatchingTargets = _.filter(rows, {'similarity': lowestSimilarity});
+          var worstMatchingText = '가장 먼 정당은 ';
+          worstMatchingTargets.forEach(function(worstMatchingTarget, index) {
+            worstMatchingText += '<strong><span style="color: ' + worstMatchingTarget.color + ';">' + worstMatchingTarget.name + '</span></strong> ';
+          });
+          worstMatchingText += '입니다.<div class="space"></div>';
+          
+          $summaryBlock.prepend(bestMatchingText  + worstMatchingText);
+        }
       } else {
         var $summaryBlock = $('.result__summary[data-tab-id="2"]');
         
         // Deal with tie score
         var highestSimilarity = rows[0].similarity;
         
-        var bestMatchingTargets = _.filter(rows, {'similarity': highestSimilarity});
-        var bestMatchingText = '<strong>' + category + '</strong> 성향은 ';
-        bestMatchingTargets.forEach(function(bestMatchingTarget, index) {
-          bestMatchingText += '<strong><span style="color: ' + bestMatchingTarget.color + ';">' + bestMatchingTarget.name + '</span></strong> ';
-        });
-        bestMatchingText += '과 가깝습니다.<div class="space"></div>';
-        
-        $summaryBlock.append(bestMatchingText);
+        if (highestSimilarity == 0) { 
+          $summaryBlock.prepend('<strong>' + category + '</strong> 성향은 가까운 정당이 없습니다.<div class="space"></div>');
+        } else {
+          var bestMatchingTargets = _.filter(rows, {'similarity': highestSimilarity});
+          var bestMatchingText = '<strong>' + category + '</strong> 성향은 ';
+          bestMatchingTargets.forEach(function(bestMatchingTarget, index) {
+            bestMatchingText += '<strong><span style="color: ' + bestMatchingTarget.color + ';">' + bestMatchingTarget.name + '</span></strong> ';
+          });
+          bestMatchingText += '과 가깝습니다.<div class="space"></div>';
+          
+          $summaryBlock.append(bestMatchingText);
+        }
       }
     });
     
