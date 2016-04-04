@@ -104,10 +104,6 @@
 
   <input type="hidden" id="domain-name" value="{{ 'DOMAIN_NAME'|get_settings_variable }}" />
 
-  <div class="alert alert-danger" role="alert" style="position: fixed; top: 0; width: 100%; text-align: center; z-index: 9999;">
-    예상치 못한 사용자 폭주로 인해 Database server 에 과부하가 오고 있습니다. 문제를 해결하고자 업그레이드를 실시하고 있으며, 최소 10분 / 최대 40분이 소요될 예정입니다. 서비스 이용에 불편을 드려 죄송합니다. 최대한 빨리 정상적인 서비스 사용이 가능하도록 노력하겠습니다. 감사합니다. - 핑 코리아
-  </div>
-
   <div class="alert alert-warning hidden" id="browser-support-alert-message" role="alert"></div>
 
   <div id="main-container">
@@ -117,7 +113,9 @@
   </div>
 
   {# Javascript #}
+  {% if 'DEBUG'|get_settings_variable == False %}
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> 
+  {% endif %}
   {% compress js %}
   <script type="text/javascript" src="{% static 'dist/vendor.js' %}"></script>
   {% endcompress %}
