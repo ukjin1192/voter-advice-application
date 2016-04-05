@@ -41,12 +41,24 @@ $(window).on('resize', function() {
   $('.modal:visible').each(centerModal);
 });
 
+// Set max height of announcement modal and make inner scroll
+$('#announcement').on('show.bs.modal', function () {
+    $('#announcement .modal-body').css('overflow-y', 'auto'); 
+    $('#announcement .modal-body').css('max-height', $(window).height() * 0.7);
+});
+
 $(window).load(function() {
 
   // Clear legacy user ID and token from the previous version
   if (localStorage.getItem('visited') === null) {
     localStorage.clear();
     localStorage.setItem('visited', true);
+  }
+
+  // Show annoucement modal for specific 
+  if (localStorage.getItem('announcement') === null) {
+    $('#announcement').modal('show');
+    localStorage.setItem('announcement', true);
   }
 
   // Hide loading icon

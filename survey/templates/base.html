@@ -112,6 +112,69 @@
 		<img src="{{ 'CDN_URL'|get_settings_variable }}/asset/common/logo_right.png" class="background-logo background-logo--right" />
   </div>
 
+  <div class="modal fade" id="announcement" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h3 class="modal-title">이용자 여러분께 알립니다</h3>
+        </div>
+        <div class="modal-body">
+          <h4>본 공지글은 다음의 내용을 담고 있습니다.</h4>
+          <ul style="margin-left: 20px;">
+            <li>정당 응답 수정에 대한 안내</li>
+            <li>서버가 불안정했던 것에 대한 안내</li>
+          </ul>
+          
+          <div class="space"></div>
+          
+          <h4>정당 응답 수정에 대한 안내</h4>
+          
+          <div class="space"></div>
+          
+          <p>방법론 페이지에서 확인하실 수 있듯, 저희 사이트의 결과 페이지는 현재 국회의원 선거에 비례대표 후보를 낸 21개 정당들에 설문지를 보내고, 돌아오는 회신을 근거로 제작되었습니다.</p>
+          
+          <div class="space"></div>
+          
+          <p>현재까지 미응답 정당(가나다순)인  개혁국민신당(개혁신당), 기독민주당(기독당), 복지국가당, 친반통일당, 통일한국당과 응답을 거부한 정당(가나다순)인  가자코리아(코리아), 강제동원일제피해일본군위안부인권정당(일제위안부인권정당) 고용복지연금선진화연대(고복연), 더불어민주당(더민주), 새누리당외에는 각 정당 공보 담당자에게 정상적으로 응답을 받아 저희 데이터베이스에 입력했습니다.</p>
+          
+          <div class="space"></div>
+          
+          <p><strong>하지만 정상적으로 회신해주신 11개 정당 중에서도</strong> 단순 착오, 기입 실수, 설문 오독, 부서간 소통 문제 등으로 정당의 공식입장과 상이한 답변이 기록된 바가 있다는 의견이 제기되었습니다. <strong>이 경우 정당의 책임있는 당직자임을 확인 후, 서면(온라인 수단 포함)으로 공식 수정 요청을 받고 변경</strong>해드리고 있습니다:</p>
+          
+          <div class="space"></div>
+          
+          <p>1. <strong>공장식 축산 문항(8번)</strong> 관련해 <u>민중연합당</u> 공보 담당자께서 “<strong>매우 바람직하다</strong>”라는 기존 답변에 대해 착오가 있었다며  “<strong>매우 바람직하지 않다</strong>”로 수정 요청해 주셨습니다. 변경하기 이전에 이 사항을 이용자 여러분께 알리고 핑코리아 데이터 베이스 내 동 정당 입장을 수정하고자 합니다. 추후 결과 페이지에는 변경된 입장에 근거해 유사도가 계산된다는 점 역시 알립니다.</p>
+          
+          <div class="space"></div>
+          
+          2. <strong>성소수자 차별금지법에 대한 문항(10번)</strong> 관련해 제정에 “<strong>동의한다</strong>”는 기독자유당의 입장이 오기된 것 같다는 의견이 다수 접수되었습니다. 이에 기독자유당에서 기존 설문지 응답사항에 대한 입장을 고수할 것인지, 착오로 기입했는지에 대한 입장을 다시 확인한 결과 실수가 있었다는 답변을 받았습니다. 해당 문항에 대하여 기독자유당의 요청에 따라 “<strong>매우 동의하지 않는다</strong>”로 결과를 변경합니다. 이용자 여러분은 결과 해석에 참고하시기 바랍니다.
+          
+          <div class="space"></div>
+          <div class="space"></div>
+          
+          <h4>서버가 불안정했던 것에 대한 안내</h4>
+          
+          <div class="space"></div>
+          
+          <p><strong>4월 4일 월요일 오후 7시경부터 새벽 4시까지</strong> 서비스 속도가 매우 느려지는 현상이 발생했습니다. 갑작스런 <strong>사용자 폭주</strong>로 인해 잠재되어 있던 문제들이 나타났고, 이를 고치는데 시간이 걸렸습니다.</p>
+          <p>해당 시간동안 서비스 이용에 불편을 겪으셨을 사용자 여러분께 <strong>진심으로 사과드립니다</strong>. 현재는 해당 문제들이 해결되어 있는 상태이므로, <strong>정상적으로 서비스를 사용</strong>하실 수 있습니다.</p>
+          
+          <div class="space"></div>
+          
+          <p>모쪼록 깊은 관심과 애정으로 저희 서비스를 이용해주셔서 감사합니다! 본 공지는 4월 6일 수요일 자정까지 게시될 예정입니다.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">
+            닫기
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   {# Javascript #}
   {% if 'DEBUG'|get_settings_variable == False %}
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> 
