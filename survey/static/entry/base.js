@@ -43,8 +43,9 @@ $(window).on('resize', function() {
 
 // Set max height of announcement modal and make inner scroll
 $('#announcement').on('show.bs.modal', function () {
-    $('#announcement .modal-body').css('overflow-y', 'auto'); 
-    $('#announcement .modal-body').css('max-height', $(window).height() * 0.7);
+  $('#announcement').css('display', 'block');
+  $('#announcement .modal-body').css('overflow-y', 'auto'); 
+  $('#announcement .modal-body').css('max-height', $(window).height() * 0.7);
 });
 
 $(window).load(function() {
