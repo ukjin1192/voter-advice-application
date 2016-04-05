@@ -22,7 +22,8 @@ module.exports = {
       'lodash',
       'fullpage.js',
       'fastclick',
-      'rangeslider.js'
+      'd3',
+      'dimple-js'
     ]
   },
   output: {
