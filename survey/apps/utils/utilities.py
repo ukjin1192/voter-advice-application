@@ -29,7 +29,7 @@ def get_survey_data_of_user(user_obj, survey_obj):
         raise ValueError('Invalid variable')
 
     answers = Answer.objects.select_related('choice').\
-        filter(user=user_obj, choice__question__survey=survey_obj).order_by('choice__id')
+        filter(user=user_obj, choice__question__survey=survey_obj).order_by('choice__question_id')
     factor_list = []
     updated_at_list = []
 
