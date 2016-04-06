@@ -56,11 +56,12 @@ $(window).load(function() {
     localStorage.setItem('visited', true);
   }
 
-  // Show annoucement modal for specific 
+  /* Show annoucement modal for specific 
   if (localStorage.getItem('announcement') === null) {
     $('#announcement').modal('show');
     localStorage.setItem('announcement', true);
   }
+  */
 
   // Hide loading icon
   $('#loading-icon').addClass('hidden');
