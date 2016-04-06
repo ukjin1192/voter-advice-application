@@ -7,11 +7,104 @@ require('bootstrap-webpack');
 var setCSRFToken = require('../../module/setCSRFToken.js');
 var setAuthToken = require('../../module/setAuthToken.js');
 var clearAuthToken = require('../../module/clearAuthToken.js');
+var drawBubbleChart = require('../../module/drawBubbleChart.js');
 
 // Global variables
 var pathName = window.location.pathname;
 var surveyID = 2;
 var resultID = pathName.match(/result\/(\d+)/)[1];
+var bubbleChartSelector = '.result__chart[data-tab-id="3"] .chart__container';
+
+var colorList = {'새누리당': '#F23B39', 
+  '더민주당': '#04AEBD', 
+  '국민의당': '#88C340', 
+  '정의당': '#FFCA08', 
+  '기독자유당': '#007EBF', 
+  '개혁신당': '#0062B4', 
+  '공화당': '#EC5E26', 
+  '불교당': '#EC5E26', 
+  '노동당': '#CD2F3E', 
+  '녹색당': '#52AD3B', 
+  '민중연합당': '#F7892F', 
+  '한국국민당': '#D3010E', 
+  '한나라당': '#59B5E0',
+  '나': '#9B59B6'
+};
+
+var scores = [
+  {
+    'category': '사회/언론', 
+    'data': {
+      '새누리당': 13, 
+      '더민주당': -7, 
+      '국민의당': -3, 
+      '정의당': -9, 
+      '기독자유당': 5,
+      '개혁신당': -7,
+      '공화당': 7, 
+      '불교당': -5, 
+      '노동당': -9, 
+      '녹색당': -9, 
+      '민중연합당': -9, 
+      '한국국민당': -1, 
+      '한나라당': 1
+    }
+  },
+  {
+    'category': '생태/다양성', 
+    'data': {
+        '새누리당': 3, 
+        '더민주당': -1, 
+        '국민의당': -9, 
+        '정의당': -9, 
+        '기독자유당': 1,
+        '개혁신당': 1,
+        '공화당': -3, 
+        '불교당': 5, 
+        '노동당': -9, 
+        '녹색당': -9, 
+        '민중연합당': -9, 
+        '한국국민당': -7, 
+        '한나라당': -3
+    }
+  },
+  {
+    'category': '경제/노동', 
+    'data': {
+        '새누리당': 9, 
+        '더민주당': -9, 
+        '국민의당': -5, 
+        '정의당': -5, 
+        '기독자유당': 7,
+        '개혁신당': -1,
+        '공화당': 5, 
+        '불교당': 3, 
+        '노동당': -7, 
+        '녹색당': -3, 
+        '민중연합당': -3, 
+        '한국국민당': -13, 
+        '한나라당': 3
+    }
+  },
+  {
+    'category': '외교/안보', 
+    'data': {
+        '새누리당': 5, 
+        '더민주당': -15, 
+        '국민의당': -3, 
+        '정의당': -13, 
+        '기독자유당': 7,
+        '개혁신당': -5,
+        '공화당': 13, 
+        '불교당': -9, 
+        '노동당': -15, 
+        '녹색당': -15, 
+        '민중연합당': -15, 
+        '한국국민당': -9, 
+        '한나라당': -5
+    }
+  }
+];
 
 // Translate similarity into word
 function translateSimilarity(similarity) {
@@ -41,6 +134,19 @@ function translateFactorSum(factorSum) {
   } else {
     return '진보';
   }
+}
+
+// Get formalized data-set to draw bubble chart
+function getFormalizedDatasetForBubbleChart() {
+  var xCoordinates = _.find(scores, {'category': $('#x-axis-value').val()})['data'];
+  var yCoordinates = _.find(scores, {'category': $('#y-axis-value').val()})['data'];
+  var coordinates = [];
+
+  _.forEach(xCoordinates, function(value, key) {
+    coordinates.push({'name': key, 'x_coord': value, 'y_coord': yCoordinates[key], 'z_coord': 1, 'color': colorList[key]});
+  });
+
+  return coordinates;
 }
 
 // Toggle tab contents
@@ -122,6 +228,30 @@ $(document).on('click', '.share-btn', function() {
     processData: false
   }).done(function(data) {
   });
+
+  // Convert svg to canvas and canvas to png file
+  /*
+  $(bubbleChartSelector).find('svg').attr({
+    'version': 1.1, 
+    'xmlns': 'http://www.w3.org/2000/svg'
+  });
+  var svgSource = $(bubbleChartSelector).find('svg').parent().html();
+  var imageSource = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgSource)));
+
+  $(bubbleChartSelector).find('canvas').attr({
+    'width': $('.result__container').width() - 20, 
+    'height': $('.result__container').width() - 20
+  });
+  var canvas = $(bubbleChartSelector).find('canvas')[0];
+  var context = canvas.getContext('2d');
+  
+  var image = new Image;
+  image.src = imageSource;
+  image.onload = function() {
+    context.drawImage(image, 0, 0);
+    $(bubbleChartSelector).find('img').attr('src', canvas.toDataURL('image/png'));
+  };
+  */
 });
 
 // Submit voice of customer
@@ -153,6 +283,11 @@ $(document).on('click', '.voice-of-customer__submit-btn', function() {
       $submitBtn.button('reset');
     });
   }
+});
+
+// Re-draw bubble chart when axis changed
+$(document).on('change', '.chart__legend--bubble', function() {
+  drawBubbleChart(bubbleChartSelector, $('.result__container').width() - 20, getFormalizedDatasetForBubbleChart(), $('#x-axis-value').val(), $('#y-axis-value').val());
 });
 
 // Load user data when DOM ready to boost up
@@ -187,8 +322,14 @@ $(document).ready(function() {
     categories.forEach(function(category, index) {
       if (category != 'all') {
         $summaryBlock.append('<strong>' + category + '</strong> 성향은 <strong>' + translateFactorSum(factorSumMine[category]) + '</strong> 입니다.<div class="space"></div>');
+        scores[index - 1]['data']['나'] = factorSumMine[category];
       }
     });
+
+    console.log(scores);
+    
+    // Draw bubble chart
+    drawBubbleChart(bubbleChartSelector, $('.result__container').width() - 20, getFormalizedDatasetForBubbleChart(), $('#x-axis-value').val(), $('#y-axis-value').val());
     
     /*
     factorSumList.forEach(function(factorSum, index) {
@@ -286,6 +427,15 @@ $(document).ready(function() {
   }).always(function() {
     $('#loading-icon').addClass('hidden');
   });
+});
+
+// Re-draw bubble chart when width of bubble chart container resized
+$(window).resize(function() {
+
+  if (localStorage.getItem('chart_width') === null || localStorage.getItem('chart_width') != $(window).width()) {
+    localStorage.setItem('chart_width', $(window).width());
+    drawBubbleChart(bubbleChartSelector, $('.result__container').width() - 20, getFormalizedDatasetForBubbleChart(), $('#x-axis-value').val(), $('#y-axis-value').val());
+  }
 });
 
 $(window).load(function() {
