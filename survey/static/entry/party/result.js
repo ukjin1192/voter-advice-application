@@ -36,7 +36,7 @@ var scores = [
     'category': '사회/언론', 
     'data': {
       '새누리당': 13, 
-      '더민주당': -7, 
+      '더민주당': -13, 
       '국민의당': -3, 
       '정의당': -9, 
       '기독자유당': 5,
@@ -53,11 +53,11 @@ var scores = [
   {
     'category': '생태/다양성', 
     'data': {
-        '새누리당': 3, 
-        '더민주당': -1, 
-        '국민의당': -9, 
+        '새누리당': 10, 
+        '더민주당': 0, 
+        '국민의당': -8, 
         '정의당': -9, 
-        '기독자유당': 1,
+        '기독자유당': -3,
         '개혁신당': 1,
         '공화당': -3, 
         '불교당': 5, 
@@ -71,14 +71,14 @@ var scores = [
   {
     'category': '경제/노동', 
     'data': {
-        '새누리당': 9, 
-        '더민주당': -9, 
+        '새누리당': 3, 
+        '더민주당': -1, 
         '국민의당': -5, 
         '정의당': -5, 
         '기독자유당': 7,
         '개혁신당': -1,
         '공화당': 5, 
-        '불교당': 3, 
+        '불교당': 7, 
         '노동당': -7, 
         '녹색당': -3, 
         '민중연합당': -3, 
@@ -89,14 +89,14 @@ var scores = [
   {
     'category': '외교/안보', 
     'data': {
-        '새누리당': 5, 
-        '더민주당': -15, 
-        '국민의당': -3, 
-        '정의당': -13, 
+        '새누리당': 9, 
+        '더민주당': -11, 
+        '국민의당': -5, 
+        '정의당': -5, 
         '기독자유당': 7,
         '개혁신당': -5,
         '공화당': 13, 
-        '불교당': -9, 
+        '불교당': -8, 
         '노동당': -15, 
         '녹색당': -15, 
         '민중연합당': -15, 
@@ -287,7 +287,7 @@ $(document).on('click', '.voice-of-customer__submit-btn', function() {
 
 // Re-draw bubble chart when axis changed
 $(document).on('change', '.chart__legend--bubble', function() {
-  drawBubbleChart(bubbleChartSelector, $('.result__container').width() - 20, getFormalizedDatasetForBubbleChart(), $('#x-axis-value').val(), $('#y-axis-value').val());
+  // drawBubbleChart(bubbleChartSelector, $('.result__container').width() - 20, getFormalizedDatasetForBubbleChart(), $('#x-axis-value').val(), $('#y-axis-value').val());
 });
 
 // Load user data when DOM ready to boost up
@@ -325,11 +325,9 @@ $(document).ready(function() {
         scores[index - 1]['data']['나'] = factorSumMine[category];
       }
     });
-
-    console.log(scores);
     
     // Draw bubble chart
-    drawBubbleChart(bubbleChartSelector, $('.result__container').width() - 20, getFormalizedDatasetForBubbleChart(), $('#x-axis-value').val(), $('#y-axis-value').val());
+    // drawBubbleChart(bubbleChartSelector, $('.result__container').width() - 20, getFormalizedDatasetForBubbleChart(), $('#x-axis-value').val(), $('#y-axis-value').val());
     
     /*
     factorSumList.forEach(function(factorSum, index) {
@@ -434,7 +432,7 @@ $(window).resize(function() {
 
   if (localStorage.getItem('chart_width') === null || localStorage.getItem('chart_width') != $(window).width()) {
     localStorage.setItem('chart_width', $(window).width());
-    drawBubbleChart(bubbleChartSelector, $('.result__container').width() - 20, getFormalizedDatasetForBubbleChart(), $('#x-axis-value').val(), $('#y-axis-value').val());
+    // drawBubbleChart(bubbleChartSelector, $('.result__container').width() - 20, getFormalizedDatasetForBubbleChart(), $('#x-axis-value').val(), $('#y-axis-value').val());
   }
 });
 
