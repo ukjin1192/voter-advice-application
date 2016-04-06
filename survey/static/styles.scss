@@ -691,6 +691,12 @@ a, a:focus, a:hover, a:active, a:visited {
 			.chart__legend {
 				margin: 15px 0 -20px 0;
 				line-height: 2.0em;
+				
+				.label {
+					display: inline-block;
+					margin: 0 3px;
+					padding: 4px 6px;
+				}
 			}
 			
 			.chart__legend--bubble {
