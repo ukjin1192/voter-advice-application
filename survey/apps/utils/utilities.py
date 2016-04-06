@@ -225,17 +225,25 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
         # Dealing exception if user answered as 'unawareness' when calculate factor sum
         # Substitue value '7' for average value of that category
         unanwareness_answers_count = temp_user_data.count(7)
+        original_factor_sum = sum(temp_user_data) - 7 * unanwareness_answers_count 
+        minimum_factor_sum = original_factor_sum - 3 * unanwareness_answers_count
+        maximum_factor_sum = original_factor_sum + 3 * unanwareness_answers_count
+        
         if len(temp_user_data) == unanwareness_answers_count:
             average_value = 0
         else:
             average_value = (sum(temp_user_data) - 7 * unanwareness_answers_count) / (len(temp_user_data) - unanwareness_answers_count)
-        temp_user_data = [average_value if x == 7 else x for x in temp_user_data] 
+        temp_user_data = [average_value if x == 7 else x for x in temp_user_data]
+        expected_factor_sum = sum(temp_user_data)
         
-        user_factor_sum[category] = sum(temp_user_data)
+        if unanwareness_answers_count == 0:
+            user_factor_sum[category] = str(original_factor_sum) 
+        else:
+            user_factor_sum[category] = str(minimum_factor_sum) + ':' + str(maximum_factor_sum) + ':' + str(expected_factor_sum) + ':' + str(unanwareness_answers_count)
 
     temp_string = ""
     for key, value in user_factor_sum.iteritems(): 
-        temp_string += ",'" + key + "': " + str(value)
+        temp_string += ",'" + key + "': '" + value + "'"
 
     record.append("{'classification': 'factor_sum', 'name': 'me'" + temp_string + "}")
 
@@ -255,17 +263,25 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
             # Dealing exception if user answered as 'unawareness' when calculate factor sum
             # Substitue value '7' for average value of that category
             unanwareness_answers_count = temp_target_factor_list.count(7)
+            original_factor_sum = sum(temp_target_factor_list) - 7 * unanwareness_answers_count 
+            minimum_factor_sum = original_factor_sum - 3 * unanwareness_answers_count
+            maximum_factor_sum = original_factor_sum + 3 * unanwareness_answers_count
+            
             if len(temp_target_factor_list) == unanwareness_answers_count:
                 average_value = 0
             else:
                 average_value = (sum(temp_target_factor_list) - 7 * unanwareness_answers_count) / (len(temp_target_factor_list) - unanwareness_answers_count)
-            temp_target_factor_list = [average_value if x == 7 else x for x in temp_target_factor_list] 
+            temp_target_factor_list = [average_value if x == 7 else x for x in temp_target_factor_list]
+            expected_factor_sum = sum(temp_target_factor_list)
             
-            target_factor_sum[category] = sum(temp_target_factor_list)
+            if unanwareness_answers_count == 0:
+                target_factor_sum[category] = str(original_factor_sum) 
+            else:
+                target_factor_sum[category] = str(minimum_factor_sum) + ':' + str(maximum_factor_sum) + ':' + str(expected_factor_sum) + ':' + str(unanwareness_answers_count)
         
         temp_string = ""
         for key, value in target_factor_sum.iteritems(): 
-            temp_string += ",'" + key + "': " + str(value)
+            temp_string += ",'" + key + "': '" + value + "'"
         
         record.append("{'classification': 'factor_sum', 'name': '" + single_target_data['name'] + "'" + temp_string + "}")
 
