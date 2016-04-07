@@ -133,14 +133,14 @@ module.exports = function drawBubbleChart(selector, width, records, xAxisName, y
       }
       
       // Patrol bubble
-      patrolBubbleObject(bubble, 
+      patrolObject(bubble, 'bubble', 
         xAxis._scale(xCoordinateMax), 
         xAxis._scale(xCoordinateMax) - xAxis._scale(xCoordinateMin), 
         yAxis._scale(yCoordinateMax), 
         yAxis._scale(yCoordinateMax) - yAxis._scale(yCoordinateMin));
       
       // Patrol bubble text
-      patrolTextObject(bubbleText, 
+      patrolObject(bubbleText, 'text',
         xAxis._scale(xCoordinateMax), 
         xAxis._scale(xCoordinateMax) - xAxis._scale(xCoordinateMin), 
         yAxis._scale(yCoordinateMax), 
@@ -148,168 +148,99 @@ module.exports = function drawBubbleChart(selector, width, records, xAxisName, y
     });
   }, 1000);
 
-  // Patrol bubble object
-  function patrolBubbleObject(object, originX, xDelta, originY, yDelta) {
-    var durationOfTrasition = 2500;
-    var counter = 0;
+  var durationOfTrasition = 2500;
+
+  function moveObject(object, type, originX, xDelta, originY, yDelta, direction) {
+    if (type == 'text') {
+      var xAttr = 'x';
+      var yAttr = 'y';
+    } else {
+      var xAttr = 'cx';
+      var yAttr = 'cy';
+    }
     
-    if (xDelta != 0 && yDelta != 0) {
-      function moveObject() {
-        object.
-          transition().
-          duration(durationOfTrasition).
-          attr('cx', originX - xDelta).
-          transition().
-          duration(durationOfTrasition).
-          attr('cy', originY - yDelta).
-          transition().
-          duration(durationOfTrasition).
-          attr('cx', originX).
-          transition().
-          duration(durationOfTrasition).
-          attr('cy', originY);
-        console.log('bar ' + counter);
-      }
-      moveObject();
-      var timer = setInterval(function() {
-        moveObject();
-        if (counter >= 1) {
-          object.
-            transition().
-            duration(durationOfTrasition).
-            attr('cx', originX - xDelta / 2).
-            transition().
-            duration(durationOfTrasition).
-            attr('cy', originY - yDelta / 2);
-          clearInterval(timer);
-        }
-        else counter++;
-      }, 4 * durationOfTrasition);
-    } else if (xDelta != 0) {
-      function moveObject() {
-        object.
-          transition().
-          duration(durationOfTrasition).
-          attr('cx', originX - xDelta).
-          transition().
-          duration(durationOfTrasition).
-          attr('cx', originX);
-      }
-      moveObject();
-      var timer = setInterval(function() {
-        moveObject();
-        if (counter >= 3) {
-          object.
-            transition().
-            duration(durationOfTrasition).
-            attr('cx', originX - xDelta / 2);
-          clearInterval(timer);
-        }
-        else counter++;
-      }, 2 * durationOfTrasition);
-    } else if (yDelta != 0) {
-      function moveObject() {
-        object.
-          transition().
-          duration(durationOfTrasition).
-          attr('cy', originY - yDelta).
-          transition().
-          duration(durationOfTrasition).
-          attr('cy', originY);
-      }
-      moveObject();
-      var timer = setInterval(function() {
-        moveObject();
-        if (counter >= 3) {
-          object.
-            transition().
-            duration(durationOfTrasition).
-            attr('cy', originY - yDelta / 2);
-          clearInterval(timer);
-        }
-        else counter++;
-      }, 2 * durationOfTrasition);
+    if (direction == 'x') {
+      object.
+        transition().
+        duration(durationOfTrasition).
+        attr(xAttr, originX - xDelta).
+        transition().
+        duration(durationOfTrasition).
+        attr(xAttr, originX);
+    } else if (direction == 'y') {
+      object.
+        transition().
+        duration(durationOfTrasition).
+        attr(yAttr, originY - yDelta).
+        transition().
+        duration(durationOfTrasition).
+        attr(yAttr, originY);
+    } else {
+      object.
+        transition().
+        duration(durationOfTrasition).
+        attr(xAttr, originX - xDelta).
+        transition().
+        duration(durationOfTrasition).
+        attr(yAttr, originY - yDelta).
+        transition().
+        duration(durationOfTrasition).
+        attr(xAttr, originX).
+        transition().
+        duration(durationOfTrasition).
+        attr(yAttr, originY);
     }
   }
 
-  // Patrol text object immediately
-  function patrolTextObject(object, originX, xDelta, originY, yDelta) {
-    var durationOfTrasition = 2500;
+  // Patrol object
+  function patrolObject(object, type, originX, xDelta, originY, yDelta) {
+    if (type == 'text') {
+      var xAttr = 'x';
+      var yAttr = 'y';
+    } else {
+      var xAttr = 'cx';
+      var yAttr = 'cy';
+    }
     var counter = 0;
     
     if (xDelta != 0 && yDelta != 0) {
-      function moveObject() {
-        object.
-          transition().
-          duration(durationOfTrasition).
-          attr('x', originX - xDelta).
-          transition().
-          duration(durationOfTrasition).
-          attr('y', originY - yDelta).
-          transition().
-          duration(durationOfTrasition).
-          attr('x', originX).
-          transition().
-          duration(durationOfTrasition).
-          attr('y', originY);
-        console.log('foo ' + counter);
-      }
-      moveObject();
-      setTimeout(moveObject, 4 * durationOfTrasition);
+      moveObject(object, type, originX, xDelta, originY, yDelta, 'xy');
       var timer = setInterval(function() {
+        moveObject(object, type, originX, xDelta, originY, yDelta, 'xy');
         if (counter >= 1) {
-          moveObject();
           object.
             transition().
             duration(durationOfTrasition).
-            attr('x', originX - xDelta / 2).
+            attr(xAttr, originX - xDelta / 2).
             transition().
             duration(durationOfTrasition).
-            attr('y', originY - yDelta / 2);
+            attr(yAttr, originY - yDelta / 2);
           clearInterval(timer);
         }
         else counter++;
       }, 4 * durationOfTrasition);
     } else if (xDelta != 0) {
-      function moveObject() {
-        object.
-          transition().
-          duration(durationOfTrasition).
-          attr('x', originX - xDelta).
-          transition().
-          duration(durationOfTrasition).
-          attr('x', originX);
-      }
-      moveObject();
+      moveObject(object, type, originX, xDelta, originY, yDelta, 'x');
       var timer = setInterval(function() {
-        moveObject();
+        moveObject(object, type, originX, xDelta, originY, yDelta, 'x');
         if (counter >= 3) {
           object.
             transition().
             duration(durationOfTrasition).
-            attr('x', originX - xDelta / 2);
+            attr(xAttr, originX - xDelta / 2);
           clearInterval(timer);
         }
         else counter++;
       }, 2 * durationOfTrasition);
     } else if (yDelta != 0) {
-      function moveObject() {
-        object.
-          transition().
-          duration(durationOfTrasition).
-          attr('y', originY - yDelta).
-          transition().
-          duration(durationOfTrasition).
-          attr('y', originY);
-      }
-      moveObject();
+      moveObject(object, type, originX, xDelta, originY, yDelta, 'y');
       var timer = setInterval(function() {
-        moveObject();
+        moveObject(object, type, originX, xDelta, originY, yDelta, 'y');
         if (counter >= 3) {
           object.
             transition().
             duration(durationOfTrasition).
-            attr('y', originY - yDelta / 2);
+            attr(yAttr, originY - yDelta / 2);
           clearInterval(timer);
         }
         else counter++;
