@@ -100,14 +100,14 @@ module.exports = function drawBubbleChart(selector, width, records, xAxisName, y
       
       if (record['name'] == '나') {
         var bubble = svgBlock.append('circle')
-            .attr('cx', xAxis._scale(xCoordinateMin))
-            .attr('cy', yAxis._scale(yCoordinateMin))
+            .attr('cx', xAxis._scale(xCoordinateMax))
+            .attr('cy', yAxis._scale(yCoordinateMax))
             .attr('r', 16)
             .style('fill', record['color']);
         
         var bubbleText = svgBlock.append('text')
-            .attr('x', xAxis._scale(xCoordinateMin))
-            .attr('y', yAxis._scale(yCoordinateMin))
+            .attr('x', xAxis._scale(xCoordinateMax))
+            .attr('y', yAxis._scale(yCoordinateMax))
             .style('text-anchor', 'middle')         // Horizontal alignment
             .style('alignment-baseline', 'middle')  // Vertical alignment
             .style('font-size', '1.3em')
@@ -116,14 +116,14 @@ module.exports = function drawBubbleChart(selector, width, records, xAxisName, y
             .text(record['name']);
       } else {
         var bubble = svgBlock.append('circle')
-            .attr('cx', xAxis._scale(xCoordinateMin))
-            .attr('cy', yAxis._scale(yCoordinateMin))
+            .attr('cx', xAxis._scale(xCoordinateMax))
+            .attr('cy', yAxis._scale(yCoordinateMax))
             .attr('r', 10)
             .style('fill', record['color']);
         
         var bubbleText = svgBlock.append('text')
-            .attr('x', xAxis._scale(xCoordinateMin))
-            .attr('y', yAxis._scale(yCoordinateMin))
+            .attr('x', xAxis._scale(xCoordinateMax))
+            .attr('y', yAxis._scale(yCoordinateMax))
             .style('text-anchor', 'middle')         // Horizontal alignment
             .style('alignment-baseline', 'middle')  // Vertical alignment
             .style('font-size', '0.9em')
@@ -134,16 +134,16 @@ module.exports = function drawBubbleChart(selector, width, records, xAxisName, y
       
       // Patrol bubble
       patrolBubbleObject(bubble, 
-        xAxis._scale(xCoordinateMin), 
+        xAxis._scale(xCoordinateMax), 
         xAxis._scale(xCoordinateMax) - xAxis._scale(xCoordinateMin), 
-        yAxis._scale(yCoordinateMin), 
+        yAxis._scale(yCoordinateMax), 
         yAxis._scale(yCoordinateMax) - yAxis._scale(yCoordinateMin));
       
       // Patrol bubble text
       patrolTextObject(bubbleText, 
-        xAxis._scale(xCoordinateMin), 
+        xAxis._scale(xCoordinateMax), 
         xAxis._scale(xCoordinateMax) - xAxis._scale(xCoordinateMin), 
-        yAxis._scale(yCoordinateMin), 
+        yAxis._scale(yCoordinateMax), 
         yAxis._scale(yCoordinateMax) - yAxis._scale(yCoordinateMin));
     });
   }, 1000);
@@ -154,48 +154,79 @@ module.exports = function drawBubbleChart(selector, width, records, xAxisName, y
     var counter = 0;
     
     if (xDelta != 0 && yDelta != 0) {
-      var timer = setInterval(function() {
+      function moveObject() {
         object.
           transition().
           duration(durationOfTrasition).
-          attr('cx', originX + xDelta).
+          attr('cx', originX - xDelta).
           transition().
           duration(durationOfTrasition).
-          attr('cy', originY + yDelta).
+          attr('cy', originY - yDelta).
           transition().
           duration(durationOfTrasition).
           attr('cx', originX).
           transition().
           duration(durationOfTrasition).
           attr('cy', originY);
-        
-        if (counter >= 1) clearInterval(timer);
+        console.log('bar ' + counter);
+      }
+      moveObject();
+      var timer = setInterval(function() {
+        moveObject();
+        if (counter >= 1) {
+          object.
+            transition().
+            duration(durationOfTrasition).
+            attr('cx', originX - xDelta / 2).
+            transition().
+            duration(durationOfTrasition).
+            attr('cy', originY - yDelta / 2);
+          clearInterval(timer);
+        }
         else counter++;
       }, 4 * durationOfTrasition);
     } else if (xDelta != 0) {
-      var timer = setInterval(function() {
+      function moveObject() {
         object.
           transition().
           duration(durationOfTrasition).
-          attr('cx', originX + xDelta).
+          attr('cx', originX - xDelta).
           transition().
           duration(durationOfTrasition).
           attr('cx', originX);
-        
-        if (counter >= 3) clearInterval(timer);
+      }
+      moveObject();
+      var timer = setInterval(function() {
+        moveObject();
+        if (counter >= 3) {
+          object.
+            transition().
+            duration(durationOfTrasition).
+            attr('cx', originX - xDelta / 2);
+          clearInterval(timer);
+        }
         else counter++;
       }, 2 * durationOfTrasition);
     } else if (yDelta != 0) {
-      var timer = setInterval(function() {
+      function moveObject() {
         object.
           transition().
           duration(durationOfTrasition).
-          attr('cy', originY + yDelta).
+          attr('cy', originY - yDelta).
           transition().
           duration(durationOfTrasition).
           attr('cy', originY);
-        
-        if (counter >= 3) clearInterval(timer);
+      }
+      moveObject();
+      var timer = setInterval(function() {
+        moveObject();
+        if (counter >= 3) {
+          object.
+            transition().
+            duration(durationOfTrasition).
+            attr('cy', originY - yDelta / 2);
+          clearInterval(timer);
+        }
         else counter++;
       }, 2 * durationOfTrasition);
     }
@@ -207,48 +238,80 @@ module.exports = function drawBubbleChart(selector, width, records, xAxisName, y
     var counter = 0;
     
     if (xDelta != 0 && yDelta != 0) {
-      var timer = setInterval(function() {
+      function moveObject() {
         object.
           transition().
           duration(durationOfTrasition).
-          attr('x', originX + xDelta).
+          attr('x', originX - xDelta).
           transition().
           duration(durationOfTrasition).
-          attr('y', originY + yDelta).
+          attr('y', originY - yDelta).
           transition().
           duration(durationOfTrasition).
           attr('x', originX).
           transition().
           duration(durationOfTrasition).
           attr('y', originY);
-        
-        if (counter >= 1) clearInterval(timer);
+        console.log('foo ' + counter);
+      }
+      moveObject();
+      setTimeout(moveObject, 4 * durationOfTrasition);
+      var timer = setInterval(function() {
+        if (counter >= 1) {
+          moveObject();
+          object.
+            transition().
+            duration(durationOfTrasition).
+            attr('x', originX - xDelta / 2).
+            transition().
+            duration(durationOfTrasition).
+            attr('y', originY - yDelta / 2);
+          clearInterval(timer);
+        }
         else counter++;
       }, 4 * durationOfTrasition);
     } else if (xDelta != 0) {
-      var timer = setInterval(function() {
+      function moveObject() {
         object.
           transition().
           duration(durationOfTrasition).
-          attr('x', originX + xDelta).
+          attr('x', originX - xDelta).
           transition().
           duration(durationOfTrasition).
           attr('x', originX);
-        
-        if (counter >= 3) clearInterval(timer);
+      }
+      moveObject();
+      var timer = setInterval(function() {
+        moveObject();
+        if (counter >= 3) {
+          object.
+            transition().
+            duration(durationOfTrasition).
+            attr('x', originX - xDelta / 2);
+          clearInterval(timer);
+        }
         else counter++;
       }, 2 * durationOfTrasition);
     } else if (yDelta != 0) {
-      var timer = setInterval(function() {
+      function moveObject() {
         object.
           transition().
           duration(durationOfTrasition).
-          attr('y', originY + yDelta).
+          attr('y', originY - yDelta).
           transition().
           duration(durationOfTrasition).
           attr('y', originY);
-        
-        if (counter >= 3) clearInterval(timer);
+      }
+      moveObject();
+      var timer = setInterval(function() {
+        moveObject();
+        if (counter >= 3) {
+          object.
+            transition().
+            duration(durationOfTrasition).
+            attr('y', originY - yDelta / 2);
+          clearInterval(timer);
+        }
         else counter++;
       }, 2 * durationOfTrasition);
     }
