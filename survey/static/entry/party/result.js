@@ -479,4 +479,18 @@ $(window).load(function() {
      
     $('#answer-table__virtual-dom').remove();
   });
+
+  // Activate 3rd tab directly when user came from facebook
+  var ref = document.referrer;
+  if (ref.indexOf('facebook') > -1) {
+    $('.navbar__btn').removeAttr('disabled');
+    $('.navbar__btn--3rd').attr('disabled', 'disabled');
+    
+    $('[data-tab-id="1"]').addClass('hidden');
+    $('[data-tab-id="2"]').addClass('hidden');
+    $('[data-tab-id="3"]').removeClass('hidden');
+    
+    // Draw bubble chart
+    drawBubbleChart(bubbleChartSelector, $('.result__container').width() - 20, getFormalizedDatasetForBubbleChart(), $('#x-axis-value').val(), $('#y-axis-value').val(), -16, 16);
+  }
 });
