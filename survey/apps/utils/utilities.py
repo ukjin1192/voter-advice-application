@@ -4,6 +4,7 @@
 import base64
 import cloudinary
 import cloudinary.uploader
+import json
 import math
 import numpy
 from django.conf import settings
@@ -458,3 +459,115 @@ def upload_base64_encoded_image_to_cloudinary(base64_encoded_image):
     cloudinary_obj = cloudinary.uploader.upload(base64_encoded_image)
 
     return cloudinary_obj['secure_url']
+
+
+def byteify(input):
+    """
+    Encode utf-8 list of dicionary
+    """
+    if isinstance(input, dict):
+        return {byteify(key): byteify(value)
+                for key, value in input.iteritems()}
+    elif isinstance(input, list):
+        return [byteify(element) for element in input]
+    elif isinstance(input, unicode):
+        return input.encode('utf-8')
+    else:
+        return input
+
+
+def get_statics(min_user_id, max_user_id):
+    """
+    Get statics of users in specific ID range
+    For example,
+    [
+        {
+            'political_tendency': 'center',
+            'supporting_party': 'none',
+            'similarities': [
+                {'party_a': 96.0},
+                {'party_b': 54.0}
+            ]
+        },
+        {
+            'political_tendency': '',
+            'supporting_party': '',
+            'similarities': [
+                {'party_a': 72.0},
+                {'party_b': 88.0}
+            ]
+        },
+        {
+            'political_tendency': 'progressive_center',
+            'supporting_party': 'party_b',
+            'similarities': [
+                {'party_a': 40.0},
+                {'party_b': 59.0}
+            ]
+        }
+    ]
+    """
+    if isinstance(min_user_id, int) == False or min_user_id < 1:
+        raise ValueError('Invalid variable')
+
+    if isinstance(max_user_id, int) == False or max_user_id < 1 or max_user_id > User.objects.latest('id').id:
+        raise ValueError('Invalid variable')
+
+    data = []
+    outfile = open(str(min_user_id) + '_' + str(max_user_id) + '.json', 'w+')
+    users = User.objects.filter(id__gte=min_user_id, id__lte=max_user_id)
+
+    for user in users:
+        single_data = {}
+        
+        supporting_party = user.supporting_party
+        if supporting_party == None:
+            single_data['supporting_party'] = ''
+        else:
+            single_data['supporting_party'] = supporting_party.encode('utf-8')
+        
+        political_tendency = user.political_tendency
+        if political_tendency == None:
+            single_data['political_tendency'] = ''
+        else:
+            single_data['political_tendency'] = political_tendency.encode('utf-8')
+        
+        try:
+            result = Result.objects.filter(user=user)[0]
+            if result.category == 'city_block_distance':
+                record = result.record
+                record = record.replace("'", '"')
+            else:
+                record = ''
+        except:
+            record = ''
+        
+        similarities = []
+        
+        if record != '':
+            rows = json.loads(record)
+            rows = byteify(rows)
+            
+            for row in rows:
+                if 'classification' in row and row['classification'] == 'category' and row['category'] == 'all':
+                    similarity = {}
+                    similarity['name'] = row['name']
+                    similarity['similarity'] = row['similarity']
+                    similarities.append(similarity)
+                elif 'similarities' in row:
+                    similarity = {}
+                    temp_similarities = row['similarities']
+                    for temp_similarity in temp_similarities:
+                        similarity['name'] = temp_similarity.keys()[0]
+                        similarity['similarity'] = temp_similarity.values()[0]
+                        similarities.append(similarity)
+                else:
+                    pass
+        
+        sorted_similarities = sorted(similarities, key=lambda k: k['similarity'], reverse=True) 
+        
+        single_data['similarities'] = sorted_similarities
+        data.append(single_data)
+
+    json.dump(data, outfile)
+    outfile.close()
