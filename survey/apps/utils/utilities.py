@@ -485,24 +485,24 @@ def get_statics(min_user_id, max_user_id):
             'political_tendency': 'center',
             'supporting_party': 'none',
             'similarities': [
-                {'party_a': 96.0},
-                {'party_b': 54.0}
+                {'name': 'party_b', 'similarity': 86.0},
+                {'name': 'party_a', 'similarity': 41.0}
             ]
         },
         {
             'political_tendency': '',
             'supporting_party': '',
             'similarities': [
-                {'party_a': 72.0},
-                {'party_b': 88.0}
+                {'name': 'party_a', 'similarity': 88.0},
+                {'name': 'party_b', 'similarity': 56.0}
             ]
         },
         {
             'political_tendency': 'progressive_center',
             'supporting_party': 'party_b',
             'similarities': [
-                {'party_a': 40.0},
-                {'party_b': 59.0}
+                {'name': 'party_a', 'similarity': 73.0},
+                {'name': 'party_b', 'similarity': 32.0}
             ]
         }
     ]
