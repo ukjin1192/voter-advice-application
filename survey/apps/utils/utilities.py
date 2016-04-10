@@ -9,6 +9,7 @@ import math
 import numpy
 from django.conf import settings
 from django.core.cache import cache
+from django.utils import timezone
 from main.models import User, ComparisonTarget, Survey, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer
 
 # Cloudinary configuration
@@ -35,8 +36,9 @@ def get_survey_data_of_user(user_obj, survey_obj):
     updated_at_list = []
 
     questions = cache.get('survey:' + str(survey_obj.id) + ':questions')
-    if questions is None:
-        return {}
+    
+    if questions is None or answers.exists() == False:
+        return {'economic_score': 0, 'factor_list': [], 'updated_at': timezone.now()}
 
     for answer, question in zip(answers, questions):
         factor = answer.choice.factor
@@ -485,23 +487,8 @@ def get_statics(min_user_id, max_user_id):
             'political_tendency': 'center',
             'supporting_party': 'none',
             'year_of_birth': '',
-            'all': [
-                {'name': 'party_b', 'similarity': 86.0},
-                {'name': 'party_a', 'similarity': 41.0}
-            ],
-            'society_media': [
-                {'name': 'party_b', 'similarity': 86.0},
-                {'name': 'party_a', 'similarity': 41.0}
-            ],
-            'ecology_diversity': [
-                {'name': 'party_b', 'similarity': 86.0},
-                {'name': 'party_a', 'similarity': 41.0}
-            ],
-            'economy_labor': [
-                {'name': 'party_b', 'similarity': 86.0},
-                {'name': 'party_a', 'similarity': 41.0}
-            ],
-            'diplomacy_security': [
+            'factor_list': [1, 3, -1, 3, 7, 1, ..., -3],
+            'similarities': [
                 {'name': 'party_b', 'similarity': 86.0},
                 {'name': 'party_a', 'similarity': 41.0}
             ]
@@ -510,23 +497,8 @@ def get_statics(min_user_id, max_user_id):
             'political_tendency': '',
             'supporting_party': '',
             'year_of_birth': '1995',
-            'all': [
-                {'name': 'party_b', 'similarity': 86.0},
-                {'name': 'party_a', 'similarity': 41.0}
-            ],
-            'society_media': [
-                {'name': 'party_b', 'similarity': 86.0},
-                {'name': 'party_a', 'similarity': 41.0}
-            ],
-            'ecology_diversity': [
-                {'name': 'party_b', 'similarity': 86.0},
-                {'name': 'party_a', 'similarity': 41.0}
-            ],
-            'economy_labor': [
-                {'name': 'party_b', 'similarity': 86.0},
-                {'name': 'party_a', 'similarity': 41.0}
-            ],
-            'diplomacy_security': [
+            'factor_list': [1, 3, -1, 3, 7, 1, ..., -3],
+            'similarities': [
                 {'name': 'party_b', 'similarity': 86.0},
                 {'name': 'party_a', 'similarity': 41.0}
             ]
@@ -542,6 +514,7 @@ def get_statics(min_user_id, max_user_id):
     data = []
     outfile = open(str(min_user_id) + '_' + str(max_user_id) + '.json', 'w+')
     users = User.objects.filter(id__gte=min_user_id, id__lte=max_user_id)
+    survey = Survey.objects.get(id=2)
 
     for user in users:
         single_data = {}
@@ -565,7 +538,7 @@ def get_statics(min_user_id, max_user_id):
             single_data['year_of_birth'] = str(year_of_birth)
         
         try:
-            result = Result.objects.filter(user=user, survey__id=2)[0]
+            result = Result.objects.filter(user=user, survey=survey)[0]
             if result.category == 'city_block_distance':
                 record = result.record
                 record = record.replace("'", '"')
@@ -574,53 +547,32 @@ def get_statics(min_user_id, max_user_id):
         except:
             record = ''
         
-        category_all = []
-        category_society_media = []
-        category_ecology_diversity = []
-        category_economy_labor = []
-        category_diplomacy_security = []
+        user_data = get_survey_data_of_user(user, survey)
+        single_data['factor_list'] = user_data['factor_list']
         
+        similarities = []
         if record != '':
             rows = json.loads(record)
             rows = byteify(rows)
             
             for row in rows:
-                if 'classification' in row and row['classification'] == 'category':
+                if 'classification' in row and row['classification'] == 'category' and row['category'] == 'all':
                     similarity = {}
                     similarity['name'] = row['name']
                     similarity['similarity'] = row['similarity']
-                    
-                    if row['category'] == 'all':
-                        category_all.append(similarity)
-                    elif row['category'] == '사회/언론':
-                        category_society_media.append(similarity)
-                    elif row['category'] == '생태/다양성':
-                        category_ecology_diversity.append(similarity)
-                    elif row['category'] == '경제/노동':
-                        category_economy_labor.append(similarity)
-                    elif row['category'] == '외교/안보':
-                        category_diplomacy_security.append(similarity)
+                    similarities.append(similarity)
                 elif 'similarities' in row:
                     similarity = {}
                     temp_similarities = row['similarities']
                     for temp_similarity in temp_similarities:
                         similarity['name'] = temp_similarity.keys()[0]
                         similarity['similarity'] = temp_similarity.values()[0]
-                        category_all.append(similarity)
+                        similarities.append(similarity)
                 else:
                     pass
         
-        sorted_category_all = sorted(category_all, key=lambda k: k['similarity'], reverse=True) 
-        sorted_category_society_media = sorted(category_society_media, key=lambda k: k['similarity'], reverse=True) 
-        sorted_category_ecology_diversity = sorted(category_ecology_diversity, key=lambda k: k['similarity'], reverse=True) 
-        sorted_category_economy_labor = sorted(category_economy_labor, key=lambda k: k['similarity'], reverse=True) 
-        sorted_category_diplomacy_security = sorted(category_diplomacy_security, key=lambda k: k['similarity'], reverse=True) 
-        
-        single_data['all'] = sorted_category_all
-        single_data['society_media'] = sorted_category_society_media
-        single_data['ecology_diversity'] = sorted_category_ecology_diversity
-        single_data['economy_labor'] = sorted_category_economy_labor
-        single_data['diplomacy_security'] = sorted_category_diplomacy_security
+        sorted_similarities = sorted(similarities, key=lambda k: k['similarity'], reverse=True) 
+        single_data['similarities'] = sorted_similarities
         
         data.append(single_data)
 
