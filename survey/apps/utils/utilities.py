@@ -484,6 +484,7 @@ def get_statics(min_user_id, max_user_id):
         {
             'political_tendency': 'center',
             'supporting_party': 'none',
+            'year_of_birth': '',
             'similarities': [
                 {'name': 'party_b', 'similarity': 86.0},
                 {'name': 'party_a', 'similarity': 41.0}
@@ -492,6 +493,7 @@ def get_statics(min_user_id, max_user_id):
         {
             'political_tendency': '',
             'supporting_party': '',
+            'year_of_birth': '1995',
             'similarities': [
                 {'name': 'party_a', 'similarity': 88.0},
                 {'name': 'party_b', 'similarity': 56.0}
@@ -500,6 +502,7 @@ def get_statics(min_user_id, max_user_id):
         {
             'political_tendency': 'progressive_center',
             'supporting_party': 'party_b',
+            'year_of_birth': '1989',
             'similarities': [
                 {'name': 'party_a', 'similarity': 73.0},
                 {'name': 'party_b', 'similarity': 32.0}
@@ -532,8 +535,14 @@ def get_statics(min_user_id, max_user_id):
         else:
             single_data['political_tendency'] = political_tendency.encode('utf-8')
         
+        year_of_birth = user.year_of_birth
+        if year_of_birth == None:
+            single_data['year_of_birth'] = ''
+        else:
+            single_data['year_of_birth'] = str(year_of_birth)
+        
         try:
-            result = Result.objects.filter(user=user)[0]
+            result = Result.objects.filter(user=user, survey__id=2)[0]
             if result.category == 'city_block_distance':
                 record = result.record
                 record = record.replace("'", '"')
