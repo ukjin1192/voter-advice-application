@@ -485,7 +485,23 @@ def get_statics(min_user_id, max_user_id):
             'political_tendency': 'center',
             'supporting_party': 'none',
             'year_of_birth': '',
-            'similarities': [
+            'all': [
+                {'name': 'party_b', 'similarity': 86.0},
+                {'name': 'party_a', 'similarity': 41.0}
+            ],
+            'society_media': [
+                {'name': 'party_b', 'similarity': 86.0},
+                {'name': 'party_a', 'similarity': 41.0}
+            ],
+            'ecology_diversity': [
+                {'name': 'party_b', 'similarity': 86.0},
+                {'name': 'party_a', 'similarity': 41.0}
+            ],
+            'economy_labor': [
+                {'name': 'party_b', 'similarity': 86.0},
+                {'name': 'party_a', 'similarity': 41.0}
+            ],
+            'diplomacy_security': [
                 {'name': 'party_b', 'similarity': 86.0},
                 {'name': 'party_a', 'similarity': 41.0}
             ]
@@ -494,18 +510,25 @@ def get_statics(min_user_id, max_user_id):
             'political_tendency': '',
             'supporting_party': '',
             'year_of_birth': '1995',
-            'similarities': [
-                {'name': 'party_a', 'similarity': 88.0},
-                {'name': 'party_b', 'similarity': 56.0}
-            ]
-        },
-        {
-            'political_tendency': 'progressive_center',
-            'supporting_party': 'party_b',
-            'year_of_birth': '1989',
-            'similarities': [
-                {'name': 'party_a', 'similarity': 73.0},
-                {'name': 'party_b', 'similarity': 32.0}
+            'all': [
+                {'name': 'party_b', 'similarity': 86.0},
+                {'name': 'party_a', 'similarity': 41.0}
+            ],
+            'society_media': [
+                {'name': 'party_b', 'similarity': 86.0},
+                {'name': 'party_a', 'similarity': 41.0}
+            ],
+            'ecology_diversity': [
+                {'name': 'party_b', 'similarity': 86.0},
+                {'name': 'party_a', 'similarity': 41.0}
+            ],
+            'economy_labor': [
+                {'name': 'party_b', 'similarity': 86.0},
+                {'name': 'party_a', 'similarity': 41.0}
+            ],
+            'diplomacy_security': [
+                {'name': 'party_b', 'similarity': 86.0},
+                {'name': 'party_a', 'similarity': 41.0}
             ]
         }
     ]
@@ -551,31 +574,54 @@ def get_statics(min_user_id, max_user_id):
         except:
             record = ''
         
-        similarities = []
+        category_all = []
+        category_society_media = []
+        category_ecology_diversity = []
+        category_economy_labor = []
+        category_diplomacy_security = []
         
         if record != '':
             rows = json.loads(record)
             rows = byteify(rows)
             
             for row in rows:
-                if 'classification' in row and row['classification'] == 'category' and row['category'] == 'all':
+                if 'classification' in row and row['classification'] == 'category':
                     similarity = {}
                     similarity['name'] = row['name']
                     similarity['similarity'] = row['similarity']
-                    similarities.append(similarity)
+                    
+                    if row['category'] == 'all':
+                        category_all.append(similarity)
+                    elif row['category'] == '사회/언론':
+                        category_society_media.append(similarity)
+                    elif row['category'] == '생태/다양성':
+                        category_ecology_diversity.append(similarity)
+                    elif row['category'] == '경제/노동':
+                        category_economy_labor.append(similarity)
+                    elif row['category'] == '외교/안보':
+                        category_diplomacy_security.append(similarity)
                 elif 'similarities' in row:
                     similarity = {}
                     temp_similarities = row['similarities']
                     for temp_similarity in temp_similarities:
                         similarity['name'] = temp_similarity.keys()[0]
                         similarity['similarity'] = temp_similarity.values()[0]
-                        similarities.append(similarity)
+                        category_all.append(similarity)
                 else:
                     pass
         
-        sorted_similarities = sorted(similarities, key=lambda k: k['similarity'], reverse=True) 
+        sorted_category_all = sorted(category_all, key=lambda k: k['similarity'], reverse=True) 
+        sorted_category_society_media = sorted(category_society_media, key=lambda k: k['similarity'], reverse=True) 
+        sorted_category_ecology_diversity = sorted(category_ecology_diversity, key=lambda k: k['similarity'], reverse=True) 
+        sorted_category_economy_labor = sorted(category_economy_labor, key=lambda k: k['similarity'], reverse=True) 
+        sorted_category_diplomacy_security = sorted(category_diplomacy_security, key=lambda k: k['similarity'], reverse=True) 
         
-        single_data['similarities'] = sorted_similarities
+        single_data['all'] = sorted_category_all
+        single_data['society_media'] = sorted_category_society_media
+        single_data['ecology_diversity'] = sorted_category_ecology_diversity
+        single_data['economy_labor'] = sorted_category_economy_labor
+        single_data['diplomacy_security'] = sorted_category_diplomacy_security
+        
         data.append(single_data)
 
     json.dump(data, outfile)
