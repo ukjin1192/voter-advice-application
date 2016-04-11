@@ -154,7 +154,7 @@ function getFormalizedDatasetForBubbleChart() {
   var coordinates = [];
 
   _.forEach(xCoordinates, function(value, key) {
-    coordinates.push({'name': key, 'x_coord': value, 'y_coord': yCoordinates[key], 'z_coord': 1, 'color': colorList[key]});
+    coordinates.push({'name': key, 'x좌표': value, 'y좌표': yCoordinates[key], '크기': 1, 'color': colorList[key]});
   });
 
   return coordinates;

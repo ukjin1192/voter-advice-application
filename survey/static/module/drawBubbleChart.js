@@ -13,8 +13,8 @@ module.exports = function drawBubbleChart(selector, width, records, xAxisName, y
   var dynamicRecords = [];
 
   records.forEach(function(record, index) {
-    if (record['x_coord'].indexOf(':') > -1 ||
-      record['y_coord'].indexOf(':') > -1 ||
+    if (record['x좌표'].indexOf(':') > -1 ||
+      record['y좌표'].indexOf(':') > -1 ||
       record['name'] == '나') dynamicRecords.push(record);
     else staticRecords.push(record);
   });
@@ -25,9 +25,9 @@ module.exports = function drawBubbleChart(selector, width, records, xAxisName, y
   chart.setBounds('0px', '0px', width + 'px', width + 'px');
 
   // Matching with data-set
-  var xAxis= chart.addMeasureAxis('x', 'x_coord');
-  var yAxis = chart.addMeasureAxis('y', 'y_coord');
-  var zAxis = chart.addMeasureAxis('z', 'z_coord');
+  var xAxis= chart.addMeasureAxis('x', 'x좌표');
+  var yAxis = chart.addMeasureAxis('y', 'y좌표');
+  var zAxis = chart.addMeasureAxis('z', '크기');
 
   // X axis configuration
   xAxis.title = xAxisName;
@@ -55,7 +55,7 @@ module.exports = function drawBubbleChart(selector, width, records, xAxisName, y
   // Add text to each bubble
   chartSeries.afterDraw = function (shp, d, i) {
     
-    var sameRecords = _.filter(staticRecords, {'x_coord': staticRecords[i].x_coord, 'y_coord': staticRecords[i].y_coord});
+    var sameRecords = _.filter(staticRecords, {'x좌표': staticRecords[i].x좌표, 'y좌표': staticRecords[i].y좌표});
     var thisIndex = 0;
     
     if (sameRecords.length > 1) {
@@ -80,22 +80,22 @@ module.exports = function drawBubbleChart(selector, width, records, xAxisName, y
   // Draw dynamic records
   setTimeout(function () {
     dynamicRecords.forEach(function(record, index) {
-      if (record['x_coord'].indexOf(':') > -1) {
-        var rawX = record['x_coord'].split(':');
+      if (record['x좌표'].indexOf(':') > -1) {
+        var rawX = record['x좌표'].split(':');
         var xCoordinateMin = parseInt(rawX[0]);
         var xCoordinateMax = parseInt(rawX[1]);
       } else {
-        var xCoordinateMin = parseInt(record['x_coord']);
-        var xCoordinateMax = parseInt(record['x_coord']);
+        var xCoordinateMin = parseInt(record['x좌표']);
+        var xCoordinateMax = parseInt(record['x좌표']);
       }
       
-      if (record['y_coord'].indexOf(':') > -1) {
-        var rawY = record['y_coord'].split(':');
+      if (record['y좌표'].indexOf(':') > -1) {
+        var rawY = record['y좌표'].split(':');
         var yCoordinateMin = parseInt(rawY[0]);
         var yCoordinateMax = parseInt(rawY[1]);
       } else {
-        var yCoordinateMin = parseInt(record['y_coord']);
-        var yCoordinateMax = parseInt(record['y_coord']);
+        var yCoordinateMin = parseInt(record['y좌표']);
+        var yCoordinateMax = parseInt(record['y좌표']);
       }
       
       if (record['name'] == '나') {
