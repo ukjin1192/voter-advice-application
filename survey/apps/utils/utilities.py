@@ -11,6 +11,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.utils import timezone
 from main.models import User, ComparisonTarget, Survey, Question, Choice, Answer, Result, RotationMatrix, VoiceOfCustomer
+from main.serializers import QuestionSerializer
 
 # Cloudinary configuration
 cloudinary.config( 
@@ -35,9 +36,16 @@ def get_survey_data_of_user(user_obj, survey_obj):
     factor_list = []
     updated_at_list = []
 
+    # Avoid circular import
     questions = cache.get('survey:' + str(survey_obj.id) + ':questions')
+    if questions == None:
+        questions = Question.objects.prefetch_related('choices').filter(survey=survey_obj)
+        serializer = QuestionSerializer(questions, many=True)
+        cache_value = serializer.data
+        cache.set('survey:' + str(survey_obj.id) + ':questions', cache_value, timeout=getattr(settings, 'CACHE_TTL'))
+        questions = cache_value
     
-    if questions is None or answers.exists() == False:
+    if answers.exists() == False:
         return {'economic_score': 0, 'factor_list': [], 'updated_at': timezone.now()}
 
     for answer, question in zip(answers, questions):
@@ -261,7 +269,10 @@ def get_city_block_distance_result(questions_category, user_data, *target_data):
                 if question_category == category:
                     valid_index_list.append(index)
             
-            temp_target_factor_list = list(target_factor_list[i] for i in valid_index_list)
+            try:
+                temp_target_factor_list = list(target_factor_list[i] for i in valid_index_list)
+            except:
+                raise ValueError(target_factor_list)
             
             # Dealing exception if user answered as 'unawareness' when calculate factor sum
             # Substitue value '7' for average value of that category
