@@ -57,10 +57,12 @@ $(window).load(function() {
   }
 
   // Show annoucement modal for specific 
+  /*
   if (localStorage.getItem('announcement_1') === null) {
     $('#announcement').modal('show');
     localStorage.setItem('announcement_1', true);
   }
+  */
 
   // Hide loading icon
   $('#loading-icon').addClass('hidden');
