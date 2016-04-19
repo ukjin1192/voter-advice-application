@@ -42,7 +42,9 @@
   <meta name="msapplication-TileColor" content="#da532c">
   <meta name="msapplication-TileImage" content="{{ 'CDN_URL'|get_settings_variable }}/favicon/mstile-144x144.png">
   <meta name="msapplication-config" content="{{ 'CDN_URL'|get_settings_variable }}/favicon/browserconfig.xml">
-  <meta name="theme-color" content="#ffffff">
+
+  {# Color of address bar in mobile browser #}
+  <meta name="theme-color" content="#323234">
 
   {% compress css %}
   <link rel="stylesheet" type="text/css" href="{% static 'dist/base.css' %}" />
