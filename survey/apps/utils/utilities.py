@@ -498,6 +498,7 @@ def get_statics(min_user_id, max_user_id):
             'political_tendency': 'center',
             'supporting_party': 'none',
             'year_of_birth': '',
+            'sex': 'male',
             'factor_list': [1, 3, -1, 3, 7, 1, ..., -3],
             'similarities': [
                 {'name': 'party_b', 'similarity': 86.0},
@@ -508,6 +509,7 @@ def get_statics(min_user_id, max_user_id):
             'political_tendency': '',
             'supporting_party': '',
             'year_of_birth': '1995',
+            'sex': 'female',
             'factor_list': [1, 3, -1, 3, 7, 1, ..., -3],
             'similarities': [
                 {'name': 'party_b', 'similarity': 86.0},
@@ -547,6 +549,12 @@ def get_statics(min_user_id, max_user_id):
             single_data['year_of_birth'] = ''
         else:
             single_data['year_of_birth'] = str(year_of_birth)
+        
+        sex = user.sex
+        if sex == None:
+            single_data['sex'] = ''
+        else:
+            single_data['sex'] = sex.encode('utf-8')
         
         try:
             result = Result.objects.filter(user=user, survey=survey)[0]
