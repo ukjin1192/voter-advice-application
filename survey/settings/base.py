@@ -194,7 +194,7 @@ RESULT_CATEGORY_CHOICES = (
 USE_CAPTCHA = False
 
 # Time-to-live for cache
-CACHE_TTL = 60 * 60 * 24 * 7    # 7 days
+CACHE_TTL = 60 * 60 * 24 * 365    # 1 year
 
 # Domain name
 DOMAIN_NAME = config.get('django', 'domain_name')
