@@ -14,17 +14,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 class ComparisonTargetSerializer(serializers.HyperlinkedModelSerializer):
     survey = serializers.ReadOnlyField(source='survey.id')
-    completed_survey = serializers.SerializerMethodField()
 
     class Meta:
         model = ComparisonTarget
-        fields = ('id', 'survey', 'name', 'color', 'is_reliable', 'completed_survey')
-
-    def get_completed_survey(self, obj):
-        """
-        Check whether comparison target completed survey or not
-        """
-        return obj.user in obj.survey.participants.all()
+        fields = ('id', 'survey', 'name', 'color', 'is_reliable')
 
 
 class SurveySerializer(serializers.HyperlinkedModelSerializer):

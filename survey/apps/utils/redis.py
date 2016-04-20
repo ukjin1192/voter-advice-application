@@ -17,7 +17,7 @@ def set_comparison_target_list_cache(survey_obj):
     if isinstance(survey_obj, Survey) == False:
         raise ValueError('Invalid variable')
 
-    comparison_targets = ComparisonTarget.objects.select_related('user').filter(survey=survey_obj)
+    comparison_targets = ComparisonTarget.objects.select_related('user').select_related('survey').filter(survey=survey_obj)
     serializer = ComparisonTargetSerializer(comparison_targets, many=True)
     cache_value = serializer.data
     cache.set('survey:' + str(survey_obj.id) + ':comparison_targets:list', cache_value, timeout=getattr(settings, 'CACHE_TTL'))
