@@ -16,7 +16,7 @@
     "url": "https://github.com/ukjin1192/voter-advice-application/issues"
   },
   "dependencies": {
-    "jquery": "~2.1.4",
+    "jquery": "~3.5.0",
     "jquery.cookie": "~1.4.1",
     "bootstrap": "~3.3.6",
     "bootstrap-webpack": "0.0.5",
